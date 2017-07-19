@@ -1,0 +1,13 @@
+﻿User-agent: *
+Disallow: /UI/Admin/
+Disallow: /UI/Adverts/SponsorForm.aspx
+Disallow: /UI/Clubs/
+Disallow: /UI/Competitions/
+Disallow: /UI/Contacts/
+Disallow: /UI/Forms/
+Disallow: /UI/IO/
+Disallow: /UI/Menus/
+Disallow: /UI/Navigation/
+Disallow: /UI/Teams/
+Disallow: /UI/Tournament/
+Disallow: /UI/Utilities/

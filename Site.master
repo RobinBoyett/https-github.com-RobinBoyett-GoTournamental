@@ -1,0 +1,116 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <title>GoTournamental | <%: Page.Title %></title>
+
+    <meta name="publisher" content="GoTournamental Ltd" />
+    <meta name="description" content="GoTournamental Ltd. Plan your sports tournaments online - organise clubs teams and contacts - schedule fixtures - real-time league tables. Junior football, junior soccer." />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="author" content="GoTournamental Ltd" />
+    <meta name="robots" content="index,follow" />
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-15" />
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <ajaxToolkit:ToolkitScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="respond" />
+                <asp:ScriptReference Name="WebForms.js" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </ajaxToolkit:ToolkitScriptManager>
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/">Go Tournamental</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a runat="server" href="~/UI/About/About">About</a></li>
+                        <li><a runat="server" href="~/UI/About/Help">Help</a></li>
+                        <li><a runat="server" href="~/UI/About/ContactUsForm">Contact Us</a></li>
+                    </ul>
+                    <asp:LoginView ID="GTLoginView" runat="server" ViewStateMode="Disabled">
+                        <AnonymousTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+<%--                                <li><a runat="server" href="~/Account/Register">Register</a></li>--%>
+                                <li><a runat="server" href="~/Account/Login">Log in</a></li>
+                            </ul>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello <%: Context.User.Identity.GetUserName()  %></a></li>
+                                <li><asp:HyperLink ID="LinkToAdminTools" Text="GT Admin Tools" NavigateUrl="~/UI/Admin/Admin" Visible="false" runat="server" /></li>
+                                <li>
+                                    <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                </li>
+                            </ul>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </div>
+            </div>
+        </div>
+
+        <div> 
+            <style type="text/css">
+                body {
+                    background: url('<%= imagePath %>') no-repeat center center fixed;
+                    background-size: cover;
+                }
+            </style>
+            <div class="container body-content">
+
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
+                <div class="well">
+                <footer>
+                    <p>
+                        <a href="https://www.facebook.com/gotournamental" target="_blank"><asp:Image ID="FacebookIcon" ImageUrl="~/Images/Icons/FacebookIcon.jpg" runat="server" /></a>&nbsp;
+                        <a href="http://twitter.com/gotournamental" target="_blank"><asp:Image ID="TwitterIcon" ImageUrl="~/Images/Icons/TwitterIcon.png" Width="25" Height="20" runat="server" /></a>                  
+                        &nbsp;&nbsp;&nbsp;&copy; <%: DateTime.Now.Year %> - GoTournamental Ltd
+                        &nbsp;&nbsp;&nbsp;Version 1.0.0
+                    </p>
+                </footer>
+<%--                <footer>
+                    <p>
+                        <a href="https://www.facebook.com/gotournamental" target="_blank"><asp:Image ID="FacebookIcon" ImageUrl="~/Images/Icons/FacebookIcon.jpg" runat="server" /></a>&nbsp;&nbsp;Like us on Facebook&nbsp;&nbsp;&nbsp;
+                        <a href="http://twitter.com/gotournamental" target="_blank"><asp:Image ID="TwitterIcon" ImageUrl="~/Images/Icons/TwitterIcon.png" Width="25" Height="20" runat="server" /></a>&nbsp;@gotournamental                  
+                    </p>
+                    <p>&copy; <%: DateTime.Now.Year %> - GoTournamental Ltd</p>
+                </footer>--%>
+                </div>
+            </div>
+        </div>
+      
+
+    </form>
+</body>
+</html>
