@@ -14,7 +14,7 @@ CREATE TABLE [Administration].[ToolTips] (
     [ControlID]				VARCHAR (200)  NOT NULL,
     [ToolTipText]           VARCHAR(MAX)   NOT NULL,
     [UserID]				VARCHAR (200)  NOT NULL,
-	[DateAdded]				DATETIME NOT NULL
+	[DateModified]				DATETIME NOT NULL
     CONSTRAINT [PK_ToolTips] PRIMARY KEY ([ID])
 );
 
