@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -131,14 +130,14 @@ namespace GoTournamental.UI.Organiser {
 
 			if (team.PrimaryContactID == null || team.PrimaryContactID == 0) {
 				linkToContactAdd.Visible = true;
-				//linkToContactAdd.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString();
-				//linkToContactAdd.PostBackUrl = "~/UI/Contacts/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString();
+				//linkToContactAdd.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString();
+				//linkToContactAdd.PostBackUrl = "~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString();
 			}
 			else if (team.PrimaryContactID > 0) {
 				primaryContact.Visible = true;
 				primaryContact.Text = team.PrimaryContact.ToString();
 				linkToContactEdit.Visible = true;
-				linkToContactEdit.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+team.PrimaryContactID.ToString()+"&team_id="+team.ID.ToString();
+				linkToContactEdit.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+team.PrimaryContactID.ToString()+"&team_id="+team.ID.ToString();
 			}
 	
 			if (!IsPostBack) {
@@ -202,7 +201,7 @@ namespace GoTournamental.UI.Organiser {
         protected void LinkToContactAdd_Click(object sender, EventArgs e) {
 			int savedTeamID = 0;
 			savedTeamID = TeamSave();
-			Response.Redirect("~/UI/Contacts/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+savedTeamID.ToString());
+			Response.Redirect("~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+savedTeamID.ToString());
         }
 		
         protected void SaveButton_Click(object sender, EventArgs e) {
@@ -217,7 +216,7 @@ namespace GoTournamental.UI.Organiser {
                 //Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=4&TournamentID="+tournament.ID.ToString()+"&competition_id="+teamToSave.CompetitionID.ToString());
 			}
 			else {
-				Response.Redirect("~/UI/Clubs/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
+				Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
 			}
 	
         }

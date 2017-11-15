@@ -9,8 +9,9 @@ using GoTournamental.API;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class ClubsInvitedForm : Page {
 
@@ -93,13 +94,13 @@ namespace GoTournamental.UI.Organiser {
 
                 if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
                     linkToClubEdit.Text = club.Name;
-					linkToClubEdit.NavigateUrl = "~/UI/Clubs/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
+					linkToClubEdit.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
 
                     string mailTo = "?subject=Invitation%20to%20"+tournament.HostClub.Name + "%20" + tournament.Name + "&body=[INSERT%20YOUR%20TEXT%20]";
                     mailTo += "%0D%0DThis%20year%20we%20are%20using%20GoTournamental%20to%20organise%20our%20tournament.";
                     mailTo += "%0D%0DThis%20means%20that%20you%20can%20register%20your%20teams%20and%20players%20online%20%20as%20well%20as%20follow%20your%20itinerary%20on%20the%20day%20on%20your%20phone%20or%20tablet.";
                     mailTo += "%0D%0DPlease%20copy%20and%20paste%20the%20link%20below%20into%20your%20browser%20address%20bar%20to%20get%20further%20details%20and%20to%20register%20teams%20for%20" + club.Name.Replace("&","%26") + ".";
-                    mailTo += "%0D%0Dhttp://www.gotournamental.com/UI/Clubs/ClubRegistrationForm?TournamentID="+tournament.ID.ToString()+"%26version=1%26club_id="+club.ID.ToString()+"%26UserID="+ iClub.GenerateClubSecurityCode(club);
+                    mailTo += "%0D%0Dhttp://www.gotournamental.com/UI/Planner/ClubRegistrationForm?TournamentID="+tournament.ID.ToString()+"%26version=1%26club_id="+club.ID.ToString()+"%26UserID="+ iClub.GenerateClubSecurityCode(club);
                     mailTo += "%0D%0DPlease%20refer%20to%20the%20Help%20page%20at%20http://www.gotournamental.com/%20to%20find%20%22how%20to%22%20videos%20in%20case%20you%20need%20help%20registering%20your%20teams";
 
                     if (club.PrimaryContact.Email != null && club.PrimaryContact.Email != "") {

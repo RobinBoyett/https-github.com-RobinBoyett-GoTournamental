@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
+﻿using System.Linq;
 using System.Collections.Generic;
 using GoTournamental.API;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
-using GoTournamental.ORM.Organiser;
+using GoTournamental.BLL.Organiser;
+using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Planner {
 
     public class Team: ITeam {
 
@@ -87,14 +86,14 @@ namespace GoTournamental.BLL.Organiser {
             List<Team> selectedList = context.Teams.Where(i => i.GroupID == groupID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }
-        public List<Team> SQLSelectForCompetition(int competitionID) {
+        public List<Team> GetCompetitionTeamsAll(int competitionID) {
             TeamDbContext context = new TeamDbContext();
-            List<Team> selectedList = context.GetTeamsForCompetition(competitionID).OrderBy(i => i.ID).ToList();
+            List<Team> selectedList = context.GetCompetitionTeamsAll(competitionID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }	       
-        public List<Team> SQLSelectForCompetitionFinals(int competitionID) {
+        public List<Team> GetCompetitionFinalsTeams(int competitionID) {
             TeamDbContext context = new TeamDbContext();
-            List<Team> selectedList = context.GetTeamsForCompetitionFinals(competitionID).OrderBy(i => i.ID).ToList();
+            List<Team> selectedList = context.GetCompetitionFinalsTeams(competitionID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }	       
         public List<Team> SQLSelectForTournament(int tournamentID) {
@@ -143,7 +142,7 @@ namespace GoTournamental.BLL.Organiser {
         public void SQLDeleteWithCascade<T>(T input) {
             TeamDbContext context = new TeamDbContext();
             Team teamToDelete = (Team)(object)input;
-            context.SQLTeamDeleteWithCascade(teamToDelete.ID);
+            context.ExecuteTeamDeleteWithCascade(teamToDelete.ID);
 		}		
 		public Team SQLGetTeamForPrimaryContactID(int? id) {
             Team team = new Team();
@@ -175,8 +174,8 @@ namespace GoTournamental.BLL.Organiser {
         int? PrimaryContactID { get; }
         Contact PrimaryContact { get; }
         List<Team> SQLSelectForGroup(int groupID);
-        List<Team> SQLSelectForCompetition(int competitionID);
-        List<Team> SQLSelectForCompetitionFinals(int competitionID);
+        List<Team> GetCompetitionTeamsAll(int competitionID);
+        List<Team> GetCompetitionFinalsTeams(int competitionID);
         List<Team> SQLSelectForTournament(int tournamentID);
 		void SQLUpdateGroupID(int id, int groupID);
 		void SQLUpdatePrimaryContactID(int id, int primaryContactID);

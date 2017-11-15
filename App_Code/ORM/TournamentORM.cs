@@ -56,6 +56,8 @@ namespace GoTournamental.ORM.Organiser {
             Property(i => i.GoogleMapsURL).HasColumnName("GoogleMapsURL");
             Property(i => i.NoOfPlayingAreas).HasColumnName("NoOfPlayingAreas");
             Property(i => i.FixtureTurnaround).HasColumnName("FixtureTurnaround");
+            Property(i => i.FixtureHalvesNumber).HasColumnName("FixtureHalvesNumber");
+            Property(i => i.FixtureHalvesLength).HasColumnName("FixtureHalvesLength");
             Property(i => i.TeamSize).HasColumnName("TeamSize");
             Property(i => i.SquadSize).HasColumnName("SquadSize");
             Property(i => i.RotatorDate).HasColumnName("RotatorDate");

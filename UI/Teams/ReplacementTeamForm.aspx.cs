@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using GoTournamental.API;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -41,7 +40,7 @@ namespace GoTournamental.UI.Organiser {
             }
 			if (Request.QueryString.Get("competition_id") != null) {
 				competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
-                teamsInCompetition = iTeam.SQLSelectForCompetition(competition.ID).OrderBy(i => i.Club.Name).ThenBy(i => i.Name).ToList();
+                teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).OrderBy(i => i.Club.Name).ThenBy(i => i.Name).ToList();
             }
 
             if (teamsInCompetitionDropDown.Items.Count < 2) {

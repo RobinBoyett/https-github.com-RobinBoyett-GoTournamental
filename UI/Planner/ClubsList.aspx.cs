@@ -8,9 +8,10 @@ using System.Drawing;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
+using GoTournamental.BLL.Planner;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class ClubsList : Page {
 
@@ -69,10 +70,10 @@ namespace GoTournamental.UI.Organiser {
             }
 			if (Request.QueryString.Get("competition_id") != null) {
 				competitionID = Int32.Parse(Request.QueryString.Get("competition_id"));
-				clubs = iClub.SQLSelectClubsForCompetition(competitionID).Where(i => i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.Name).ToList();
+				clubs = iClub.GetCompetitionClubsAll(competitionID).Where(i => i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.Name).ToList();
 			}
 
-			LinkToClubsAdd.NavigateUrl = "~/UI/Clubs/ClubForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
+			LinkToClubsAdd.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
 			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 				LinkToClubsAdd.Visible = true;
 			}
@@ -88,11 +89,11 @@ namespace GoTournamental.UI.Organiser {
 			switch (pageVersion) {
 				case RequestVersion.TeamDelete:
 					iTeam.SQLDeleteWithCascade<Team>(team);
-					Response.Redirect("~/UI/Clubs/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
+					Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
 					break;
 				case RequestVersion.ClubDelete:
 					iClub.SQLDeleteWithCascade<Club>(club);
-					Response.Redirect("~/UI/Clubs/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
+					Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
 					break;
                 case RequestVersion.TeamsList:
 					clubsDataList = (DataList)ClubsListPanel.FindControl("ClubsDataList");
@@ -131,7 +132,7 @@ namespace GoTournamental.UI.Organiser {
 					linkToClubEdit.Text = club.Name;
 				}
 				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-					linkToClubEdit.NavigateUrl = "~/UI/Clubs/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
+					linkToClubEdit.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
 				}
 				HyperLink linkToClubItinary = (HyperLink)e.Item.FindControl("LinkToClubItinary");
 				linkToClubItinary.NavigateUrl = "~/UI/Competitions/FixturesList?TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
@@ -144,18 +145,17 @@ namespace GoTournamental.UI.Organiser {
 				}
 
                 DataList teamsListForClub = (DataList)e.Item.FindControl("TeamsListForClub");
-				if (competitionID == 0) {
-					if (club.Teams != null && club.Teams.Count > 0) {
-						teamsList = club.Teams.Where(i => i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.CompetitionID).ThenBy(i => i.Name).ToList();
-						teamsListForClub.DataSource = teamsList;
-						teamsListForClub.DataBind();
-					}
-				}
-				else {
-					teamsList = iTeam.SQLSelectForCompetition(competitionID).Where(i => i.ClubID == club.ID && i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.Name).ToList();
+                if (competitionID == 0) {
+                    if (club.Teams != null && club.Teams.Count > 0) {
+                        teamsList = club.Teams.Where(i => i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.CompetitionID).ThenBy(i => i.Name).ToList();
+                        teamsListForClub.DataSource = teamsList;
+                        teamsListForClub.DataBind();
+                    }
+                } else {
+                    teamsList = iTeam.GetCompetitionTeamsAll(competitionID).Where(i => i.ClubID == club.ID && i.AttendanceType != API.Domains.AttendanceTypes.Deleted).OrderBy(i => i.Name).ToList();
                     teamsListForClub.DataSource = teamsList;
                     teamsListForClub.DataBind();
-				}
+                }
             }
         }
         protected void TeamsListForClub_ItemDataBound(Object sender, DataListItemEventArgs e) {

@@ -5,13 +5,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
-using System.Xml.Linq;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -56,7 +55,7 @@ namespace GoTournamental.UI.Organiser {
             }
             if (Request.QueryString.Get("competition_id") != null) {
                 competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
-                teamsList = iTeam.SQLSelectForCompetition(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
+                teamsList = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
                 linkToCompetitionSummary.NavigateUrl = "~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
             }
             if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
@@ -81,7 +80,7 @@ namespace GoTournamental.UI.Organiser {
             ageBand.Text = EnumExtensions.GetStringValue(competition.AgeBand);
             if (competition.CountTeamsAttendingCompetition() != 0) {
                 noTeamsAttending.Text = competition.CountTeamsAttendingCompetition().ToString();
-                noTeamsAttending.NavigateUrl = "~/UI/Clubs/ClubsList?version=1&TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
+                noTeamsAttending.NavigateUrl = "~/UI/Planner/ClubsList?version=1&TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
             }
             int i = 0;
             foreach (PlayingArea playingArea in playingAreaList) {

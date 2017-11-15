@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -319,7 +319,7 @@ namespace GoTournamental.UI.Organiser {
 					iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
 				}
 			}
-			List<Team> teamsInCompetition = iTeam.SQLSelectForCompetition(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
+			List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
 			List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
 			groupsInCompetition = groupsList.Count;
 			int currentGroup = 0;

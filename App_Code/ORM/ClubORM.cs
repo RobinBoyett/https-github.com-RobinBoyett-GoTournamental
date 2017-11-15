@@ -1,11 +1,10 @@
-using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Configuration;
 using System.Collections.Generic;
-using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.ORM.Organiser {
+namespace GoTournamental.ORM.Planner {
 
     public class ClubDbContext : DbContext {
         public DbSet<Club> Clubs { get; set; }
@@ -15,12 +14,13 @@ namespace GoTournamental.ORM.Organiser {
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             modelBuilder.Configurations.Add(new ClubConfiguration());
+            modelBuilder.HasDefaultSchema("Planner");
             base.OnModelCreating(modelBuilder);
         }
         public void SQLClubDeleteWithCascade(int clubID) {
             this.Database.ExecuteSqlCommand("EXEC Planner.ClubDeleteWithCascade @clubID = {0}", clubID);
         }
-        public IEnumerable<Club> SQLGetClubsForCompetition(int competitionID) {
+        public IEnumerable<Club> GetCompetitionClubsAll(int competitionID) {
             IEnumerable<Club> clubs = this.Database.SqlQuery<Club>("EXEC Planner.CompetitionClubsAll {0}", competitionID);
             return clubs;
         }
@@ -48,6 +48,8 @@ namespace GoTournamental.ORM.Organiser {
             ToTable("Planner.Clubs");
             HasMany<Team>(i => i.Teams).WithRequired(i => i.Club).HasForeignKey(i => i.ClubID);
         }
+
+        //
     }
 
 }

@@ -48,7 +48,7 @@ public partial class TournamentMenu : System.Web.UI.UserControl {
 			linkToSponsorsList.Visible = false;
 		}
 		else {
-			linkToTournament.NavigateUrl = "~/UI/Tournaments/TournamentView.aspx?TournamentID=" + tournament.ID.ToString();
+			linkToTournament.NavigateUrl = "~/UI/Planner/TournamentView.aspx?TournamentID=" + tournament.ID.ToString();
 
             if (tournament.StartTime <= DateTime.Now) {
                 linkToFixtures.Visible = true;

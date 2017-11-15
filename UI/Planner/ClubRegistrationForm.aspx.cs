@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,9 +7,10 @@ using Microsoft.AspNet.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
+using GoTournamental.BLL.Planner;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class ClubRegistrationForm : Page {
 
@@ -249,8 +249,8 @@ namespace GoTournamental.UI.Organiser {
 				}
 			}
 
-			teamsListForClub.DataSource = club.Teams.OrderBy(i => i.GetCompetition().AgeBand).ThenBy(i => i.Name);
-			teamsListForClub.DataBind();
+			//teamsListForClub.DataSource = club.Teams.OrderBy(i => i.GetCompetition().AgeBand).ThenBy(i => i.Name);
+			//teamsListForClub.DataBind();
 
         }
 

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Data.Entity.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using OfficeOpenXml;
 using GoTournamental.API;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.BLL.Organiser {
         
@@ -75,13 +74,42 @@ namespace GoTournamental.BLL.Organiser {
 			[DescriptionAttribute("80 Minutes")] Eighty = 80,
 			[DescriptionAttribute("90 Minutes")] Ninety = 90
         } 
+        public enum FixtureHalvesNumbers {
+            Undefined = 0,
+			One = 1,
+			Two = 2
+        } 
+        public enum FixtureHalvesLengths {
+            Undefined = 0,
+			[DescriptionAttribute("2 Minutes")] Two = 2,
+			[DescriptionAttribute("3 Minutes")] Three = 3,
+			[DescriptionAttribute("4 Minutes")] Four = 4,
+			[DescriptionAttribute("5 Minutes")] Five = 5,
+			[DescriptionAttribute("6 Minutes")] Six = 6,
+			[DescriptionAttribute("7 Minutes")] Seven = 7,
+			[DescriptionAttribute("8 Minutes")] Eight = 8,
+			[DescriptionAttribute("9 Minutes")] Nine = 9,
+			[DescriptionAttribute("10 Minutes")] Ten = 10,
+			[DescriptionAttribute("11 Minutes")] Eleven = 11,
+			[DescriptionAttribute("12 Minutes")] Twelve = 12,
+			[DescriptionAttribute("13 Minutes")] Thirteen = 13,
+			[DescriptionAttribute("14 Minutes")] Fourteen = 14,
+			[DescriptionAttribute("15 Minutes")] Fifteen = 15,
+			[DescriptionAttribute("20 Minutes")] Twenty = 20,
+			[DescriptionAttribute("25 Minutes")] TwentyFive = 25,
+			[DescriptionAttribute("30 Minutes")] Thirty = 30,
+			[DescriptionAttribute("35 Minutes")] ThirtyFive = 35,
+			[DescriptionAttribute("40 Minutes")] Forty = 40,
+			[DescriptionAttribute("45 Minutes")] FortyFive = 45
+        } 
 		#endregion
               
         #region Constructors
 		public Tournament() {}
         public Tournament(
-            int id, TournamentTypes tournamentType, string name, int? affiliation, DateTime? startTime, DateTime? endTime, string venue, string postcode, string googleMapsURL, NumberOfPlayingAreas noOfPlayingAreas, 
-			FixtureTurnarounds fixtureTurnaround, Domains.NumberOfParticipants teamSize, Domains.NumberOfParticipants squadSize, DateTime? rotatorDate, Competition.Sessions rotatorSession
+            int id, TournamentTypes tournamentType, string name, int? affiliation, DateTime? startTime, DateTime? endTime, string venue, string postcode, string googleMapsURL, 
+            NumberOfPlayingAreas noOfPlayingAreas, FixtureTurnarounds fixtureTurnaround, FixtureHalvesNumbers fixtureHalvesNumber, FixtureHalvesLengths fixtureHalvesLength,
+            Domains.NumberOfParticipants teamSize, Domains.NumberOfParticipants squadSize, DateTime? rotatorDate, Competition.Sessions rotatorSession
         ) {
             this.ID = id;
             this.TournamentType = tournamentType;
@@ -94,6 +122,8 @@ namespace GoTournamental.BLL.Organiser {
             this.GoogleMapsURL = googleMapsURL;
             this.NoOfPlayingAreas = noOfPlayingAreas;
 			this.FixtureTurnaround = fixtureTurnaround;
+            this.FixtureHalvesNumber = fixtureHalvesNumber;
+            this.FixtureHalvesLength = fixtureHalvesLength;
             this.TeamSize = teamSize;
             this.SquadSize = squadSize;
 			this.RotatorDate = rotatorDate;
@@ -152,6 +182,8 @@ namespace GoTournamental.BLL.Organiser {
         }
         public NumberOfPlayingAreas NoOfPlayingAreas { get; set; }
         public FixtureTurnarounds FixtureTurnaround { get; set; }
+        public FixtureHalvesNumbers FixtureHalvesNumber { get; set; }
+        public FixtureHalvesLengths FixtureHalvesLength { get; set; }
         public Domains.NumberOfParticipants TeamSize { get; set; }
         public Domains.NumberOfParticipants SquadSize { get; set; }		
 		public DateTime? RotatorDate { get; set; }
@@ -210,6 +242,8 @@ namespace GoTournamental.BLL.Organiser {
                 selected.GoogleMapsURL = updated.GoogleMapsURL;
                 selected.NoOfPlayingAreas = updated.NoOfPlayingAreas;
 				selected.FixtureTurnaround = updated.FixtureTurnaround;
+                selected.FixtureHalvesNumber = updated.FixtureHalvesNumber;
+                selected.FixtureHalvesLength = updated.FixtureHalvesLength;
                 selected.TeamSize = updated.TeamSize;
                 selected.SquadSize = updated.SquadSize;
                 selected.RotatorDate = updated.RotatorDate;
@@ -361,6 +395,8 @@ namespace GoTournamental.BLL.Organiser {
         Tournament.PlayingAreaTypes PlayingAreaType { get; }
         Tournament.NumberOfPlayingAreas NoOfPlayingAreas { get; }
 		Tournament.FixtureTurnarounds FixtureTurnaround { get; }
+        Tournament.FixtureHalvesNumbers FixtureHalvesNumber { get; }
+        Tournament.FixtureHalvesLengths FixtureHalvesLength { get; }
         Domains.NumberOfParticipants TeamSize { get; }
         Domains.NumberOfParticipants SquadSize { get; }
 		DateTime? RotatorDate { get; }

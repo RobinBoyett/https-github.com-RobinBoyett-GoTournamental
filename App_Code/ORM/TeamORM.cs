@@ -1,11 +1,10 @@
-using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Configuration;
 using System.Collections.Generic;
-using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.ORM.Organiser {
+namespace GoTournamental.ORM.Planner {
 
     public class TeamDbContext : DbContext {
         public DbSet<Team> Teams { get; set; }
@@ -17,14 +16,14 @@ namespace GoTournamental.ORM.Organiser {
             modelBuilder.Configurations.Add(new TeamConfiguration());
             base.OnModelCreating(modelBuilder);
         }
-        public void SQLTeamDeleteWithCascade(int teamID) {
+        public void ExecuteTeamDeleteWithCascade(int teamID) {
             this.Database.ExecuteSqlCommand("EXEC Planner.TeamDeleteWithCascade @teamID = {0}", teamID);
         }
-        public IEnumerable<Team> GetTeamsForCompetition(int competitionID) {
+        public IEnumerable<Team> GetCompetitionTeamsAll(int competitionID) {
             IEnumerable<Team> teams = this.Database.SqlQuery<Team>("EXEC Planner.CompetitionTeamsAll @CompetitionID = {0}", competitionID);
             return teams;
         }
-        public IEnumerable<Team> GetTeamsForCompetitionFinals(int competitionID) {
+        public IEnumerable<Team> GetCompetitionFinalsTeams(int competitionID) {
             IEnumerable<Team> teams = this.Database.SqlQuery<Team>("EXEC Planner.TeamsInCompetitionFinals @competitionID = {0}", competitionID);
             return teams;
         }

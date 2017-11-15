@@ -9,19 +9,21 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [Planner].[Fixtures] (
-    [ID]                INT          IDENTITY (1, 1) NOT NULL,
-    [CompetitionID]     INT          NULL,
-    [GroupID]           INT          NULL,
-    [PlayingAreaID]     INT          NULL,
-    [Name]              VARCHAR (50) NULL,
-    [StartTime]         DATETIME     NULL,
-    [IsLeagueFixture]   BIT          NULL,
-    [HomeTeamID]        INT          NULL,
-    [HomeTeamScore]     INT          NULL,
-    [AwayTeamID]        INT          NULL,
-    [AwayTeamScore]     INT          NULL,
-    [PrimaryOfficialID] INT          NULL, 
-    CONSTRAINT [PK_Fixtures] PRIMARY KEY ([ID])
+    [ID]                     INT          IDENTITY (1, 1) NOT NULL,
+    [CompetitionID]          INT          NULL,
+    [GroupID]                INT          NULL,
+    [PlayingAreaID]          INT          NULL,
+    [Name]                   VARCHAR (50) NULL,
+    [StartTime]              DATETIME     NULL,
+    [IsLeagueFixture]        BIT          NULL,
+    [HomeTeamID]             INT          NULL,
+    [HomeTeamScore]          INT          NULL,
+    [HomeTeamPenaltiesScore] INT          NULL,
+    [AwayTeamID]             INT          NULL,
+    [AwayTeamScore]          INT          NULL,
+    [AwayTeamPenaltiesScore] INT          NULL,
+    [PrimaryOfficialID]      INT          NULL,
+    CONSTRAINT [PK_Fixtures] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
 

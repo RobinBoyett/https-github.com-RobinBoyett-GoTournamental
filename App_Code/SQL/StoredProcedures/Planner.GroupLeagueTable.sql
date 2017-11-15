@@ -1,3 +1,13 @@
+USE [GoTournamental]
+GO
+
+/****** Object: SqlProcedure [Planner].[GroupLeagueTable] Script Date: 25/07/2017 11:12:21 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 CREATE PROCEDURE [Planner].[GroupLeagueTable] (
 	@GroupID		int
 )
@@ -23,10 +33,8 @@ BEGIN
 	FROM Planner.Teams
 	WHERE GroupID = @GroupID 
 
-
 	SELECT @rowcount = 0
 	SELECT @rowcount = COUNT(*) FROM Planner.Fixtures WHERE GroupID = @GroupID
-
 
 	IF @rowcount > 0
 	BEGIN
@@ -46,17 +54,17 @@ BEGIN
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 
-			IF @HomeTeamScore > @AwayTeamScore
+			IF @HomeTeamScore > @AwayTeamScore			-- Home Wins
 				BEGIN
 					UPDATE #TemporaryLeagueTable SET Points = Points + 3, Wins = Wins + 1 WHERE TeamID = @HomeTeamID
 					UPDATE #TemporaryLeagueTable SET Defeats = Defeats + 1 WHERE TeamID = @AwayTeamID
 				END
-			IF @AwayTeamScore > @HomeTeamScore
+			IF @AwayTeamScore > @HomeTeamScore			-- Away Wins
 				BEGIN
 					UPDATE #TemporaryLeagueTable SET Points = Points + 3, Wins = Wins + 1 WHERE TeamID = @AwayTeamID
 					UPDATE #TemporaryLeagueTable SET Defeats = Defeats + 1 WHERE TeamID = @HomeTeamID
 				END
-			IF @HomeTeamScore = @AwayTeamScore
+			IF @HomeTeamScore = @AwayTeamScore			-- Draws
 			BEGIN
 				UPDATE #TemporaryLeagueTable SET Points = Points + 1, Draws = Draws + 1 WHERE TeamID = @HomeTeamID
 				UPDATE #TemporaryLeagueTable SET Points = Points + 1, Draws = Draws + 1 WHERE TeamID = @AwayTeamID
@@ -86,21 +94,21 @@ BEGIN
 		BEGIN
 
 			SELECT @rowcount = COUNT(*) FROM Planner.Fixtures WHERE (HomeTeamID = @TeamID OR AwayTeamID = @TeamID) AND IsLeagueFixture = 'True' AND HomeTeamScore IS NOT NULL AND AwayTeamScore IS NOT NULL
-			UPDATE #TemporaryLeagueTable SET Played = @rowcount WHERE TeamID = @TeamID
+			UPDATE #TemporaryLeagueTable SET Played = @rowcount WHERE TeamID = @TeamID											-- Games Played
 
 			SELECT @Score = SUM(HomeTeamScore) FROM Planner.Fixtures WHERE HomeTeamID = @TeamID AND IsLeagueFixture = 'True'
 			IF @Score IS NOT NULL
-				UPDATE #TemporaryLeagueTable SET GoalsFor = GoalsFor + @Score WHERE TeamID = @TeamID
+				UPDATE #TemporaryLeagueTable SET GoalsFor = GoalsFor + @Score WHERE TeamID = @TeamID							-- Sum Goals For From Home Games
 			SELECT @Score = SUM(AwayTeamScore) FROM Planner.Fixtures WHERE AwayTeamID = @TeamID AND IsLeagueFixture = 'True'
 			IF @Score IS NOT NULL
-				UPDATE #TemporaryLeagueTable SET GoalsFor = GoalsFor + @Score WHERE TeamID = @TeamID
+				UPDATE #TemporaryLeagueTable SET GoalsFor = GoalsFor + @Score WHERE TeamID = @TeamID							-- Sum Goals For From Away Games
 
 			SELECT @Score = SUM(AwayTeamScore) FROM Planner.Fixtures WHERE HomeTeamID = @TeamID AND IsLeagueFixture = 'True'
 			IF @Score IS NOT NULL
-				UPDATE #TemporaryLeagueTable SET GoalsAgainst = GoalsAgainst + @Score WHERE TeamID = @TeamID
+				UPDATE #TemporaryLeagueTable SET GoalsAgainst = GoalsAgainst + @Score WHERE TeamID = @TeamID					-- Sum Goals Against From Home Games
 			SELECT @Score = SUM(HomeTeamScore) FROM Planner.Fixtures WHERE AwayTeamID = @TeamID AND IsLeagueFixture = 'True'
 			IF @Score IS NOT NULL
-				UPDATE #TemporaryLeagueTable SET GoalsAgainst = GoalsAgainst + @Score WHERE TeamID = @TeamID
+				UPDATE #TemporaryLeagueTable SET GoalsAgainst = GoalsAgainst + @Score WHERE TeamID = @TeamID					-- Sum Goals Against From Away Games
 
 		FETCH NEXT FROM TeamCursor INTO
 			@TeamID
@@ -148,7 +156,7 @@ BEGIN
 
 				SELECT @TeamIDPositionN = TeamID FROM #AdjustedLeagueTable WHERE Position = @Position
 				SELECT @TeamIDPositionNPlus1 = TeamID FROM #AdjustedLeagueTable WHERE Position = @Position + 1
-			
+
 				SELECT @HomeTeamScore = HomeTeamScore, @AwayTeamScore = AwayTeamScore
 				FROM Planner.Fixtures
 				WHERE HomeTeamID = @TeamIDPositionN AND AwayTeamID = @TeamIDPositionNPlus1
@@ -163,9 +171,9 @@ BEGIN
 				WHERE HomeTeamID = @TeamIDPositionNPlus1 AND AwayTeamID = @TeamIDPositionN
 			
 				IF @HomeTeamScore > @AwayTeamScore
-					UPDATE #AdjustedLeagueTable SET HiddenPoints = HiddenPoints + 1 WHERE TeamID = @TeamIDPositionN
-				IF @AwayTeamScore > @HomeTeamScore
 					UPDATE #AdjustedLeagueTable SET HiddenPoints = HiddenPoints + 1 WHERE TeamID = @TeamIDPositionNPlus1
+				IF @AwayTeamScore > @HomeTeamScore
+					UPDATE #AdjustedLeagueTable SET HiddenPoints = HiddenPoints + 1 WHERE TeamID = @TeamIDPositionN
 						
 			END
 

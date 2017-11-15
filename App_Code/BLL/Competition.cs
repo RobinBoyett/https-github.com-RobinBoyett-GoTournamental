@@ -77,13 +77,16 @@ namespace GoTournamental.BLL.Organiser {
  				session : Sessions.Undefined,
 				competitionFormat : Competition.CompetitionFormats.Undefined ,
 				fixtureTurnaround : Tournament.FixtureTurnarounds.Undefined ,
+                fixtureHalvesNumber : Tournament.FixtureHalvesNumbers.Undefined ,
+                fixtureHalvesLength : Tournament.FixtureHalvesLengths.Undefined ,
 				teamSize : Domains.NumberOfParticipants.Undefined ,
 				squadSize : Domains.NumberOfParticipants.Undefined 		
 			) {	
 		}
         public Competition(
-            int id, int tournamentID, AgeBands ageBand, DateTime? startTime, Sessions session, CompetitionFormats competitionFormat, Tournament.FixtureTurnarounds fixtureTurnaround, 
-			Domains.NumberOfParticipants teamSize, Domains.NumberOfParticipants squadSize
+            int id, int tournamentID, AgeBands ageBand, DateTime? startTime, Sessions session, CompetitionFormats competitionFormat, 
+            Tournament.FixtureTurnarounds fixtureTurnaround, Tournament.FixtureHalvesNumbers fixtureHalvesNumber, Tournament.FixtureHalvesLengths fixtureHalvesLength,
+            Domains.NumberOfParticipants teamSize, Domains.NumberOfParticipants squadSize
         ) {
 			this.ID = id;
 			this.TournamentID = tournamentID;
@@ -92,6 +95,8 @@ namespace GoTournamental.BLL.Organiser {
 			this.Session = session;
 			this.CompetitionFormat = competitionFormat;
 			this.FixtureTurnaround = fixtureTurnaround;
+            this.FixtureHalvesNumber = fixtureHalvesNumber;
+            this.FixtureHalvesLength = fixtureHalvesLength;
             this.TeamSize = teamSize;
             this.SquadSize = squadSize;
 		}
@@ -105,6 +110,8 @@ namespace GoTournamental.BLL.Organiser {
 		public Sessions Session { get; set; } 
         public CompetitionFormats CompetitionFormat { get; set; }
         public Tournament.FixtureTurnarounds FixtureTurnaround { get; set; }
+        public Tournament.FixtureHalvesNumbers FixtureHalvesNumber { get; set; }
+        public Tournament.FixtureHalvesLengths FixtureHalvesLength { get; set; }
         public Domains.NumberOfParticipants TeamSize { get; set; }
         public Domains.NumberOfParticipants SquadSize { get; set; }
         #endregion
@@ -155,6 +162,8 @@ namespace GoTournamental.BLL.Organiser {
                 selected.Session = updated.Session;
                 selected.CompetitionFormat = updated.CompetitionFormat;
                 selected.FixtureTurnaround = updated.FixtureTurnaround;
+                selected.FixtureHalvesNumber = updated.FixtureHalvesNumber;
+                selected.FixtureHalvesLength = updated.FixtureHalvesLength;
                 selected.TeamSize = updated.TeamSize;
                 selected.SquadSize = updated.SquadSize;
                 context.SaveChanges();
@@ -298,6 +307,8 @@ namespace GoTournamental.BLL.Organiser {
 					session : Sessions.Undefined ,
 					competitionFormat: competitionFormat ,
 					fixtureTurnaround : fixtureTurnaround ,
+                    fixtureHalvesNumber : Tournament.FixtureHalvesNumbers.Undefined ,
+                    fixtureHalvesLength : Tournament.FixtureHalvesLengths.Undefined ,
                     teamSize : tournament.TeamSize ,
                     squadSize : tournament.SquadSize 
 				);
@@ -437,6 +448,8 @@ namespace GoTournamental.BLL.Organiser {
 		Competition.Sessions Session { get; }
         Competition.CompetitionFormats CompetitionFormat { get; }
 		Tournament.FixtureTurnarounds FixtureTurnaround { get; }
+        Tournament.FixtureHalvesNumbers FixtureHalvesNumber { get; }
+        Tournament.FixtureHalvesLengths FixtureHalvesLength { get; }
         Domains.NumberOfParticipants TeamSize { get; }
         Domains.NumberOfParticipants SquadSize { get; }
 		List<Competition> SQLSelectForTournament(int tournamentID, bool sessionBased);

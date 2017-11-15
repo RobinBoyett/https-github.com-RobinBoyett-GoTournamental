@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Tournament" validateRequest="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentForm.aspx.cs" Inherits="GoTournamental.UI.Organiser.TournamentForm" %>
+﻿<%@ Page Title="Tournament" validateRequest="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentForm.aspx.cs" Inherits="GoTournamental.UI.Planner.TournamentForm" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register TagPrefix="Navigation" TagName="TournamentMenu" Src="~/UI/Menus/TournamentMenu.ascx" %>
 
@@ -124,12 +124,21 @@
             <td>
                 Fixture Turnaround:<div style="color:red; display:inline; line-height:2;">*</div>
             </td>
-            <td>
+            <td style="text-align:left;">
                 <asp:DropDownList ID="FixtureTurnaround" AppendDataBoundItems="true" runat="server">
 					<asp:ListItem Value="0">Select</asp:ListItem>              
                 </asp:DropDownList>
                 Minutes
+                <asp:DropDownList ID="FixtureHalvesNumber" AppendDataBoundItems="true" runat="server">
+					<asp:ListItem Value="0">Select</asp:ListItem>              
+                </asp:DropDownList>
+                no. of halves
+                <asp:DropDownList ID="FixtureHalvesLength" AppendDataBoundItems="true" runat="server">
+					<asp:ListItem Value="0">Select</asp:ListItem>              
+                </asp:DropDownList>
+                mins per half
                 <asp:RangeValidator runat="server" id="FixtureTurnaroundMandatory" type="Integer" minimumvalue="1" MaximumValue="9999" errormessage="Please enter your default Fixture Turnaround" ForeColor="Crimson" ControlToValidate="FixtureTurnaround" SetFocusOnError="true" Font-Size="12px" />
+<%--                <asp:CustomValidator OnServerValidate="ValidateFixtureDuration" ControlToValidate="FixtureHalvesLength" ErrorMessage="The fixture times exceed the turnaround" runat="server" />--%>
             </td>
         </tr>
         <tr>

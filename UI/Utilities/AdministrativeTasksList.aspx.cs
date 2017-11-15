@@ -8,8 +8,11 @@ using Microsoft.AspNet.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.API.Identity;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
+using GoTournamental.UI.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+
+namespace GoTournamental.UI.Planner {
 
     public partial class AdministrativeTasksList : Page {
 

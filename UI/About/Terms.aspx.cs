@@ -42,7 +42,7 @@ namespace GoTournamental.UI.Organiser {
                 );
                 iTermsSignatory.SQLInsert<TermsSignatory>(termsSignatory);
                 identityHelper.AddRoleForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentOwner");
-                Response.Redirect("~/UI/Tournaments/TournamentForm.aspx?version=1");
+                Response.Redirect("~/UI/Planner/TournamentForm.aspx?version=1");
             }
         }
 

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
@@ -28,6 +23,7 @@ namespace GoTournamental.UI.Organiser {
 		private string startTimeText = "";
 		private int groupsInCompetition = 0;
 		private int groupID = 0;
+        bool fixtureOverRun = false;		
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
         protected enum RequestVersion {
@@ -47,6 +43,8 @@ namespace GoTournamental.UI.Organiser {
 		DropDownList competitionStartMinute = new DropDownList();
 		DropDownList session = new DropDownList();
 		DropDownList fixtureTurnaround = new DropDownList();
+		DropDownList fixtureHalvesNumber = new DropDownList();
+		DropDownList fixtureHalvesLength = new DropDownList();
 		DropDownList teamSize = new DropDownList();
  		DropDownList squadSize = new DropDownList();
 		DropDownList competitionFormat = new DropDownList();
@@ -92,6 +90,8 @@ namespace GoTournamental.UI.Organiser {
 			competitionStartMinute = (DropDownList)CompetitionFormPanel.FindControl("CompetitionStartMinute");
 			session = (DropDownList)CompetitionFormPanel.FindControl("Session"); 
 			fixtureTurnaround = (DropDownList)CompetitionFormPanel.FindControl("FixtureTurnaround"); 
+			fixtureHalvesNumber = (DropDownList)CompetitionFormPanel.FindControl("FixtureHalvesNumber"); 
+			fixtureHalvesLength = (DropDownList)CompetitionFormPanel.FindControl("FixtureHalvesLength"); 
  			teamSize = (DropDownList)CompetitionFormPanel.FindControl("TeamSize"); 
 			squadSize = (DropDownList)CompetitionFormPanel.FindControl("SquadSize"); 
 			competitionFormat = (DropDownList)CompetitionFormPanel.FindControl("CompetitionFormat");
@@ -115,6 +115,8 @@ namespace GoTournamental.UI.Organiser {
 			CompetitionStartHourMinuteLoad();
 			SessionLoad();
 			FixtureTurnaroundLoad();
+            FixtureHalvesNumberLoad();
+            FixtureHalvesLengthLoad();
 			TeamSizeLoad();
 			SquadSizeLoad();
  			CompetitionFormatLoad();
@@ -147,6 +149,8 @@ namespace GoTournamental.UI.Organiser {
 				}
 				session.SelectedValue = EnumExtensions.GetIntValue(competition.Session).ToString();
 				fixtureTurnaround.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureTurnaround).ToString();
+				fixtureHalvesNumber.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureHalvesNumber).ToString();
+				fixtureHalvesLength.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureHalvesLength).ToString();
 				teamSize.SelectedValue = EnumExtensions.GetIntValue(competition.TeamSize).ToString();
 				squadSize.SelectedValue = EnumExtensions.GetIntValue(competition.SquadSize).ToString();
 				competitionFormat.SelectedValue = EnumExtensions.GetIntValue(competition.CompetitionFormat).ToString();
@@ -206,7 +210,28 @@ namespace GoTournamental.UI.Organiser {
                     }
                 }
             }
-		}							
+		}						
+ 		protected void FixtureHalvesNumberLoad() {
+        	Array fixtureHalvesNumberEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesNumbers));
+            if (fixtureHalvesNumber.Items.Count < 2) {
+                foreach (Enum type in fixtureHalvesNumberEnum) {
+                    if (EnumExtensions.GetIntValue(type) > 0) {
+                        fixtureHalvesNumber.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
+                    }
+                }
+            }
+        }       
+  		protected void FixtureHalvesLengthLoad() {
+			Array fixtureHalvesLengthEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesLengths));
+            if (fixtureHalvesLength.Items.Count < 2) {
+                foreach (Enum type in fixtureHalvesLengthEnum) {
+                    if (EnumExtensions.GetIntValue(type) > 0) {
+                        fixtureHalvesLength.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
+                    }
+                }
+            }
+        }       
+	
 		protected void TeamSizeLoad() {
 			Array teamSizeEnum = Enum.GetValues(typeof(Domains.NumberOfParticipants));
             if (teamSize.Items.Count < 2) {
@@ -258,7 +283,10 @@ namespace GoTournamental.UI.Organiser {
 			}
 			if (competitionStartDate.SelectedValue != "" && competitionStartHour.SelectedValue != "" && competitionStartMinute.SelectedValue != "") {
 				startTimeText = startTimeText + " " + competitionStartHour.SelectedValue + ":"+competitionStartMinute.SelectedValue+":00";
-			}			
+			}
+            if ((Int32.Parse(fixtureHalvesNumber.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) {
+                fixtureOverRun = true;
+            }
             competitionToSave = new Competition(
 				id : competition.ID ,
 				tournamentID : tournament.ID ,
@@ -267,6 +295,8 @@ namespace GoTournamental.UI.Organiser {
 				session : (Competition.Sessions)Int32.Parse(session.SelectedValue) ,
 				competitionFormat : (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue) ,
 				fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
+                fixtureHalvesNumber : fixtureOverRun == true ? Tournament.FixtureHalvesNumbers.Undefined : (Tournament.FixtureHalvesNumbers)Int32.Parse(fixtureHalvesNumber.SelectedValue) ,
+                fixtureHalvesLength : fixtureOverRun == true ? Tournament.FixtureHalvesLengths.Undefined : (Tournament.FixtureHalvesLengths)Int32.Parse(fixtureHalvesLength.SelectedValue) ,
 				teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
 				squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) 
             );
@@ -296,7 +326,13 @@ namespace GoTournamental.UI.Organiser {
             //    Response.Redirect("~/UI/KnockoutView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
             //}
             //else {
-            Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+
+            if (fixtureOverRun) {
+                Response.Write("<script language=javascript>alert('The fixture lengths selected are longer than the turnaround');</script>");
+            }
+            else {
+                Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+            }
             //}
 
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,8 +7,9 @@ using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
 	public partial class ContactsList : Page {
 
@@ -39,7 +39,7 @@ namespace GoTournamental.UI.Organiser {
 				contacts = iContact.SQLSelectForTournament(tournament.ID);
 			}
 	
-			LinkToContactAdd.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
+			LinkToContactAdd.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
 			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 				LinkToContactAdd.Visible = true;
 			}
@@ -68,7 +68,7 @@ namespace GoTournamental.UI.Organiser {
 				HyperLink editContactLink = (HyperLink)e.Row.FindControl("EditContactLink");
 				editContactLink.Text = contact.FirstName + " " + contact.LastName;
 				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-					editContactLink.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=2&TournamentID=" + tournament.ID.ToString() + "&contact_id=" + contact.ID.ToString();
+					editContactLink.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=2&TournamentID=" + tournament.ID.ToString() + "&contact_id=" + contact.ID.ToString();
 				}
 				if (contact.Type == Contact.ContactTypes.ClubContact) {
 					Club club = iClub.GetClubForPrimaryContactID(contact.ID);

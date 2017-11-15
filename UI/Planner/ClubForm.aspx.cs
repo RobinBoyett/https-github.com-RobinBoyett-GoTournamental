@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class ClubForm : Page {
 
@@ -136,7 +136,7 @@ namespace GoTournamental.UI.Organiser {
 				primaryContact.Visible = true;
 				primaryContact.Text = club.PrimaryContact.ToString();
                 editContactButton.Visible = true;
-                //linkToContactEdit.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString();
+                //linkToContactEdit.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString();
 			}
 	
 			if (!IsPostBack) {
@@ -190,15 +190,15 @@ namespace GoTournamental.UI.Organiser {
 
         protected void AddContactButton_Click(object sender, EventArgs e) {
             SaveClubData();
-            Response.Redirect("~/UI/Contacts/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+clubID.ToString());
+            Response.Redirect("~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+clubID.ToString());
         }
         protected void EditContactButton_Click(object sender, EventArgs e) {
             SaveClubData();
-            Response.Redirect("~/UI/Contacts/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString());
+            Response.Redirect("~/UI/Planner/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString());
         }
         protected void SaveButton_Click(object sender, EventArgs e) {
             SaveClubData();
-			Response.Redirect("~/UI/Clubs/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
+			Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
         }
 
     }

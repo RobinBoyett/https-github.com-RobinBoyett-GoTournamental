@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -9,6 +8,7 @@ using System.IO;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -76,6 +76,8 @@ namespace GoTournamental.UI.Organiser {
 
 			if (Request.QueryString.Get("TournamentID") != null) {
 				tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
+                if (tournament.ID == 1) {
+                }
 				club = iClub.SQLSelectHostClubForTournament(tournament.ID);
 			}
 			if (Request.QueryString.Get("UploadType") != null) {
@@ -180,7 +182,7 @@ namespace GoTournamental.UI.Organiser {
                 iClub.SQLUpdateClubLogoFile(tournament.HostClub.ID,null);
                 IOExtensions.DeleteExistingFile(Server.MapPath(filePath));
             }
-            Response.Redirect("~/UI/Tournaments/TournamentView?TournamentID="+tournament.ID.ToString());
+            Response.Redirect("~/UI/Planner/TournamentView?TournamentID="+tournament.ID.ToString());
         }
 
 		protected void UploadType_SelectedIndexChanged(object sender, EventArgs e) {
@@ -288,10 +290,11 @@ namespace GoTournamental.UI.Organiser {
 		}
 
 		protected void SaveButton_Click(object sender, EventArgs e) {
-			fileRequiredValidator.Enabled = false;
-			string newFileName = "";
 
-			IOExtensions.DeleteAgedFilesInDirectory(Server.MapPath("~/Uploads/"), IOExtensions.TimeUnits.Seconds, 300);
+            IOExtensions.DeleteAgedFilesInDirectory(Server.MapPath("~/Uploads/"), IOExtensions.TimeUnits.Seconds, 300);
+
+            fileRequiredValidator.Enabled = false;
+			string newFileName = "";
 
 			if (fileUploadType == FileUploadTypes.ClubLogo) {
 				newFileName = "ClubID" + club.ID.ToString() + "Logo" + graphicFileName.Value.Substring(graphicFileName.Value.IndexOf("."), 4);
@@ -321,7 +324,7 @@ namespace GoTournamental.UI.Organiser {
 
 			if (fileUploadType == FileUploadTypes.ClubLogo) {
 				backToReferrerLink.Text = "Back to Tournament Home Page >>";
-				backToReferrerLink.NavigateUrl = "~/UI/Tournaments/TournamentView?TournamentID=" + tournament.ID.ToString();
+				backToReferrerLink.NavigateUrl = "~/UI/Planner/TournamentView?TournamentID=" + tournament.ID.ToString();
 			}
 			else if (fileUploadType == FileUploadTypes.Advert) {
 				backToReferrerLink.Text = "Back to Adverts List >>";
@@ -332,7 +335,7 @@ namespace GoTournamental.UI.Organiser {
 
 		protected void RejectButton_Click(object sender, EventArgs e) {
 			IOExtensions.DeleteExistingFile(Server.MapPath("~/Uploads/"+graphicFileName.Value));
-			Response.Redirect("~/UI/Tournaments/TournamentView?TournamentID=" + tournament.ID.ToString());
+			Response.Redirect("~/UI/Planner/TournamentView?TournamentID=" + tournament.ID.ToString());
 		}
 
 	}

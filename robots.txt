@@ -1,9 +1,9 @@
 ﻿User-agent: *
 Disallow: /UI/Admin/
 Disallow: /UI/Adverts/SponsorForm.aspx
-Disallow: /UI/Clubs/
+Disallow: /UI/Planner/
 Disallow: /UI/Competitions/
-Disallow: /UI/Contacts/
+Disallow: /UI/Planner/
 Disallow: /UI/Forms/
 Disallow: /UI/IO/
 Disallow: /UI/Menus/

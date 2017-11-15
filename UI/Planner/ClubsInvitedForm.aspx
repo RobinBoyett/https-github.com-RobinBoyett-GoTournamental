@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Club" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ClubsInvitedForm.aspx.cs" Inherits="GoTournamental.UI.Organiser.ClubsInvitedForm" %>
+﻿<%@ Page Title="Club" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ClubsInvitedForm.aspx.cs" Inherits="GoTournamental.UI.Planner.ClubsInvitedForm" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register TagPrefix="Navigation" TagName="TournamentMenu" Src="~/UI/Menus/TournamentMenu.ascx" %>
 <%@ Register TagPrefix="Navigation" TagName="SetUpMenu" Src="~/UI/Menus/SetUpMenu.ascx" %>

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
-using GoTournamental.API.Identity;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class TournamentForm : Page {
 
@@ -31,6 +31,7 @@ namespace GoTournamental.UI.Organiser {
 		int noPlayingAreasInTournament = 0;
         int maxTeamSize = 0;
         int maxSquadSize = 0;
+        bool fixtureOverRun = false;
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
         protected enum RequestVersion {
@@ -58,6 +59,8 @@ namespace GoTournamental.UI.Organiser {
         TextBox tournamentGoogleMapsURL = new TextBox();
         DropDownList tournamentNoPlayingAreas = new DropDownList();
 		DropDownList fixtureTurnaround = new DropDownList();
+		DropDownList fixtureHalvesNumber = new DropDownList();
+		DropDownList fixtureHalvesLength = new DropDownList();
 		DropDownList teamSize = new DropDownList();
  		DropDownList squadSize = new DropDownList();
 	 	DropDownList rotatorDate = new DropDownList();
@@ -72,7 +75,6 @@ namespace GoTournamental.UI.Organiser {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
 
-			ManageRoleSecurity();
                         
             string rawID = Request.QueryString.Get("TournamentID");
             if (!String.IsNullOrEmpty(rawID) && Int32.TryParse(rawID, out tournamentID)) {
@@ -80,6 +82,9 @@ namespace GoTournamental.UI.Organiser {
 				tournamentID = tournament.ID;
 				tournamentFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 				clubs = iClub.SQLSelectClubsForTournament(tournament.ID);
+            }
+            if (tournamentID != 1) {
+    			ManageRoleSecurity();
             }
 
             Array tournamentTypes = Enum.GetValues(typeof(Tournament.TournamentTypes));
@@ -106,6 +111,24 @@ namespace GoTournamental.UI.Organiser {
                     }
                 }
             }
+			Array fixtureHalvesNumberEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesNumbers));
+            if (fixtureHalvesNumber.Items.Count < 2) {
+                foreach (Enum type in fixtureHalvesNumberEnum) {
+                    if (EnumExtensions.GetIntValue(type) > 0) {
+                        fixtureHalvesNumber.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
+                    }
+                }
+            }
+			Array fixtureHalvesLengthEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesLengths));
+            if (fixtureHalvesLength.Items.Count < 2) {
+                foreach (Enum type in fixtureHalvesLengthEnum) {
+                    if (EnumExtensions.GetIntValue(type) > 0) {
+                        fixtureHalvesLength.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
+                    }
+                }
+            }
+
+
 			if (tournament.StartTime.HasValue && tournament.StartTime != null) {
 				rotatorDate.Items.Add(new ListItem(tournament.StartTime.Value.ToShortDateString(), tournament.StartTime.Value.ToShortDateString()));
 			}
@@ -149,6 +172,8 @@ namespace GoTournamental.UI.Organiser {
             tournamentGoogleMapsURL = (TextBox)TournamentFormPanel.FindControl("TournamentGoogleMapsURL");
             tournamentNoPlayingAreas = (DropDownList)TournamentFormPanel.FindControl("TournamentNoPlayingAreas"); 
 			fixtureTurnaround = (DropDownList)TournamentFormPanel.FindControl("FixtureTurnaround"); 
+			fixtureHalvesNumber = (DropDownList)TournamentFormPanel.FindControl("FixtureHalvesNumber"); 
+			fixtureHalvesLength = (DropDownList)TournamentFormPanel.FindControl("FixtureHalvesLength"); 
  			teamSize = (DropDownList)TournamentFormPanel.FindControl("TeamSize"); 
 			squadSize = (DropDownList)TournamentFormPanel.FindControl("SquadSize");
 			rotatorDate = (DropDownList)TournamentFormPanel.FindControl("RotatorDate");
@@ -234,6 +259,8 @@ namespace GoTournamental.UI.Organiser {
 				tournamentGoogleMapsURL.Text = tournament.GoogleMapsURL ;
 				tournamentNoPlayingAreas.SelectedValue = EnumExtensions.GetIntValue(tournament.NoOfPlayingAreas).ToString();
 				fixtureTurnaround.SelectedValue = EnumExtensions.GetIntValue(tournament.FixtureTurnaround).ToString();
+                fixtureHalvesNumber.SelectedValue = EnumExtensions.GetIntValue(tournament.FixtureHalvesNumber).ToString();
+                fixtureHalvesLength.SelectedValue = EnumExtensions.GetIntValue(tournament.FixtureHalvesLength).ToString();
 				teamSize.SelectedValue = EnumExtensions.GetIntValue(tournament.TeamSize).ToString();
 				squadSize.SelectedValue = EnumExtensions.GetIntValue(tournament.SquadSize).ToString();
 				if (tournament.RotatorDate.HasValue && tournament.RotatorDate != null) {
@@ -295,6 +322,18 @@ namespace GoTournamental.UI.Organiser {
             }
 		}	
 
+        //protected void ValidateFixtureDuration(object sender, ServerValidateEventArgs e) {
+        //    int turnaround = Int32.Parse(fixtureTurnaround.SelectedValue);
+        //    int halvesNumber = Int32.Parse(fixtureHalvesNumber.SelectedValue);
+        //    int halvesLength = Int32.Parse(fixtureHalvesLength.SelectedValue);
+        //    if (turnaround > (halvesNumber * halvesLength)) {
+        //        e.IsValid = true;
+        //    }
+        //    else {
+        //        e.IsValid = false;
+        //    }
+        //}
+
  		protected void TournamentType_SelectedIndexChanged(object sender, EventArgs e) {
             DropDownList tournamentTypeMenu = (DropDownList)TournamentFormPanel.FindControl("TournamentType");
             Tournament.TournamentTypes tournamentType = (Tournament.TournamentTypes)Int32.Parse(tournamentTypeMenu.SelectedValue);
@@ -304,77 +343,88 @@ namespace GoTournamental.UI.Organiser {
        
         protected void SaveButton_Click(object sender, EventArgs e) {
  
-			if (tournamentStartDate.Text != "") {
-				startTimeText = tournamentStartDate.Text;
-			}
-			if (tournamentStartDate.Text != "" && tournamentStartHour.SelectedValue != "" && tournamentStartMinute.SelectedValue != "") {
-				startTimeText = startTimeText + " " + tournamentStartHour.SelectedValue + ":"+ tournamentStartMinute.SelectedValue+":00";
-			}
-			else {
-                startTimeText = startTimeText + " 09:00:00";
-            }
-			Tournament tournamentToSave = new Tournament(
-				id: tournamentID ,
-				tournamentType: (Tournament.TournamentTypes)Int32.Parse(tournamentType.SelectedValue) ,
-				name: tournamentName.Text ,
-				affiliation : null ,
-				startTime: startTimeText.Length > 0 ? DateTime.Parse(startTimeText) : (Nullable<DateTime>)null ,
-				endTime: tournamentEndDate.Text == "" ? (Nullable<DateTime>)null : DateTime.Parse(tournamentEndDate.Text),
-				venue: tournamentVenue.Text,
-				postcode: tournamentPostcode.Text ,
-				googleMapsURL: iTournament.GetSourceForGoogleMapEmbedString(tournamentGoogleMapsURL.Text) ,
-				noOfPlayingAreas: (Tournament.NumberOfPlayingAreas)Int32.Parse(tournamentNoPlayingAreas.SelectedValue) ,
-				fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
-				teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
-				squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) ,
-				rotatorDate : rotatorDate.SelectedValue != "" ? DateTime.Parse(rotatorDate.SelectedValue) : (Nullable<DateTime>)null  ,
-				rotatorSession : (Competition.Sessions)Int32.Parse(rotatorSession.SelectedValue)
-            );
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    if (tournamentStartDate.Text != "") {
+				    startTimeText = tournamentStartDate.Text;
+			    }
+			    if (tournamentStartDate.Text != "" && tournamentStartHour.SelectedValue != "" && tournamentStartMinute.SelectedValue != "") {
+				    startTimeText = startTimeText + " " + tournamentStartHour.SelectedValue + ":"+ tournamentStartMinute.SelectedValue+":00";
+			    }
+			    else {
+                    startTimeText = startTimeText + " 09:00:00";
+                }
+                if ((Int32.Parse(fixtureHalvesNumber.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) {
+                    fixtureOverRun = true;
+                }
+			    Tournament tournamentToSave = new Tournament(
+				    id: tournamentID ,
+				    tournamentType: (Tournament.TournamentTypes)Int32.Parse(tournamentType.SelectedValue) ,
+				    name: tournamentName.Text ,
+				    affiliation : null ,
+				    startTime: startTimeText.Length > 0 ? DateTime.Parse(startTimeText) : (Nullable<DateTime>)null ,
+				    endTime: tournamentEndDate.Text == "" ? (Nullable<DateTime>)null : DateTime.Parse(tournamentEndDate.Text),
+				    venue: tournamentVenue.Text,
+				    postcode: tournamentPostcode.Text ,
+				    googleMapsURL: iTournament.GetSourceForGoogleMapEmbedString(tournamentGoogleMapsURL.Text) ,
+				    noOfPlayingAreas: (Tournament.NumberOfPlayingAreas)Int32.Parse(tournamentNoPlayingAreas.SelectedValue) ,
+				    fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
+                    fixtureHalvesNumber : fixtureOverRun == true ? Tournament.FixtureHalvesNumbers.Undefined : (Tournament.FixtureHalvesNumbers)Int32.Parse(fixtureHalvesNumber.SelectedValue) ,
+                    fixtureHalvesLength : fixtureOverRun == true ? Tournament.FixtureHalvesLengths.Undefined : (Tournament.FixtureHalvesLengths)Int32.Parse(fixtureHalvesLength.SelectedValue) ,
+				    teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
+				    squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) ,
+				    rotatorDate : rotatorDate.SelectedValue != "" ? DateTime.Parse(rotatorDate.SelectedValue) : (Nullable<DateTime>)null  ,
+				    rotatorSession : (Competition.Sessions)Int32.Parse(rotatorSession.SelectedValue)
+                );
 
-            if (tournamentToSave.ID == 0) {
-                tournamentID = iTournament.SQLInsertAndReturnID<Tournament>(tournamentToSave);
-				identityHelper.AddClaimForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournamentID.ToString());
-				Club hostClub = new Club(
-					id: 0,
-					tournamentID: tournamentID,
-					name: hostClubName.Text,
-                    attendanceType: Domains.AttendanceTypes.HostClub,
-					websiteURL: null,
-					logoFile: null,
-					twitter: null,
-					colourPrimary: null,
-					colourSecondary: null,
-					affiliation : null ,
-					affiliationNumber : null ,
-					primaryContactID : null
-				);
-				iClub.SQLInsert<Club>(hostClub);
-                System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID));
-                System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID+"/Adverts"));
-                System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID + "/Logos"));
-                System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID + "/Documents"));
-            }
-            else {
-                iTournament.SQLUpdate<Tournament>(tournamentToSave);
-            }
+                if (tournamentToSave.ID == 0) {
+                    tournamentID = iTournament.SQLInsertAndReturnID<Tournament>(tournamentToSave);
+				    identityHelper.AddClaimForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournamentID.ToString());
+				    Club hostClub = new Club(
+					    id: 0,
+					    tournamentID: tournamentID,
+					    name: hostClubName.Text,
+                        attendanceType: Domains.AttendanceTypes.HostClub,
+					    websiteURL: null,
+					    logoFile: null,
+					    twitter: null,
+					    colourPrimary: null,
+					    colourSecondary: null,
+					    affiliation : null ,
+					    affiliationNumber : null ,
+					    primaryContactID : null
+				    );
+				    iClub.SQLInsert<Club>(hostClub);
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID));
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID+"/Adverts"));
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID + "/Logos"));
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads/Tournament" + tournamentID + "/Documents"));
+                }
+                else {
+                    iTournament.SQLUpdate<Tournament>(tournamentToSave);
+                }
 
-			noPlayingAreasInTournament = iTournament.CountPlayingAreasForTournament(tournamentToSave.ID);
-            if (noPlayingAreasInTournament == 0) {
-                //noPlayingAreasInTournament = EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas);
-                for (int i = 1; i <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas); i++) {
-                    PlayingArea playingArea = new PlayingArea(id: 0, tournamentID: tournamentID, name: "Pitch " + i.ToString());
-                    iPlayingArea.SQLInsert<PlayingArea>(playingArea);
+			    noPlayingAreasInTournament = iTournament.CountPlayingAreasForTournament(tournamentToSave.ID);
+                if (noPlayingAreasInTournament == 0) {
+                    //noPlayingAreasInTournament = EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas);
+                    for (int i = 1; i <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas); i++) {
+                        PlayingArea playingArea = new PlayingArea(id: 0, tournamentID: tournamentID, name: "Pitch " + i.ToString());
+                        iPlayingArea.SQLInsert<PlayingArea>(playingArea);
+                    }
+                }
+                else if (noPlayingAreasInTournament <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas)) {
+                     for (int i = noPlayingAreasInTournament+1; i <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas); i++) {
+                        PlayingArea playingArea = new PlayingArea(id: 0, tournamentID: tournamentID, name: "Pitch " + i.ToString());
+                        iPlayingArea.SQLInsert<PlayingArea>(playingArea);
+                    }           
                 }
             }
-            else if (noPlayingAreasInTournament <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas)) {
-                 for (int i = noPlayingAreasInTournament+1; i <= EnumExtensions.GetIntValue(tournamentToSave.NoOfPlayingAreas); i++) {
-                    PlayingArea playingArea = new PlayingArea(id: 0, tournamentID: tournamentID, name: "Pitch " + i.ToString());
-                    iPlayingArea.SQLInsert<PlayingArea>(playingArea);
-                }           
+
+            if (fixtureOverRun) {
+                Response.Write("<script language=javascript>alert('The fixture lengths selected are longer than the turnaround');</script>");
             }
-
-            Response.Redirect("~/UI/Tournaments/TournamentView.aspx?TournamentID="+tournamentID.ToString());
-
+            else {
+                Response.Redirect("~/UI/Planner/TournamentView.aspx?TournamentID="+tournamentID.ToString());
+            }
 
         }
 

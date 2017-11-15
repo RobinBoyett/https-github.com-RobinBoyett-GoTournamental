@@ -13,8 +13,8 @@ DECLARE @GroupID				int
 BEGIN
 
 	--// CREATE TOURNAMENT
-	INSERT INTO Planner.Tournaments ([Type], [Name], StartTime, EndTime, Venue, Postcode, GoogleMapsURL, NoOfPlayingAreas, FixtureTurnaround, TeamSize, SquadSize, RotatorDate, RotatorSession) 
-	VALUES (1, 'Tournament Demonstration 2017', CONVERT(datetime,'24/06/2017 09:00:00',103), CONVERT(datetime,'25/06/2017 00:00:00',103), 'Sir Alf Ramsey Playing Fields, Broadmead', 'TN6 2TN', NULL, 7, 15, 6, 8, NULL, 0)
+	INSERT INTO Planner.Tournaments ([Type], [Name], StartTime, EndTime, Venue, Postcode, GoogleMapsURL, NoOfPlayingAreas, FixtureTurnaround, FixtureHalvesNumber, FixtureHalvesLength, TeamSize, SquadSize, RotatorDate, RotatorSession) 
+	VALUES (1, 'Tournament Demonstration 2017', CONVERT(datetime,'24/06/2017 09:00:00',103), CONVERT(datetime,'25/06/2017 00:00:00',103), 'Sir Alf Ramsey Playing Fields, Broadmead', 'TN6 2TN', NULL, 7, 15, 2, 6, 6, 8, NULL, 0)
 
 
  	SELECT @TournamentID = ID FROM Planner.Tournaments WHERE [Name] = 'Tournament Demonstration 2017'

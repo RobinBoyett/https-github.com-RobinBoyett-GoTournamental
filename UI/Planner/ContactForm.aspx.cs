@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class ContactForm : Page {
 
@@ -164,13 +162,13 @@ namespace GoTournamental.UI.Organiser {
 				Response.Redirect("~/UI/Teams/TeamForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString());
 			}
 			else if (Request.QueryString.Get("club_id") != null) {
-				Response.Redirect("~/UI/Clubs/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString());
+				Response.Redirect("~/UI/Planner/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString());
 			}
 			else if (contactTypeSelected == GoTournamental.BLL.Organiser.Contact.ContactTypes.TournamentContact) {
-				Response.Redirect("~/UI/Tournaments/TournamentView?TournamentID="+tournament.ID.ToString());
+				Response.Redirect("~/UI/Planner/TournamentView?TournamentID="+tournament.ID.ToString());
 			}
 			else {
-				Response.Redirect("~/UI/Contacts/ContactsList.aspx?TournamentID="+tournament.ID.ToString());
+				Response.Redirect("~/UI/Planner/ContactsList.aspx?TournamentID="+tournament.ID.ToString());
 			}
 
         }

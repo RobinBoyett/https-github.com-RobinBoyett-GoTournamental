@@ -22,13 +22,13 @@ namespace GoTournamental.UI.Organiser {
                 int tournamentID = identityHelper.TournamentIDCreatedByUser(HttpContext.Current.User.Identity.GetUserId());
                 HyperLink tournamentLink = (HyperLink)GTHomePagePanel.FindControl("TournamentLink");
                 tournamentLink.Text = "Your Tournament &raquo;";
-                tournamentLink.NavigateUrl = "/UI/Tournaments/TournamentView?TournamentID=" + tournamentID.ToString();
+                tournamentLink.NavigateUrl = "/UI/Planner/TournamentView?TournamentID=" + tournamentID.ToString();
                 tournamentLink.Visible = true;
             }
             else if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated) {
                 HyperLink tournamentLink = (HyperLink)GTHomePagePanel.FindControl("TournamentLink");
                 tournamentLink.Text = "Create Tournament &raquo;";
-                tournamentLink.NavigateUrl = "/UI/Tournaments/TournamentForm?Version=1";
+                tournamentLink.NavigateUrl = "/UI/Planner/TournamentForm?Version=1";
                 tournamentLink.Visible = true;
             }
 

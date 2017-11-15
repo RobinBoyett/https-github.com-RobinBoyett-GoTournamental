@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -330,7 +330,7 @@ namespace GoTournamental.UI.Organiser {
 					iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
 				}
 			}
-			List<Team> teamsInCompetition = iTeam.SQLSelectForCompetition(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
+			List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
 			List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
 			groupsInCompetition = groupsList.Count;
 			int currentGroup = 0;
@@ -399,7 +399,8 @@ namespace GoTournamental.UI.Organiser {
                 }
                 else {
                     homeTeamScore.Enabled = false;
-                } e.Row.Cells[4].Text = "V";
+                }
+                e.Row.Cells[4].Text = "V";
  				HiddenField awayTeamID = (HiddenField)e.Row.FindControl("FinalsAwayTeamID");
 				awayTeamID.Value = fixture.AwayTeamID.ToString();
 				TextBox awayTeamScore = (TextBox)e.Row.FindControl("FinalsAwayTeamScore");
@@ -415,6 +416,16 @@ namespace GoTournamental.UI.Organiser {
 					playingArea = iPlayingArea.SQLSelect<PlayingArea, int>((int)fixture.PlayingAreaID);
 		            e.Row.Cells[7].Text = playingArea.Name;
 				}
+
+                if (fixture.HomeTeamScore != null && (fixture.HomeTeamScore == fixture.AwayTeamScore)) {
+                    e.Row.Cells[10].Text = "-";
+                }
+                else {
+                    e.Row.Cells[9].Visible = false;
+                    e.Row.Cells[10].Visible = false;
+                    e.Row.Cells[11].Visible = false;
+                }
+
 			}
 		}
 
@@ -438,8 +449,10 @@ namespace GoTournamental.UI.Organiser {
                                     startTime: null,
                                     homeTeamID: Int32.Parse(Request.Form[i + 1]),
                                     homeTeamScore: Int32.Parse(Request.Form[i + 2]),
+                                    homeTeamPenaltiesScore: null,
                                     awayTeamID: Int32.Parse(Request.Form[i + 3]),
                                     awayTeamScore: Int32.Parse(Request.Form[i + 4]),
+                                    awayTeamPenaltiesScore: null,
                                     primaryOfficialID: null
                                 );
                                 scoresList.Add(fixtureToUpdate);
@@ -458,8 +471,10 @@ namespace GoTournamental.UI.Organiser {
                                 startTime: null,
                                 homeTeamID: Int32.Parse(Request.Form[i + 1]),
                                 homeTeamScore: Int32.Parse(Request.Form[i + 2]),
+                                homeTeamPenaltiesScore: null,
                                 awayTeamID: Int32.Parse(Request.Form[i + 3]),
                                 awayTeamScore: Int32.Parse(Request.Form[i + 4]),
+                                awayTeamPenaltiesScore: null,
                                 primaryOfficialID: null
                             );
                             scoresList.Add(fixtureToUpdate);
@@ -478,8 +493,8 @@ namespace GoTournamental.UI.Organiser {
 			ArrayList scoresList = new ArrayList();
 			int i = 0;
 			foreach (string item in Request.Form.Keys) {
-				if (item.Contains("FinalsID")) {					
-					if (Request.Form[i+2] != "" && Request.Form[i+5] != "") {
+				if (item.Contains("FinalsID")) {        // score in normal time
+                    if (Request.Form[i+2] != "" && Request.Form[i+4] != "") {
 						Fixture fixtureToUpdate = new Fixture(
 							id: Int32.Parse(Request.Form[i]) ,
 							competitionID : null ,
@@ -490,13 +505,36 @@ namespace GoTournamental.UI.Organiser {
 							startTime : null ,
 							homeTeamID : Int32.Parse(Request.Form[i+1]) ,
 							homeTeamScore : Int32.Parse(Request.Form[i+2]) ,
+                            homeTeamPenaltiesScore: null ,
 							awayTeamID : Int32.Parse(Request.Form[i+3]) ,
 							awayTeamScore : Int32.Parse(Request.Form[i+4]) ,
+                            awayTeamPenaltiesScore: null,
 							primaryOfficialID : null
 						);
 						scoresList.Add(fixtureToUpdate);
 					}
 				}
+				if (item.Contains("PenaltiesRequired")) {        // score from penalties
+                    if (Request.Form[i + 1] != "" && Request.Form[i + 2] != "") {
+                        Fixture fixtureToUpdate = new Fixture(
+                            id: Int32.Parse(Request.Form[i - 5]),
+                            competitionID: null,
+                            groupID: null,
+                            isLeagueFixture: null,
+                            playingAreaID: null,
+                            name: null,
+                            startTime: null,
+                            homeTeamID: Int32.Parse(Request.Form[i - 4]),
+                            homeTeamScore: Int32.Parse(Request.Form[i - 3]),
+                            homeTeamPenaltiesScore: Int32.Parse(Request.Form[i + 1]),
+                            awayTeamID: Int32.Parse(Request.Form[i - 2]),
+                            awayTeamScore: Int32.Parse(Request.Form[i -1]),
+                            awayTeamPenaltiesScore: Int32.Parse(Request.Form[i + 2]),
+                            primaryOfficialID: null
+                        );
+                        scoresList.Add(fixtureToUpdate);
+                    }
+                }
 				i++;
 			}
 			foreach (Fixture newScore in scoresList) {

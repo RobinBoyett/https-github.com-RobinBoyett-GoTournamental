@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Web.Helpers;
@@ -8,9 +6,10 @@ using OfficeOpenXml;
 using GoTournamental.API;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
-using GoTournamental.ORM.Organiser;
+using GoTournamental.BLL.Organiser;
+using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Planner {
 
     public class Club: IClub {
 
@@ -96,9 +95,9 @@ namespace GoTournamental.BLL.Organiser {
             List<Club> selectedList = context.Clubs.Where(i => i.TournamentID == tournamentID).OrderBy(i => i.Name).ToList();
             return selectedList;
         }
-        public List<Club> SQLSelectClubsForCompetition(int competitionID) {
+        public List<Club> GetCompetitionClubsAll(int competitionID) {
             ClubDbContext context = new ClubDbContext();
-			List<Club> clubList = context.SQLGetClubsForCompetition(competitionID).ToList();
+			List<Club> clubList = context.GetCompetitionClubsAll(competitionID).ToList();
 			return clubList;
         }		
 		public void SQLUpdate<T>(T input) {
@@ -222,7 +221,7 @@ namespace GoTournamental.BLL.Organiser {
         ICollection<Team> Teams { get; }
         Club SQLSelectHostClubForTournament(int tournamentID);
         List<Club> SQLSelectClubsForTournament(int tournamentID);
-		List<Club> SQLSelectClubsForCompetition(int competitionID);
+		List<Club> GetCompetitionClubsAll(int competitionID);
 		void SQLUpdatePrimaryContactID(int id, int primaryContactID);
         void SQLUpdateAttendanceType(int id, Domains.AttendanceTypes attendanceType);
 		Club GetClubForPrimaryContactID(int primaryContactID);

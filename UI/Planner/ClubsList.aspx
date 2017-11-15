@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Clubs List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ClubsList.aspx.cs" Inherits="GoTournamental.UI.Organiser.ClubsList" %>
+﻿<%@ Page Title="Clubs List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ClubsList.aspx.cs" Inherits="GoTournamental.UI.Planner.ClubsList" %>
 <%@ Register TagPrefix="Navigation" TagName="TournamentMenu" Src="~/UI/Menus/TournamentMenu.ascx" %>
 <%@ Register TagPrefix="Navigation" TagName="SetUpMenu" Src="~/UI/Menus/SetUpMenu.ascx" %>
 

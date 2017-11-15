@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
 public partial class SetUpMenu : System.Web.UI.UserControl {
@@ -47,7 +44,7 @@ public partial class SetUpMenu : System.Web.UI.UserControl {
             contacts = iContact.SQLSelectForTournament(tournament.ID);
         }
 
-        if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+        if (tournament.ID == 1 || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
             SetUpNavigationPanel.Visible = true;
 
             linkToSetUp.NavigateUrl = "~/UI/Competitions/SetUp.aspx?TournamentID=" + tournament.ID.ToString();
@@ -61,24 +58,24 @@ public partial class SetUpMenu : System.Web.UI.UserControl {
                 linkToCompetitions.Visible = true;
             }
 
-			linkToClubsDirectory.NavigateUrl = "~/UI/Clubs/ClubsList.aspx?version=1&TournamentID=" + tournament.ID.ToString();
-            linkToClubInvitation.NavigateUrl = "~/UI/Clubs/ClubsInvitedForm.aspx?TournamentID=" + tournament.ID.ToString();
+			linkToClubsDirectory.NavigateUrl = "~/UI/Planner/ClubsList.aspx?version=1&TournamentID=" + tournament.ID.ToString();
+            linkToClubInvitation.NavigateUrl = "~/UI/Planner/ClubsInvitedForm.aspx?TournamentID=" + tournament.ID.ToString();
 
             linkToTeamAttendance.NavigateUrl = "~/UI/Teams/TeamAttendanceForm.aspx?TournamentID=" + tournament.ID.ToString();
 
             if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
                 linkToRegistration.Visible = true;
-                linkToRegistration.NavigateUrl = "~/UI/Clubs/ClubRegistrationForm.aspx?TournamentID=" + tournament.ID.ToString() + "&version=1&club_id=" + tournament.HostClub.ID.ToString();
+                linkToRegistration.NavigateUrl = "~/UI/Planner/ClubRegistrationForm.aspx?TournamentID=" + tournament.ID.ToString() + "&version=1&club_id=" + tournament.HostClub.ID.ToString();
             }
  
             
 			if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated) {
 				linkToContacts.Visible = true;
 				if (contacts.Count > 0) {
-					linkToContacts.NavigateUrl = "~/UI/Contacts/ContactsList.aspx?TournamentID=" + tournament.ID.ToString();
+					linkToContacts.NavigateUrl = "~/UI/Planner/ContactsList.aspx?TournamentID=" + tournament.ID.ToString();
 				}
 				else {
-					linkToContacts.NavigateUrl = "~/UI/Contacts/ContactForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
+					linkToContacts.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
 				}
             }
 

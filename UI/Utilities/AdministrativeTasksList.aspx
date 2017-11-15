@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Sponsors List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="AdministrativeTasksList.aspx.cs" Inherits="GoTournamental.UI.Organiser.AdministrativeTasksList" %>
+﻿<%@ Page Title="Sponsors List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="AdministrativeTasksList.aspx.cs" Inherits="GoTournamental.UI.Planner.AdministrativeTasksList" %>
 <%@ Register TagPrefix="Navigation" TagName="TournamentMenu" Src="~/UI/Menus/TournamentMenu.ascx" %>
 <%@ Register TagPrefix="Navigation" TagName="SetUpMenu" Src="~/UI/Menus/SetUpMenu.ascx" %>
 <%@ Register TagPrefix="Advertisements" TagName="AdvertPanel" Src="~/UI/Adverts/AdvertPanel.ascx" %>

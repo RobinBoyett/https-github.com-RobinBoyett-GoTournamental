@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Tournaments Search" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentsList.aspx.cs" Inherits="GoTournamental.UI.Organiser.TournamentsList" %>
+﻿<%@ Page Title="Tournaments Search" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentsList.aspx.cs" Inherits="GoTournamental.UI.Planner.TournamentsList" %>
 <%@ Register TagPrefix="Advertisements" TagName="AdvertPanel" Src="~/UI/Adverts/AdvertPanel.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">

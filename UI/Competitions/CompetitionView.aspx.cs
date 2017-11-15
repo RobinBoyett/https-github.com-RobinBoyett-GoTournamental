@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -10,6 +9,7 @@ using GoTournamental.API.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -52,6 +52,8 @@ namespace GoTournamental.UI.Organiser {
         Label startTime = new Label();
 		Label session = new Label();
 		Label fixtureTurnaround = new Label();
+        Label fixtureHalvesNumber = new Label();
+        Label fixtureHalvesLength = new Label();
 		Label competitionFormat = new Label();
         Label teamSize = new Label();
         Label squadSize = new Label();
@@ -98,6 +100,8 @@ namespace GoTournamental.UI.Organiser {
             startTime = (Label)CompetitionViewPanel.FindControl("StartTime");
 			session = (Label)CompetitionViewPanel.FindControl("Session");
 			fixtureTurnaround = (Label)CompetitionViewPanel.FindControl("FixtureTurnaround");
+            fixtureHalvesNumber = (Label)CompetitionViewPanel.FindControl("FixtureHalvesNumber");
+            fixtureHalvesLength = (Label)CompetitionViewPanel.FindControl("FixtureHalvesLength");
 			competitionFormat = (Label)CompetitionViewPanel.FindControl("CompetitionFormat");
             teamSize = (Label)CompetitionViewPanel.FindControl("TeamSize");
             squadSize = (Label)CompetitionViewPanel.FindControl("SquadSize");
@@ -118,7 +122,7 @@ namespace GoTournamental.UI.Organiser {
 			ageBand.Text = EnumExtensions.GetStringValue(competition.AgeBand);
 			if (competition.CountTeamsAttendingCompetition() != 0) {
 				noTeamsAttending.Text = competition.CountTeamsAttendingCompetition().ToString();
-				noTeamsAttending.NavigateUrl = "~/UI/Clubs/ClubsList?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString();
+				noTeamsAttending.NavigateUrl = "~/UI/Planner/ClubsList?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString();
 			}
 			if (competition.StartTime.HasValue) {
 				hourString = competition.StartTime.Value.Hour.ToString();
@@ -142,7 +146,11 @@ namespace GoTournamental.UI.Organiser {
 			}	
 			if (competition.FixtureTurnaround != Tournament.FixtureTurnarounds.Undefined) {
 				fixtureTurnaround.Text = EnumExtensions.GetIntValue(competition.FixtureTurnaround).ToString() + " Minutes";
-			}	
+			}
+			if (competition.FixtureHalvesNumber != Tournament.FixtureHalvesNumbers.Undefined) {
+                fixtureHalvesNumber.Text = "- matches are " + EnumExtensions.GetIntValue(competition.FixtureHalvesNumber).ToString() + " x " + EnumExtensions.GetIntValue(competition.FixtureHalvesLength).ToString() + " mins";
+            } 
+        	
 			if (competition.CompetitionFormat != Competition.CompetitionFormats.Undefined) {
 				competitionFormat.Text = EnumExtensions.GetStringValue(competition.CompetitionFormat);
 			}
@@ -189,7 +197,7 @@ namespace GoTournamental.UI.Organiser {
             groupsDataList.DataBind();
 
             fixturesList = iFixture.SQLSelectFinalsForCompetition(competition.ID);
-			if (fixturesList.Count > 0) {
+            if (fixturesList.Count > 0) {
 				finalsLabel.Visible = true;
 				fixturesListForCompetition.DataSource = fixturesList;
 				fixturesListForCompetition.DataBind();
@@ -366,9 +374,16 @@ namespace GoTournamental.UI.Organiser {
 					e.Row.Cells[6].Text = iClub.SQLSelect<Club, int>(fixture.AwayTeam.ClubID).Name + " " + fixture.AwayTeam.Name;
 				}
 
+                if (fixture.HomeTeamPenaltiesScore != null && fixture.AwayTeamPenaltiesScore != null) {
+                    e.Row.Cells[7].Text = fixture.HomeTeamPenaltiesScore.ToString() + "-" + fixture.AwayTeamPenaltiesScore + " on pens";
+                }
+                else {
+
+                }
+
 				if (fixture.PlayingAreaID != null) {
 					playingArea = iPlayingArea.SQLSelect<PlayingArea, int>((int)fixture.PlayingAreaID);
-		            e.Row.Cells[7].Text = playingArea.Name;
+		            e.Row.Cells[8].Text = playingArea.Name;
 				}
 			}
 		}

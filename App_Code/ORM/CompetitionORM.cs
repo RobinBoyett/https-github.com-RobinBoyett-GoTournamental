@@ -77,6 +77,8 @@ namespace GoTournamental.ORM.Organiser {
             Property(i => i.Session).HasColumnName("Session");
             Property(i => i.CompetitionFormat).HasColumnName("CompetitionFormat");
             Property(i => i.FixtureTurnaround).HasColumnName("FixtureTurnaround");
+            Property(i => i.FixtureHalvesNumber).HasColumnName("FixtureHalvesNumber");
+            Property(i => i.FixtureHalvesLength).HasColumnName("FixtureHalvesLength");
             Property(i => i.TeamSize).HasColumnName("TeamSize");
             Property(i => i.SquadSize).HasColumnName("SquadSize");
             ToTable("Planner.Competitions");

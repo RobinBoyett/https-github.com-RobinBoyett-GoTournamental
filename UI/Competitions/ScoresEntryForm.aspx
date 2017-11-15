@@ -81,6 +81,20 @@
                         <asp:BoundField HeaderText="'Away'" ItemStyle-Width="260" ItemStyle-Font-Size="Small" />
                         <asp:BoundField HeaderText="Pitch" ItemStyle-Width="50" ItemStyle-Font-Size="Small" />
                         <asp:BoundField HeaderText="Referee" ItemStyle-Width="120" ItemStyle-Font-Size="Small" />
+
+                        <asp:TemplateField HeaderText="Pens" ItemStyle-Width="30"  ItemStyle-Font-Size="Small" >
+                            <Itemtemplate>
+                                <asp:HiddenField ID="PenaltiesRequired" runat="server" />
+                                <asp:TextBox ID="FinalsHomeTeamPenaltiesScore" Width="25" Style="text-align: right;" runat="server" />                   
+                            </Itemtemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField ItemStyle-Width="10" ItemStyle-Font-Size="Small" />
+                        <asp:TemplateField ItemStyle-Width="40" ItemStyle-Font-Size="Small" >
+                            <Itemtemplate>
+                                <asp:TextBox ID="FinalsAwayTeamPenaltiesScore" Width="25" Style="text-align: left;" runat="server" />                   
+                            </Itemtemplate>
+                        </asp:TemplateField>
+
                     </Columns>
                 </asp:GridView>
                 <asp:Button ID="SaveFinalsScoresButton" Text="Save Finals Scores" OnClick="SaveFinalsScoresButton_Click" CssClass="btn btn-default" Visible="false" runat="server" /><br />

@@ -10,7 +10,7 @@ using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Planner {
 
     public partial class TournamentsList : Page {
 
@@ -18,7 +18,7 @@ namespace GoTournamental.UI.Organiser {
         List<Tournament> tournamentsList = new List<Tournament>();
         ITournament iTournament = new Tournament();
 		Tournament.TournamentTypes selectedType = Tournament.TournamentTypes.Undefined;
-		AdvertPanel advert300By250 = new AdvertPanel();
+		//AdvertPanel advert300By250 = new AdvertPanel();
         string searchFor = "";
 
         protected void Page_Load(object sender, EventArgs e) {
@@ -49,9 +49,9 @@ namespace GoTournamental.UI.Organiser {
             TournamentsListGridView.DataSource = tournamentsList;
             TournamentsListGridView.DataBind();
 
-			advert300By250 = (AdvertPanel)TournamentsListPanel.FindControl("Advert300By250");
-			advert300By250.graphicFileStyle = Advert.GraphicFileStyles.Advert300By250;
-			advert300By250.tournamentID = 0;
+			//advert300By250 = (AdvertPanel)TournamentsListPanel.FindControl("Advert300By250");
+			//advert300By250.graphicFileStyle = Advert.GraphicFileStyles.Advert300By250;
+			//advert300By250.tournamentID = 0;
  
 		}
 
@@ -66,7 +66,7 @@ namespace GoTournamental.UI.Organiser {
                 }
                 linkText += " - " + tournament.Name;
                 tournamentLink.Text = linkText;
-                tournamentLink.NavigateUrl = "/UI/Tournaments/TournamentView.aspx?TournamentID="+tournament.ID.ToString();
+                tournamentLink.NavigateUrl = "/UI/Planner/TournamentView.aspx?TournamentID="+tournament.ID.ToString();
                 //if (tournament.DaysDuration > 1) {
                 e.Row.Cells[1].Text = String.Format("{0:MMMM d, yyyy}", tournament.StartTime);
                 //}

@@ -29,7 +29,7 @@
                     The annual tournament or festival is usually your club's biggest income stream. Don't let it drive you mad - GoTournamental!
                 </p>
                 <p>
-                    <a href="/UI/Tournaments/TournamentsList.aspx">Search Tournaments &raquo;</a>
+                    <a href="/UI/Planner/TournamentsList.aspx">Search Tournaments &raquo;</a>
                 </p>
                 <p>
                     <asp:HyperLink ID="TournamentLink" class="btn btn-default" Visible="false" runat="server" />

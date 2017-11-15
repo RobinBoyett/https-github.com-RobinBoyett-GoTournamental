@@ -1,14 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
-using GoTournamental.ORM.Organiser;
+using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Planner {
 
     public class AdministrativeTask: IAdministrativeTask {
 

@@ -61,6 +61,14 @@
 					<asp:ListItem Value="0">Select</asp:ListItem>              
                 </asp:DropDownList>
                 Minutes
+                <asp:DropDownList ID="FixtureHalvesNumber" AppendDataBoundItems="true" runat="server">
+					<asp:ListItem Value="0">Select</asp:ListItem>              
+                </asp:DropDownList>
+                no. of halves
+                <asp:DropDownList ID="FixtureHalvesLength" AppendDataBoundItems="true" runat="server">
+					<asp:ListItem Value="0">Select</asp:ListItem>              
+                </asp:DropDownList>
+                mins per half
             </td>
         </tr>
         <tr>

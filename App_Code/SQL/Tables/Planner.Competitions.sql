@@ -16,6 +16,8 @@ CREATE TABLE [Planner].[Competitions] (
     [Session]           INT      NULL,
     [CompetitionFormat] INT      NULL,
     [FixtureTurnaround] INT      NULL,
+	[FixtureHalvesNumber] INT	 NULL,
+	[FixtureHalvesLength] INT	 NULL,
     [TeamSize]          INT      NULL,
     [SquadSize]         INT      NULL,
     CONSTRAINT [PK_Competitions] PRIMARY KEY ([ID])

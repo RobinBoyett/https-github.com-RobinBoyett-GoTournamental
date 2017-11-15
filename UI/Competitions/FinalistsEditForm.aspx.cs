@@ -5,6 +5,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -41,9 +42,9 @@ namespace GoTournamental.UI.Organiser {
 				competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 			}        
 			ageBand.Text = "Edit Team In " + EnumExtensions.GetStringValue(competition.AgeBand) + " Finals";
-            teamsInFinals = iTeam.SQLSelectForCompetitionFinals(competition.ID);
+            teamsInFinals = iTeam.GetCompetitionFinalsTeams(competition.ID);
             var finalsTeamsIDs = (from teams in teamsInFinals select teams.ID);
-            teamsInCompetition = iTeam.SQLSelectForCompetition(competition.ID);
+            teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID);
             teamsInCompetition.RemoveAll(i => finalsTeamsIDs.Contains(i.ID));
 
             if (finalistTeamList.Items.Count < 2) {

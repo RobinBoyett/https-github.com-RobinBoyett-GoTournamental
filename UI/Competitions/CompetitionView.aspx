@@ -39,7 +39,9 @@
                 Fixture Turnaround:
             </td>
             <td>
-                <asp:Label ID="FixtureTurnaround" runat="server" />
+                <asp:Label ID="FixtureTurnaround" runat="server" /> 
+                <asp:Label ID="FixtureHalvesNumber" runat="server" />
+                <asp:Label ID="FixtureHalvesLength" runat="server" />           
             </td>
         </tr>
         <tr>
@@ -150,6 +152,7 @@
             <asp:BoundField ItemStyle-Width="20" ItemStyle-Font-Size="Small" />
             <asp:BoundField ItemStyle-Width="20" ItemStyle-Font-Size="Small" />
             <asp:BoundField HeaderText="'Away'" ItemStyle-Width="260" ItemStyle-Font-Size="Small" />
+            <asp:BoundField HeaderText="" ItemStyle-Width="80" ItemStyle-Font-Size="Small" />
             <asp:BoundField HeaderText="Pitch" ItemStyle-Width="50" ItemStyle-Font-Size="Small" />
             <asp:BoundField HeaderText="Referee" ItemStyle-Width="120" ItemStyle-Font-Size="Small" />
         </Columns>

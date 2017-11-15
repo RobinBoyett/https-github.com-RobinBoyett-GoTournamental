@@ -20,6 +20,8 @@ CREATE TABLE [Planner].[Tournaments] (
     [GoogleMapsURL]     VARCHAR (500) NULL,
     [NoOfPlayingAreas]  INT           NULL,
     [FixtureTurnaround] INT           NULL,
+    [FixtureHalvesNumber] INT           NULL,
+    [FixtureHalvesLength] INT           NULL,
     [TeamSize]          INT           NULL,
     [SquadSize]         INT           NULL,
     [RotatorDate]       DATETIME      NULL,

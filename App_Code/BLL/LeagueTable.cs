@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
+﻿using System.Linq;
 using System.Collections.Generic;
-using GoTournamental.API.Interface;
-using GoTournamental.API.Utilities;
+using GoTournamental.BLL.Planner;
 using GoTournamental.ORM.Organiser;
 
 namespace GoTournamental.BLL.Organiser {
@@ -31,9 +28,7 @@ namespace GoTournamental.BLL.Organiser {
             get {
                 Team team = new Team();
                 ITeam iTeam = new Team();
-                if (this.TeamID != null) {
-                    team = iTeam.SQLSelect<Team, int>(TeamID);
-                }
+                team = iTeam.SQLSelect<Team, int>(TeamID);
                 return team;
             }
         }

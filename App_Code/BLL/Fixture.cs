@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Data.Entity.Infrastructure;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
+using GoTournamental.BLL.Planner;
 using GoTournamental.ORM.Organiser;
 
 namespace GoTournamental.BLL.Organiser {
@@ -27,7 +27,10 @@ namespace GoTournamental.BLL.Organiser {
 
 		#region Constructors
         public Fixture() { }
-        public Fixture(int id, int? competitionID, int? groupID, bool? isLeagueFixture, int? playingAreaID, string name, DateTime? startTime, int? homeTeamID, int? homeTeamScore, int? awayTeamID, int? awayTeamScore, int? primaryOfficialID) {
+        public Fixture(
+            int id, int? competitionID, int? groupID, bool? isLeagueFixture, int? playingAreaID, string name, DateTime? startTime, 
+            int? homeTeamID, int? homeTeamScore, int? homeTeamPenaltiesScore, int? awayTeamID, int? awayTeamScore, int? awayTeamPenaltiesScore, int? primaryOfficialID
+        ) {
 			this.ID = id;
 			this.CompetitionID = competitionID;
 			this.GroupID = groupID;
@@ -37,8 +40,10 @@ namespace GoTournamental.BLL.Organiser {
 			this.StartTime = startTime;
 			this.HomeTeamID = homeTeamID;
 			this.HomeTeamScore = homeTeamScore;
+            this.HomeTeamPenaltiesScore = homeTeamPenaltiesScore;
 			this.AwayTeamID = awayTeamID;
 			this.AwayTeamScore = awayTeamScore;
+            this.AwayTeamPenaltiesScore = awayTeamPenaltiesScore;
 			this.PrimaryOfficialID = primaryOfficialID;
 		}
         #endregion
@@ -83,6 +88,7 @@ namespace GoTournamental.BLL.Organiser {
             }
         }
         public int? HomeTeamScore { get; set; }
+        public int? HomeTeamPenaltiesScore { get; set; }
         public int? AwayTeamID { get; set; }
         public Team AwayTeam {
             get {
@@ -95,6 +101,7 @@ namespace GoTournamental.BLL.Organiser {
             }
         }
         public int? AwayTeamScore { get; set; }
+        public int? AwayTeamPenaltiesScore { get; set; }
         public int? PrimaryOfficialID { get; set; }
         public Contact PrimaryOfficial {
             get {
@@ -122,8 +129,19 @@ namespace GoTournamental.BLL.Organiser {
 			Fixture selected = context.Fixtures.Single(i => i.ID == updated.ID);
 			selected.HomeTeamScore = updated.HomeTeamScore;
 			selected.AwayTeamScore = updated.AwayTeamScore;
+            selected.HomeTeamPenaltiesScore = updated.HomeTeamPenaltiesScore;
+            selected.AwayTeamPenaltiesScore = updated.AwayTeamPenaltiesScore;
 			context.SaveChanges();
 		}
+		public void SQLUpdatePenaltyScores(Fixture fixture) {
+			FixtureDbContext context = new FixtureDbContext();
+			Fixture updated = fixture;
+			Fixture selected = context.Fixtures.Single(i => i.ID == updated.ID);
+			selected.HomeTeamPenaltiesScore = updated.HomeTeamPenaltiesScore;
+			selected.AwayTeamPenaltiesScore = updated.AwayTeamPenaltiesScore;
+			context.SaveChanges();
+		}
+
         public T SQLSelect<T, U>(U id) {
             FixtureDbContext context = new FixtureDbContext();
             Fixture selected = context.Fixtures.Where(i => i.ID == (int)(object)id).SingleOrDefault();
@@ -254,8 +272,10 @@ namespace GoTournamental.BLL.Organiser {
                                     startTime: fixtureStart,
                                     homeTeamID: ((Team)fixturesArray[(noMatches - 1) * 2]).ID,
                                     homeTeamScore: null,
+                                    homeTeamPenaltiesScore: null,
                                     awayTeamID: ((Team)fixturesArray[(noMatches * 2) - 1]).ID,
                                     awayTeamScore: null,
+                                    awayTeamPenaltiesScore: null,
                                     primaryOfficialID: null
                                 );
                             }
@@ -270,8 +290,10 @@ namespace GoTournamental.BLL.Organiser {
                                     startTime: fixtureStart,
                                     homeTeamID: ((Team)fixturesArray[(noMatches * 2) - 1]).ID,
                                     homeTeamScore: null,
+                                    homeTeamPenaltiesScore: null,
                                     awayTeamID: ((Team)fixturesArray[(noMatches - 1) * 2]).ID,
                                     awayTeamScore: null,
+                                    awayTeamPenaltiesScore: null,
                                     primaryOfficialID: null
                                 );
                             }
@@ -316,8 +338,10 @@ namespace GoTournamental.BLL.Organiser {
                                     startTime: fixtureStart,
                                     homeTeamID: ((Team)fixturesArray[(noMatches - 1) * 2]).ID,
                                     homeTeamScore: null,
+                                    homeTeamPenaltiesScore: null,
                                     awayTeamID: ((Team)fixturesArray[(noMatches * 2) - 1]).ID,
                                     awayTeamScore: null,
+                                    awayTeamPenaltiesScore: null,
                                     primaryOfficialID: null
                                 );
                             }
@@ -332,8 +356,10 @@ namespace GoTournamental.BLL.Organiser {
                                     startTime: fixtureStart,
                                     homeTeamID: ((Team)fixturesArray[(noMatches * 2) - 1]).ID,
                                     homeTeamScore: null,
+                                    homeTeamPenaltiesScore: null,
                                     awayTeamID: ((Team)fixturesArray[(noMatches - 1) * 2]).ID,
                                     awayTeamScore: null,
+                                    awayTeamPenaltiesScore: null,
                                     primaryOfficialID: null
                                 );
                             }
@@ -394,8 +420,10 @@ namespace GoTournamental.BLL.Organiser {
                         startTime: fixtureStart,
                         homeTeamID: null,
                         homeTeamScore: null,
+                        homeTeamPenaltiesScore: null,
                         awayTeamID: null,
                         awayTeamScore: null,
+                        awayTeamPenaltiesScore: null,
                         primaryOfficialID: null
                     );
                     iFixture.SQLInsert<Fixture>(fixture);
@@ -425,8 +453,10 @@ namespace GoTournamental.BLL.Organiser {
                         startTime: fixtureStart,
                         homeTeamID: null,
                         homeTeamScore: null,
+                        homeTeamPenaltiesScore: null,
                         awayTeamID: null,
                         awayTeamScore: null,
+                        awayTeamPenaltiesScore: null,
                         primaryOfficialID: null
                     );
                     iFixture.SQLInsert<Fixture>(fixture);
@@ -455,8 +485,10 @@ namespace GoTournamental.BLL.Organiser {
                     startTime: fixtureStart,
                     homeTeamID: null,
                     homeTeamScore: null,
+                    homeTeamPenaltiesScore : null,
                     awayTeamID: null,
                     awayTeamScore: null,
+                    awayTeamPenaltiesScore: null,
                     primaryOfficialID: null
                 );
                 iFixture.SQLInsert<Fixture>(fixture);
@@ -473,8 +505,10 @@ namespace GoTournamental.BLL.Organiser {
                     startTime: fixtureStart,
                     homeTeamID: null,
                     homeTeamScore: null,
+                    homeTeamPenaltiesScore: null,
                     awayTeamID: null,
                     awayTeamScore: null,
+                    awayTeamPenaltiesScore: null,
                     primaryOfficialID: null
                 );
                 iFixture.SQLInsert<Fixture>(fixture);
@@ -659,9 +693,17 @@ namespace GoTournamental.BLL.Organiser {
 			if (fixture.HomeTeamScore > fixture.AwayTeamScore) {
 				team = iTeam.SQLSelect<Team, int>((int)fixture.HomeTeamID);
 			}
-			else {
+			else if (fixture.AwayTeamScore > fixture.HomeTeamScore) {
 				team = iTeam.SQLSelect<Team, int>((int)fixture.AwayTeamID);
 			}
+            else if (fixture.AwayTeamScore == fixture.HomeTeamScore) {
+                if (fixture.HomeTeamPenaltiesScore > fixture.AwayTeamPenaltiesScore) {
+    				team = iTeam.SQLSelect<Team, int>((int)fixture.HomeTeamID);
+                }
+                else if (fixture.AwayTeamPenaltiesScore > fixture.HomeTeamPenaltiesScore) {
+    				team = iTeam.SQLSelect<Team, int>((int)fixture.AwayTeamID);
+                }
+            }
 			return team;
 		}
 		public Team GetLosingTeamFromFixture(Competition competition, string fixtureName) {
@@ -672,9 +714,17 @@ namespace GoTournamental.BLL.Organiser {
 			if (fixture.HomeTeamScore > fixture.AwayTeamScore) {
 				team = iTeam.SQLSelect<Team, int>((int)fixture.AwayTeamID);
 			}
-			else {
+			else if (fixture.AwayTeamScore > fixture.HomeTeamScore) {
 				team = iTeam.SQLSelect<Team, int>((int)fixture.HomeTeamID);
 			}
+            else if (fixture.AwayTeamScore == fixture.HomeTeamScore) {
+                if (fixture.HomeTeamPenaltiesScore > fixture.AwayTeamPenaltiesScore) {
+    				team = iTeam.SQLSelect<Team, int>((int)fixture.AwayTeamID);
+                }
+                else if (fixture.AwayTeamPenaltiesScore > fixture.HomeTeamPenaltiesScore) {
+    				team = iTeam.SQLSelect<Team, int>((int)fixture.HomeTeamID);
+                }
+            }
 			return team;
 		}
 		public string GetTeamNameForFixture(Competition competition, string fixtureName, Venue venue) {
@@ -831,23 +881,23 @@ namespace GoTournamental.BLL.Organiser {
 						break;
 				}
 				if (fixtureName == "Cup Final" && venue == Venue.Home) {
+					teamName = "Winner Cup Semi-Final 1";
 					if (FixtureCompleted(competition, "Cup Semi-Final 1")) {
 						team = GetWinningTeamFromFixture(competition, "Cup Semi-Final 1");
-						this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
-						teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
-					}
-					else {
-						teamName = "Winner Cup Semi-Final 1";
+                        if (team.ID != 0) {
+						    this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
+						    teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
+                        }
 					}
 				}
 				else if (fixtureName == "Cup Final" && venue == Venue.Away) {
+					teamName = "Winner Cup Semi-Final 2";
 					if (FixtureCompleted(competition, "Cup Semi-Final 2")) {
 						team = GetWinningTeamFromFixture(competition, "Cup Semi-Final 2");
-						this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
-						teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
-					}
-					else {
-						teamName = "Winner Cup Semi-Final 2";
+                        if (team.ID != 0) {
+						    this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
+						    teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
+                        }
 					}
 				}
 			}
@@ -966,21 +1016,24 @@ namespace GoTournamental.BLL.Organiser {
 				}
                 // JBJFC
                 if (fixtureName == "Plate Final" && venue == Venue.Home) {
+                    teamName = "Winner Plate Semi-Final 1";
                     if (FixtureCompleted(competition, "Plate Semi-Final 1")) {
                         team = GetWinningTeamFromFixture(competition, "Plate Semi-Final 1");
-                        this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
-                        teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
-                    } else {
-                        teamName = "Winner Plate Semi-Final 1";
-                    }
-                } else if (fixtureName == "Plate Final" && venue == Venue.Away) {
+                        if (team.ID != 0) {
+                            this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
+                            teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
+                        }
+                    } 
+                } 
+                else if (fixtureName == "Plate Final" && venue == Venue.Away) {
+                    teamName = "Winner Plate Semi-Final 2";
                     if (FixtureCompleted(competition, "Plate Semi-Final 2")) {
                         team = GetWinningTeamFromFixture(competition, "Plate Semi-Final 2");
-                        this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
-                        teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
-                    } else {
-                        teamName = "Winner Plate Semi-Final 2";
-                    }
+                        if (team.ID != 0) {
+                            this.UpdateTeamInFixture(competition, fixtureName, venue, team.ID);
+                            teamName = iClub.SQLSelect<Club, int>(team.ClubID).Name + " " + team.Name;
+                        }
+                    } 
                 }
 
                 // CAFC
@@ -1008,8 +1061,6 @@ namespace GoTournamental.BLL.Organiser {
 
 			return teamName;
 		}
-
-
 		#endregion Methods
 
     }
@@ -1025,12 +1076,15 @@ namespace GoTournamental.BLL.Organiser {
         int? HomeTeamID { get; }
         Team HomeTeam { get; }
         int? HomeTeamScore { get; }
+        int? HomeTeamPenaltiesScore { get; }
         int? AwayTeamID { get; }
         Team AwayTeam { get; }
         int? AwayTeamScore { get; }
+        int? AwayTeamPenaltiesScore { get; }
         int? PrimaryOfficialID { get; }
         Contact PrimaryOfficial { get; }
 		void SQLUpdateScores(Fixture fixture);
+        void SQLUpdatePenaltyScores(Fixture fixture);
         List<Fixture> SQLSelectForGroup(int groupID);
 		List<Fixture> SQLSelectFinalsForCompetition(int competitionID);
         List<Fixture> SQLSelectForCompetition(int competitionID);

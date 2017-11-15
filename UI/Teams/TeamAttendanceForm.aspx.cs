@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Microsoft.AspNet.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 namespace GoTournamental.UI.Organiser {
 
@@ -113,7 +112,7 @@ namespace GoTournamental.UI.Organiser {
                 linkToCompetition.Text = EnumExtensions.GetStringValue(iCompetition.SQLSelect<Competition, int>((int)team.CompetitionID).AgeBand);
                 linkToCompetition.NavigateUrl = "~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + team.CompetitionID.ToString();
                 linkToClubEdit.Text = (iclub.SQLSelect<Club, int>(team.ClubID)).Name;
-                linkToClubEdit.NavigateUrl = "~/UI/Clubs/ClubForm?version=2&TournamentID=" + tournament.ID.ToString() + "&club_id=" + team.ClubID.ToString();
+                linkToClubEdit.NavigateUrl = "~/UI/Planner/ClubForm?version=2&TournamentID=" + tournament.ID.ToString() + "&club_id=" + team.ClubID.ToString();
                 linkToTeamEdit.Text = team.Name;
                 linkToTeamEdit.NavigateUrl = "~/UI/Teams/TeamForm?version=2&TournamentID=" + tournament.ID.ToString() + "&club_id=" + team.ClubID.ToString() + "&team_id=" + team.ID.ToString();
 

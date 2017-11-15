@@ -12,7 +12,7 @@
             <br />
 	        <asp:GridView id="ContactUsListGridView" OnRowDataBound="ContactUsListGridView_RowDataBound" EmptyDataText="No Queries Were Found" runat="server" GridLines="None" AutoGenerateColumns="False" Width="1000">
 		        <Columns>
-			        <asp:HyperLinkField HeaderText="ID" HeaderStyle-HorizontalAlign="Left" DataTextField="ID" ItemStyle-Font-Size="11px" ItemStyle-Width="40" DataNavigateUrlFormatString="~/UI/Contacts/ContactUsForm.aspx?ID={0}" DataNavigateUrlFields="ID" />
+			        <asp:HyperLinkField HeaderText="ID" HeaderStyle-HorizontalAlign="Left" DataTextField="ID" ItemStyle-Font-Size="11px" ItemStyle-Width="40" DataNavigateUrlFormatString="~/UI/Planner/ContactUsForm.aspx?ID={0}" DataNavigateUrlFields="ID" />
                     <asp:BoundField HeaderText="Date" ItemStyle-Width="100" />
                     <asp:BoundField HeaderText="From" ItemStyle-Width="250" />
                     <asp:BoundField HeaderText="Organisation" DataField="Organisation" ItemStyle-Width="250" />

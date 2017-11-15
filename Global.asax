@@ -13,8 +13,7 @@
               
         GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
 
-        identityHelper.CreateRole("Administrator");
-        
+        identityHelper.CreateRole("Administrator");      
         identityHelper.CreateRole("TournamentOwner");
         identityHelper.CreateRole("TournamentOwnerPremium");
                
@@ -22,6 +21,7 @@
 
         identityHelper.CreateUser("Rob", "Pellings136", "rob@gotournamental.com");
         identityHelper.CreateUser("Martin", "Pellings136", "martin@gotournamental.com");
+        identityHelper.CreateUser("guest", "guest", "noreply@gotournamental.com");
 
         identityHelper.AddRoleForUser("Rob", "rob@gotournamental.com", "TournamentOwner");
         identityHelper.AddRoleForUser("Rob", "rob@gotournamental.com", "TournamentOwnerPremium");

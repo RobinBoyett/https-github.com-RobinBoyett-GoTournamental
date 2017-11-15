@@ -1,11 +1,9 @@
-using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Configuration;
-using System.Collections.Generic;
-using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.ORM.Organiser {
+namespace GoTournamental.ORM.Planner {
 
     public class AdministrativeTaskDbContext : DbContext {
         public DbSet<AdministrativeTask> AdministrativeTasks { get; set; }
@@ -26,7 +24,7 @@ namespace GoTournamental.ORM.Organiser {
             Property(i => i.TaskType).HasColumnName("TaskType");
             Property(i => i.TypeID).HasColumnName("TypeID");
             Property(i => i.TaskStatus).HasColumnName("TaskStatus");
-            ToTable(" AdministrativeTasks");
+            ToTable("Planner.AdministrativeTasks");
         }
     }
 

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Tournament" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentView.aspx.cs" Inherits="GoTournamental.UI.Organiser.TournamentView" %>
+﻿<%@ Page Title="Tournament" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="TournamentView.aspx.cs" Inherits="GoTournamental.UI.Planner.TournamentView" %>
 <%@ Register TagPrefix="Navigation" TagName="TournamentMenu" Src="~/UI/Menus/TournamentMenu.ascx" %>
 <%@ Register TagPrefix="Navigation" TagName="SetUpMenu" Src="~/UI/Menus/SetUpMenu.ascx" %>
 <%@ Register TagPrefix="Advertisements" TagName="AdvertPanel" Src="~/UI/Adverts/AdvertPanel.ascx" %>
@@ -90,6 +90,8 @@
                                 </td>
                                 <td>
                                     <asp:Label ID="FixtureTurnaround" runat="server" />
+                                    <asp:Label ID="FixtureHalvesNumber" runat="server" />
+                                    <asp:Label ID="FixtureHalvesLength" runat="server" />
                                 </td>
                             </tr>
                             <tr>

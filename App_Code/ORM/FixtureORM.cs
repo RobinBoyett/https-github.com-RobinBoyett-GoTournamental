@@ -57,8 +57,10 @@ namespace GoTournamental.ORM.Organiser {
             Property(i => i.StartTime).HasColumnName("StartTime");
             Property(i => i.HomeTeamID).HasColumnName("HomeTeamID");
             Property(i => i.HomeTeamScore).HasColumnName("HomeTeamScore");
+            Property(i => i.HomeTeamPenaltiesScore).HasColumnName("HomeTeamPenaltiesScore");
             Property(i => i.AwayTeamID).HasColumnName("AwayTeamID");
             Property(i => i.AwayTeamScore).HasColumnName("AwayTeamScore");
+            Property(i => i.AwayTeamPenaltiesScore).HasColumnName("AwayTeamPenaltiesScore");
             Property(i => i.PrimaryOfficialID).HasColumnName("PrimaryOfficialID");
             ToTable("Planner.Fixtures");
         }

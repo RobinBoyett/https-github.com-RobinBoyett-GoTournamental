@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Data;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.ComponentModel;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Drawing;
 using OfficeOpenXml;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
+using GoTournamental.BLL.Planner;
 
 public partial class ExportData : Page {
 
@@ -357,7 +355,12 @@ public partial class ExportData : Page {
                         range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                         range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                         range.Style.Fill.BackgroundColor.SetColor(Color.SkyBlue);
-                        competitionsSheet.Cells[rowIndex, 5+offset].Value = fixture.StartTime.Value.ToShortTimeString() + "  2 x 5 mins"; 
+                        if (competition.FixtureHalvesNumber != Tournament.FixtureHalvesNumbers.Undefined && competition.FixtureHalvesLength != Tournament.FixtureHalvesLengths.Undefined) {
+                            competitionsSheet.Cells[rowIndex, 5+offset].Value = fixture.StartTime.Value.ToShortTimeString() + " " + EnumExtensions.GetIntValue(competition.FixtureHalvesNumber).ToString() + " x " + EnumExtensions.GetIntValue(competition.FixtureHalvesLength).ToString() + " mins"; 
+                        }
+                        else {
+                            competitionsSheet.Cells[rowIndex, 5+offset].Value = fixture.StartTime.Value.ToShortTimeString() + " " + EnumExtensions.GetIntValue(tournament.FixtureHalvesNumber).ToString() + " x " + EnumExtensions.GetIntValue(tournament.FixtureHalvesLength).ToString() + " mins"; 
+                        }
                     }
                     var headers = competitionsSheet.Cells[rowIndex, 1, rowIndex, 6+offset];
                     headers.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thick;
