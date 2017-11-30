@@ -124,6 +124,25 @@ public partial class ExportData : Page {
 							colIndex++;
 						}
 
+                        using (ExcelRange range = groupSheet.Cells["A6:F6"]) {
+							range.Merge = true;
+							range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+							range.Style.Font.Bold = true;
+                            range.Style.Font.Color.SetColor(Color.Red);
+                            if (competition.FixtureHalvesNumber == Tournament.FixtureHalvesNumbers.Two && competition.FixtureHalvesLength != Tournament.FixtureHalvesLengths.Undefined) {
+    							groupSheet.Cells["A6"].Value = "ALL GAMES " + (EnumExtensions.GetIntValue(competition.FixtureHalvesLength)).ToString() + " MINUTES EACH WAY";
+                            }
+                            else if (competition.FixtureHalvesNumber == Tournament.FixtureHalvesNumbers.One && competition.FixtureHalvesLength != Tournament.FixtureHalvesLengths.Undefined) {
+    							groupSheet.Cells["A6"].Value = "ALL GAMES " + (EnumExtensions.GetIntValue(competition.FixtureHalvesLength)).ToString() + " MINUTES - NO HALF TIME";
+                            }
+                            else if (tournament.FixtureHalvesNumber == Tournament.FixtureHalvesNumbers.Two && tournament.FixtureHalvesLength != Tournament.FixtureHalvesLengths.Undefined) {
+    							groupSheet.Cells["A6"].Value = "ALL GAMES " + (EnumExtensions.GetIntValue(tournament.FixtureHalvesLength)).ToString() + " MINUTES EACH WAY";
+                            }
+                            else if (tournament.FixtureHalvesNumber == Tournament.FixtureHalvesNumbers.One && tournament.FixtureHalvesLength != Tournament.FixtureHalvesLengths.Undefined) {
+    							groupSheet.Cells["A6"].Value = "ALL GAMES " + (EnumExtensions.GetIntValue(tournament.FixtureHalvesLength)).ToString() + "MINUTES - NO HALF TIME";
+                            }
+						}
+
 						rowIndex = 7;
 						groupSheet.Cells[rowIndex, 1].Value = "K-O";
 						groupSheet.Cells[rowIndex, 2].Value = "Home";

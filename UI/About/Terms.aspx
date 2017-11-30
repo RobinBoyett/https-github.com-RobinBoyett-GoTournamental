@@ -13,7 +13,7 @@
         <div class="col-md-8">
             <h3>Terms And Conditions</h3>
             <p>
-                <asp:Hyperlink ID="TermsAndConditionsLink" Text="Click Here" runat="server" /> to read our Terms and Conditions<br />
+                <asp:Hyperlink ID="TermsAndConditionsLink" Text="Click Here" Target="_blank" runat="server" /> to read our Terms and Conditions<br />
                 <asp:Panel ID="TermsSignatoryPanel" Visible="false" runat="server">
                     I have read and understand the Terms and Conditions and wish to create a tournament&nbsp;&nbsp;&nbsp;<asp:CheckBox ID="TermsSigned" Width="15" Height="15" runat="server" />
                     <asp:Button ID="SaveTermsSigned" onClick="SaveTermsSigned_Click" Text="Save" runat="server" />

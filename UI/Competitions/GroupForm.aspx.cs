@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
-using GoTournamental.API;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
@@ -15,6 +12,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class GroupForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         IGroup iGroup = new Group();
@@ -70,9 +68,11 @@ namespace GoTournamental.UI.Organiser {
 		}
         
 		protected void SaveButton_Click(object sender, EventArgs e) {
-            if (fixtureTurnaround.SelectedValue != "0") {
-                iGroup.SQLUpdateFixtureTurnaround(group.ID, (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue));
-                iFixture.AdjustFixtureTurnaroundForGroup(group.ID, Int32.Parse(fixtureTurnaround.SelectedValue));
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                if (fixtureTurnaround.SelectedValue != "0") {
+                    iGroup.SQLUpdateFixtureTurnaround(group.ID, (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue));
+                    iFixture.AdjustFixtureTurnaroundForGroup(group.ID, Int32.Parse(fixtureTurnaround.SelectedValue));
+                }
             }
             Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
         }

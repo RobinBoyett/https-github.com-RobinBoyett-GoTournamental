@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
-using GoTournamental.API;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -15,6 +16,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class ScoresEntryForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         Competition competition = new Competition();
@@ -307,40 +309,42 @@ namespace GoTournamental.UI.Organiser {
         }	
 	
 		protected void AllocateTeamsIntoGroupsWithPlayingAreas() {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 
-			iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
+			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
 
-			groupsInCompetition = iCompetition.CountGroupsForCompetition(competition.ID);
+			    groupsInCompetition = iCompetition.CountGroupsForCompetition(competition.ID);
 
-			int noGroups = Int32.Parse(competitionNoGroups.SelectedValue);
-			int playingAreaID = 0;
-			ArrayList playingAreaIDs = new ArrayList();
-			foreach (ListItem li in playingAreasList.Items) {
-				if (li.Selected == true) {
-					playingAreaIDs.Add(Int32.Parse(li.Value));
-				}
-			}
-			if (groupsInCompetition == 0) {
-				groupsInCompetition = noGroups;
-				for (int i = 1; i <= groupsInCompetition; i++) {
-					Group group = new Group(id: 0, competitionID: competition.ID, name: "Group " + i.ToString(), fixtureTurnaround : 0 , fixturesUnderWay: false);
-					groupID = iGroup.SQLInsertAndReturnID<Group>(group);
-					playingAreaID = (int)playingAreaIDs[i-1];
-					GroupPlayingArea groupPlayingArea = new GroupPlayingArea(id : 0, groupID: groupID, playingAreaID: playingAreaID );
-					iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
-				}
-			}
-			List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
-			List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
-			groupsInCompetition = groupsList.Count;
-			int currentGroup = 0;
-			foreach (Team team in teamsInCompetition) {
-				if (currentGroup == groupsInCompetition) {
-					currentGroup = 0;
-				}
-				iTeam.SQLUpdateGroupID(team.ID, groupsList[currentGroup].ID);
-				currentGroup++;
-			}
+			    int noGroups = Int32.Parse(competitionNoGroups.SelectedValue);
+			    int playingAreaID = 0;
+			    ArrayList playingAreaIDs = new ArrayList();
+			    foreach (ListItem li in playingAreasList.Items) {
+				    if (li.Selected == true) {
+					    playingAreaIDs.Add(Int32.Parse(li.Value));
+				    }
+			    }
+			    if (groupsInCompetition == 0) {
+				    groupsInCompetition = noGroups;
+				    for (int i = 1; i <= groupsInCompetition; i++) {
+					    Group group = new Group(id: 0, competitionID: competition.ID, name: "Group " + i.ToString(), fixtureTurnaround : 0 , fixturesUnderWay: false);
+					    groupID = iGroup.SQLInsertAndReturnID<Group>(group);
+					    playingAreaID = (int)playingAreaIDs[i-1];
+					    GroupPlayingArea groupPlayingArea = new GroupPlayingArea(id : 0, groupID: groupID, playingAreaID: playingAreaID );
+					    iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
+				    }
+			    }
+			    List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
+			    List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
+			    groupsInCompetition = groupsList.Count;
+			    int currentGroup = 0;
+			    foreach (Team team in teamsInCompetition) {
+				    if (currentGroup == groupsInCompetition) {
+					    currentGroup = 0;
+				    }
+				    iTeam.SQLUpdateGroupID(team.ID, groupsList[currentGroup].ID);
+				    currentGroup++;
+			    }
+            }
 		}
 
 		protected void AllocateTeamsToGroups_Click(object sender, EventArgs e) {
@@ -349,14 +353,18 @@ namespace GoTournamental.UI.Organiser {
 		}
 		
         protected void ReAllocateTeamsIntoNewGroups_Click(object sender, EventArgs e) {
-			iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
-			Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
+            }
+            Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
         }
 
 
 		protected void GenerateFixtureButton_Click(object sender, EventArgs e) {
-			iFixture.GenerateFixturesForCompetition(tournament, competition);		
-			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    iFixture.GenerateFixturesForCompetition(tournament, competition);		
+			}
+            Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
 		}
 
 		protected void FixturesListForCompetition_RowDataBound(Object sender, GridViewRowEventArgs e) {
@@ -430,14 +438,37 @@ namespace GoTournamental.UI.Organiser {
 		}
 
 		protected void SaveLeagueScoresButton_Click(object sender, EventArgs e) {
-			ArrayList scoresList = new ArrayList();
-			int i = 0;
-			foreach (string item in Request.Form.Keys) {
-				if (item.Contains("FixtureID")) {		
-                    Fixture fixture = iFixture.SQLSelect<Fixture,int>(Int32.Parse(Request.Form[i]));
-                    if (fixture.GroupID != null) {
-                        Group group = iGroup.SQLSelect<Group, int>((int)fixture.GroupID);
-                        if (group.FixturesUnderWay == true) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    ArrayList scoresList = new ArrayList();
+			    int i = 0;
+			    foreach (string item in Request.Form.Keys) {
+				    if (item.Contains("FixtureID")) {		
+                        Fixture fixture = iFixture.SQLSelect<Fixture,int>(Int32.Parse(Request.Form[i]));
+                        if (fixture.GroupID != null) {
+                            Group group = iGroup.SQLSelect<Group, int>((int)fixture.GroupID);
+                            if (group.FixturesUnderWay == true) {
+                                if (Request.Form[i + 2] != "" && Request.Form[i + 5] != "") {
+                                    Fixture fixtureToUpdate = new Fixture(
+                                        id: Int32.Parse(Request.Form[i]),
+                                        competitionID: null,
+                                        groupID: null,
+                                        isLeagueFixture: null,
+                                        playingAreaID: null,
+                                        name: null,
+                                        startTime: null,
+                                        homeTeamID: Int32.Parse(Request.Form[i + 1]),
+                                        homeTeamScore: Int32.Parse(Request.Form[i + 2]),
+                                        homeTeamPenaltiesScore: null,
+                                        awayTeamID: Int32.Parse(Request.Form[i + 3]),
+                                        awayTeamScore: Int32.Parse(Request.Form[i + 4]),
+                                        awayTeamPenaltiesScore: null,
+                                        primaryOfficialID: null
+                                    );
+                                    scoresList.Add(fixtureToUpdate);
+                                }
+                            }
+                        }
+                        else {
                             if (Request.Form[i + 2] != "" && Request.Form[i + 5] != "") {
                                 Fixture fixtureToUpdate = new Fixture(
                                     id: Int32.Parse(Request.Form[i]),
@@ -457,89 +488,70 @@ namespace GoTournamental.UI.Organiser {
                                 );
                                 scoresList.Add(fixtureToUpdate);
                             }
-                        }
-                    }
-                    else {
-                        if (Request.Form[i + 2] != "" && Request.Form[i + 5] != "") {
+                        }                    			
+				    }
+				    i++;
+			    }
+			    foreach (Fixture newScore in scoresList) {
+				    iFixture.SQLUpdateScores(newScore);				
+			    }
+            }
+			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+		}
+
+		protected void SaveFinalsScoresButton_Click(object sender, EventArgs e) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    ArrayList scoresList = new ArrayList();
+			    int i = 0;
+			    foreach (string item in Request.Form.Keys) {
+				    if (item.Contains("FinalsID")) {        // score in normal time
+                        if (Request.Form[i+2] != "" && Request.Form[i+4] != "") {
+						    Fixture fixtureToUpdate = new Fixture(
+							    id: Int32.Parse(Request.Form[i]) ,
+							    competitionID : null ,
+							    groupID : null ,
+							    isLeagueFixture : null ,
+							    playingAreaID : null ,
+							    name : null ,
+							    startTime : null ,
+							    homeTeamID : Int32.Parse(Request.Form[i+1]) ,
+							    homeTeamScore : Int32.Parse(Request.Form[i+2]) ,
+                                homeTeamPenaltiesScore: null ,
+							    awayTeamID : Int32.Parse(Request.Form[i+3]) ,
+							    awayTeamScore : Int32.Parse(Request.Form[i+4]) ,
+                                awayTeamPenaltiesScore: null,
+							    primaryOfficialID : null
+						    );
+						    scoresList.Add(fixtureToUpdate);
+					    }
+				    }
+				    if (item.Contains("PenaltiesRequired")) {        // score from penalties
+                        if (Request.Form[i + 1] != "" && Request.Form[i + 2] != "") {
                             Fixture fixtureToUpdate = new Fixture(
-                                id: Int32.Parse(Request.Form[i]),
+                                id: Int32.Parse(Request.Form[i - 5]),
                                 competitionID: null,
                                 groupID: null,
                                 isLeagueFixture: null,
                                 playingAreaID: null,
                                 name: null,
                                 startTime: null,
-                                homeTeamID: Int32.Parse(Request.Form[i + 1]),
-                                homeTeamScore: Int32.Parse(Request.Form[i + 2]),
-                                homeTeamPenaltiesScore: null,
-                                awayTeamID: Int32.Parse(Request.Form[i + 3]),
-                                awayTeamScore: Int32.Parse(Request.Form[i + 4]),
-                                awayTeamPenaltiesScore: null,
+                                homeTeamID: Int32.Parse(Request.Form[i - 4]),
+                                homeTeamScore: Int32.Parse(Request.Form[i - 3]),
+                                homeTeamPenaltiesScore: Int32.Parse(Request.Form[i + 1]),
+                                awayTeamID: Int32.Parse(Request.Form[i - 2]),
+                                awayTeamScore: Int32.Parse(Request.Form[i -1]),
+                                awayTeamPenaltiesScore: Int32.Parse(Request.Form[i + 2]),
                                 primaryOfficialID: null
                             );
                             scoresList.Add(fixtureToUpdate);
                         }
-                    }                    			
-				}
-				i++;
-			}
-			foreach (Fixture newScore in scoresList) {
-				iFixture.SQLUpdateScores(newScore);				
-			}
-			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
-		}
-
-		protected void SaveFinalsScoresButton_Click(object sender, EventArgs e) {
-			ArrayList scoresList = new ArrayList();
-			int i = 0;
-			foreach (string item in Request.Form.Keys) {
-				if (item.Contains("FinalsID")) {        // score in normal time
-                    if (Request.Form[i+2] != "" && Request.Form[i+4] != "") {
-						Fixture fixtureToUpdate = new Fixture(
-							id: Int32.Parse(Request.Form[i]) ,
-							competitionID : null ,
-							groupID : null ,
-							isLeagueFixture : null ,
-							playingAreaID : null ,
-							name : null ,
-							startTime : null ,
-							homeTeamID : Int32.Parse(Request.Form[i+1]) ,
-							homeTeamScore : Int32.Parse(Request.Form[i+2]) ,
-                            homeTeamPenaltiesScore: null ,
-							awayTeamID : Int32.Parse(Request.Form[i+3]) ,
-							awayTeamScore : Int32.Parse(Request.Form[i+4]) ,
-                            awayTeamPenaltiesScore: null,
-							primaryOfficialID : null
-						);
-						scoresList.Add(fixtureToUpdate);
-					}
-				}
-				if (item.Contains("PenaltiesRequired")) {        // score from penalties
-                    if (Request.Form[i + 1] != "" && Request.Form[i + 2] != "") {
-                        Fixture fixtureToUpdate = new Fixture(
-                            id: Int32.Parse(Request.Form[i - 5]),
-                            competitionID: null,
-                            groupID: null,
-                            isLeagueFixture: null,
-                            playingAreaID: null,
-                            name: null,
-                            startTime: null,
-                            homeTeamID: Int32.Parse(Request.Form[i - 4]),
-                            homeTeamScore: Int32.Parse(Request.Form[i - 3]),
-                            homeTeamPenaltiesScore: Int32.Parse(Request.Form[i + 1]),
-                            awayTeamID: Int32.Parse(Request.Form[i - 2]),
-                            awayTeamScore: Int32.Parse(Request.Form[i -1]),
-                            awayTeamPenaltiesScore: Int32.Parse(Request.Form[i + 2]),
-                            primaryOfficialID: null
-                        );
-                        scoresList.Add(fixtureToUpdate);
                     }
-                }
-				i++;
-			}
-			foreach (Fixture newScore in scoresList) {
-				iFixture.SQLUpdateScores(newScore);				
-			}
+				    i++;
+			    }
+			    foreach (Fixture newScore in scoresList) {
+				    iFixture.SQLUpdateScores(newScore);				
+			    }
+            }
 			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
 		}
 

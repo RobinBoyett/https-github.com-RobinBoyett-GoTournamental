@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
 using GoTournamental.API;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -13,6 +15,7 @@ namespace GoTournamental.UI.Planner {
     public partial class ClubForm : Page {
 
         #region Declare Domain Objects & Page Variables
+		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
  		List<Competition> competitions = new List<Competition>();
@@ -161,30 +164,31 @@ namespace GoTournamental.UI.Planner {
         }
 
         protected void SaveClubData() {
-            Club clubToSave = new Club(
-                id: Int32.Parse(clubIDHidden.Value),
-                tournamentID: tournament.ID,
-                name: clubName.Text,
-                attendanceType: (Domains.AttendanceTypes)Int32.Parse(attendanceType.SelectedValue),
-                websiteURL: null,
-                logoFile: null,
-                twitter: null,
-                colourPrimary: clubColourPrimary.SelectedValue,
-                colourSecondary: clubColourSecondary.SelectedValue,
-                affiliation: null,
-                affiliationNumber: null,
-                primaryContactID: primaryContactID.Value == "0" ? (int?)null : Int32.Parse(primaryContactID.Value)
-            );
-            bool alreadyExists = false;
-            alreadyExists = (clubToSave.ID != 0 || iClub.SQLClubExistsForTournament(tournament.ID, clubName.Text));
-            if (alreadyExists) {
-                iClub.SQLUpdate<Club>(clubToSave);
-                Response.Write("<script language=javascript>alert('There is already a Club with this name in the Tournament.');</script>");
+ 		    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+               Club clubToSave = new Club(
+                    id: Int32.Parse(clubIDHidden.Value),
+                    tournamentID: tournament.ID,
+                    name: clubName.Text,
+                    attendanceType: (Domains.AttendanceTypes)Int32.Parse(attendanceType.SelectedValue),
+                    websiteURL: null,
+                    logoFile: null,
+                    twitter: null,
+                    colourPrimary: clubColourPrimary.SelectedValue,
+                    colourSecondary: clubColourSecondary.SelectedValue,
+                    affiliation: null,
+                    affiliationNumber: null,
+                    primaryContactID: primaryContactID.Value == "0" ? (int?)null : Int32.Parse(primaryContactID.Value)
+                );
+                bool alreadyExists = false;
+                alreadyExists = (clubToSave.ID != 0 || iClub.SQLClubExistsForTournament(tournament.ID, clubName.Text));
+                if (alreadyExists) {
+                    iClub.SQLUpdate<Club>(clubToSave);
+                    Response.Write("<script language=javascript>alert('There is already a Club with this name in the Tournament.');</script>");
+                }
+                else {
+                    clubID = iClub.SQLInsertAndReturnID<Club>(clubToSave);
+                }
             }
-            else {
-                clubID = iClub.SQLInsertAndReturnID<Club>(clubToSave);
-            }
-
         }
 
 

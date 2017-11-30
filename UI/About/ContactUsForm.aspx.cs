@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI {
 
 	public partial class ContactUsForm : Page {
 
-		AdvertPanel advert120x600 = new AdvertPanel();
+		//AdvertPanel advert120x600 = new AdvertPanel();
 
 		#region Declare Domain Objects & Page Variables
 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -55,9 +54,9 @@ namespace GoTournamental.UI.Organiser {
 
 			ManagePageVersion(pageVersion);
 			
-			advert120x600 = (AdvertPanel)ContactUsFormPanel.FindControl("Advert120x600");
-			advert120x600.graphicFileStyle = Advert.GraphicFileStyles.Advert120By600;
-			advert120x600.tournamentID = 0;
+			//advert120x600 = (AdvertPanel)ContactUsFormPanel.FindControl("Advert120x600");
+			//advert120x600.graphicFileStyle = Advert.GraphicFileStyles.Advert120By600;
+			//advert120x600.tournamentID = 0;
 
 		}
 
@@ -141,7 +140,7 @@ namespace GoTournamental.UI.Organiser {
 	            iContactUs.SQLUpdate<ContactUs>(contactUsToSave);
 				Response.Redirect("~/UI/Admin/ContactUsList");
 			}
-
+            EmailNotificationOfNewContact();
 		}
 
 		protected void DeleteButton_Click(object sender, EventArgs e) {
@@ -149,6 +148,26 @@ namespace GoTournamental.UI.Organiser {
 			Response.Redirect("~/UI/Admin/ContactUsList");
 		
 		}
+
+        protected void EmailNotificationOfNewContact() {
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.EnableSsl = false;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.Timeout = 20000;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential("noreply@gotournamental.com", "GT@1Pellings!");
+            smtpClient.Host = "smtp.WebSiteLive.net";
+            smtpClient.Port = 587;
+            MailAddress mailFrom = new MailAddress("noreply@gotournamental.com", "Gotournamental");
+            MailAddress mailTo = new MailAddress("martin@gotournamental.com", "Martin Bunte");
+            MailMessage mailMessage = new MailMessage(mailFrom, mailTo);
+            mailMessage.Subject = "New Contact Us Entry For GT";
+            mailMessage.Body = "http://www.gotournamental.com/UI/Admin/ContactUsList";
+            smtpClient.Send(mailMessage);
+
+            smtpClient.Dispose();
+
+        }
 
 
 	}

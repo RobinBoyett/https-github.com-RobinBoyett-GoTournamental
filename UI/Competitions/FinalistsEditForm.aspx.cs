@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -12,6 +15,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class FinalistsEditForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         Competition competition = new Competition();
@@ -69,10 +73,12 @@ namespace GoTournamental.UI.Organiser {
 		}
 
 		protected void SaveButton_Click(object sender, EventArgs e) {
-            if (finalistTeamList.SelectedValue != "0" && replacementTeamList.SelectedValue != "0") {
-                iFixture.ReplaceFinalistTeamInFixtures(Int32.Parse(finalistTeamList.SelectedValue), Int32.Parse(replacementTeamList.SelectedValue));
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                if (finalistTeamList.SelectedValue != "0" && replacementTeamList.SelectedValue != "0") {
+                    iFixture.ReplaceFinalistTeamInFixtures(Int32.Parse(finalistTeamList.SelectedValue), Int32.Parse(replacementTeamList.SelectedValue));
+                }
             }
-			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+            Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
         }
 
     }

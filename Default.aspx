@@ -23,7 +23,7 @@
                     keep updated on their tablets or phones. Let GoTournamental help with contacts, prepare your programme and 
                     help print your referee slips. We'll even prompt you to book the ice cream van.
                     See <a href="/UI/About/About.aspx">About</a> for more details, and be sure 
-                    to <a href="/UI/About/ContactUsForm.aspx">Contact Us</a> for a free trial tournament.
+                    to <a href="/UI/About/ContactUsForm.aspx">Contact Us</a> for a trial tournament.
                 </p>
                  <p style="font-size:medium;">
                     The annual tournament or festival is usually your club's biggest income stream. Don't let it drive you mad - GoTournamental!

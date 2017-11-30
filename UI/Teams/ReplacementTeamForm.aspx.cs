@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
 using GoTournamental.API;
+using GoTournamental.API.Identity;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
@@ -12,6 +15,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class ReplacementTeamForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
 		Competition competition = new Competition();
@@ -70,8 +74,10 @@ namespace GoTournamental.UI.Organiser {
 		}
  
         protected void SaveButton_Click(object sender, EventArgs e) {
-            if (teamsInCompetitionDropDown.SelectedValue != "0" && replacementTeamsDropDown.SelectedValue != "0") {
-                iFixture.ReplaceCancelledTeamInFixtures(Int32.Parse(teamsInCompetitionDropDown.SelectedValue), Int32.Parse(replacementTeamsDropDown.SelectedValue));
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                if (teamsInCompetitionDropDown.SelectedValue != "0" && replacementTeamsDropDown.SelectedValue != "0") {
+                    iFixture.ReplaceCancelledTeamInFixtures(Int32.Parse(teamsInCompetitionDropDown.SelectedValue), Int32.Parse(replacementTeamsDropDown.SelectedValue));
+                }
             }
 		    Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
         }

@@ -4,7 +4,7 @@ using System.Web.UI;
 
 namespace GoTournamental.UI {
 
-	public partial class About : Page {
+	public partial class Product : Page {
 
 		//AdvertPanel advert120x600 = new AdvertPanel();
 

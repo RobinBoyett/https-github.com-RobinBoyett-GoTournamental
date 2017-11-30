@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using GoTournamental.API;
-using GoTournamental.API.Utilities;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.BLL.Organiser;
 
 namespace GoTournamental.UI.Organiser {
@@ -13,6 +11,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class SponsorForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         Advertiser sponsor = new Advertiser();
@@ -83,24 +82,27 @@ namespace GoTournamental.UI.Organiser {
 			}		
         }
         protected void SponsorDelete() {
-            iAdvertiser.SQLDelete<Advertiser>(sponsor);
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                iAdvertiser.SQLDelete<Advertiser>(sponsor);
+            }
             Response.Redirect("~/UI/Adverts/SponsorsList.aspx?TournamentID="+tournament.ID.ToString());
         }
 
         protected void SaveButton_Click(object sender, EventArgs e) {
-			Advertiser sponsorToSave = new Advertiser(
-				id: Int32.Parse(sponsorIDHidden.Value),
-				tournamentID: tournament.ID,
-				advertiserName: sponsorName.Text,
-				websiteURL: sponsorURL.Text
-			);
-            if (sponsorToSave.ID == 0) {
-                iAdvertiser.SQLInsert<Advertiser>(sponsorToSave);
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    Advertiser sponsorToSave = new Advertiser(
+				    id: Int32.Parse(sponsorIDHidden.Value),
+				    tournamentID: tournament.ID,
+				    advertiserName: sponsorName.Text,
+				    websiteURL: sponsorURL.Text
+			    );
+                if (sponsorToSave.ID == 0) {
+                    iAdvertiser.SQLInsert<Advertiser>(sponsorToSave);
+                }
+			    else {
+				    iAdvertiser.SQLUpdate<Advertiser>(sponsorToSave);
+			    }
             }
-			else {
-				iAdvertiser.SQLUpdate<Advertiser>(sponsorToSave);
-			}
-
             Response.Redirect("~/UI/Adverts/SponsorsList.aspx?TournamentID="+tournament.ID.ToString());
 
         }

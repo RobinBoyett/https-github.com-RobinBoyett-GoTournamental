@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
+using Microsoft.AspNet.Identity;
 using GoTournamental.API;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -15,6 +17,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class GroupAllocationForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         Competition competition = new Competition();
@@ -126,15 +129,19 @@ namespace GoTournamental.UI.Organiser {
                     CompetitionEditFormLoad();
 					break;
                 case RequestVersion.ReCalculateFixtures:
-					iFixture.DeleteFixturesForCompetition(competition.ID);
-					iFixture.GenerateFixturesForCompetition(tournament, competition);		
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                        iFixture.DeleteFixturesForCompetition(competition.ID);
+	    				iFixture.GenerateFixturesForCompetition(tournament, competition);		
+                    }
 					Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
                     break;
 				case RequestVersion.TeamDelete:
-					iTeam.SQLDeleteWithCascade<Team>(team);
-					iFixture.DeleteFixturesForCompetition(competition.ID);
-					iFixture.GenerateFixturesForCompetition(tournament, competition);		
-					Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+					    iTeam.SQLDeleteWithCascade<Team>(team);
+					    iFixture.DeleteFixturesForCompetition(competition.ID);
+					    iFixture.GenerateFixturesForCompetition(tournament, competition);		
+                    }
+                    Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
 					break;
                 case RequestVersion.CompetitionEdit:
                     CompetitionEditFormLoad();
@@ -297,39 +304,41 @@ namespace GoTournamental.UI.Organiser {
 	
 		protected void AllocateTeamsIntoGroupsWithPlayingAreas() {
 
-			iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
 
-			groupsInCompetition = iCompetition.CountGroupsForCompetition(competition.ID);
+			    groupsInCompetition = iCompetition.CountGroupsForCompetition(competition.ID);
 
-			int noGroups = Int32.Parse(competitionNoGroups.SelectedValue);
-			int playingAreaID = 0;
-			ArrayList playingAreaIDs = new ArrayList();
-			foreach (ListItem li in playingAreasList.Items) {
-				if (li.Selected == true) {
-					playingAreaIDs.Add(Int32.Parse(li.Value));
-				}
-			}
-			if (groupsInCompetition == 0) {
-				groupsInCompetition = noGroups;
-				for (int i = 1; i <= groupsInCompetition; i++) {
-					Group group = new Group(id: 0, competitionID: competition.ID, name: "Group " + i.ToString(), fixtureTurnaround : 0 , fixturesUnderWay: false);
-					groupID = iGroup.SQLInsertAndReturnID<Group>(group);
-					playingAreaID = (int)playingAreaIDs[i-1];
-					GroupPlayingArea groupPlayingArea = new GroupPlayingArea(id : 0, groupID: groupID, playingAreaID: playingAreaID );
-					iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
-				}
-			}
-			List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
-			List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
-			groupsInCompetition = groupsList.Count;
-			int currentGroup = 0;
-			foreach (Team team in teamsInCompetition) {
-				if (currentGroup == groupsInCompetition) {
-					currentGroup = 0;
-				}
-				iTeam.SQLUpdateGroupID(team.ID, groupsList[currentGroup].ID);
-				currentGroup++;
-			}
+			    int noGroups = Int32.Parse(competitionNoGroups.SelectedValue);
+			    int playingAreaID = 0;
+			    ArrayList playingAreaIDs = new ArrayList();
+			    foreach (ListItem li in playingAreasList.Items) {
+				    if (li.Selected == true) {
+					    playingAreaIDs.Add(Int32.Parse(li.Value));
+				    }
+			    }
+			    if (groupsInCompetition == 0) {
+				    groupsInCompetition = noGroups;
+				    for (int i = 1; i <= groupsInCompetition; i++) {
+					    Group group = new Group(id: 0, competitionID: competition.ID, name: "Group " + i.ToString(), fixtureTurnaround : 0 , fixturesUnderWay: false);
+					    groupID = iGroup.SQLInsertAndReturnID<Group>(group);
+					    playingAreaID = (int)playingAreaIDs[i-1];
+					    GroupPlayingArea groupPlayingArea = new GroupPlayingArea(id : 0, groupID: groupID, playingAreaID: playingAreaID );
+					    iGroupPlayingArea.SQLInsert<GroupPlayingArea>(groupPlayingArea);
+				    }
+			    }
+			    List<Team> teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
+			    List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
+			    groupsInCompetition = groupsList.Count;
+			    int currentGroup = 0;
+			    foreach (Team team in teamsInCompetition) {
+				    if (currentGroup == groupsInCompetition) {
+					    currentGroup = 0;
+				    }
+				    iTeam.SQLUpdateGroupID(team.ID, groupsList[currentGroup].ID);
+				    currentGroup++;
+			    }
+            }
 		}
 
 		protected void AllocateTeamsToGroups_Click(object sender, EventArgs e) {
@@ -338,13 +347,17 @@ namespace GoTournamental.UI.Organiser {
 		}
 		
         protected void ReAllocateTeamsIntoNewGroups_Click(object sender, EventArgs e) {
-			iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
-			Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
+            }
+            Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
         }
 
 		protected void GenerateFixtureButton_Click(object sender, EventArgs e) {
-			iFixture.GenerateFixturesForCompetition(tournament, competition);		
-			Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    iFixture.GenerateFixturesForCompetition(tournament, competition);		
+            }
+            Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
 		}
 
 	

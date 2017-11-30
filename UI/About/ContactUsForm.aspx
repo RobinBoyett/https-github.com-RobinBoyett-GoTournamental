@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Pre-Register" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ContactUsForm.aspx.cs" Inherits="GoTournamental.UI.Organiser.ContactUsForm" %>
+﻿<%@ Page Title="Pre-Register" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ContactUsForm.aspx.cs" Inherits="GoTournamental.UI.ContactUsForm" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register TagPrefix="Advertisements" TagName="AdvertPanel" Src="~/UI/Adverts/AdvertPanel.ascx" %>
 

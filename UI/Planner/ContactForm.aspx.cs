@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -11,6 +14,7 @@ namespace GoTournamental.UI.Planner {
     public partial class ContactForm : Page {
 
         #region Declare Domain Objects & Page Variables
+		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
 		List<Competition> competitions = new List<Competition>();
@@ -129,35 +133,37 @@ namespace GoTournamental.UI.Planner {
 		}
 
         protected void SaveButton_Click(object sender, EventArgs e) {
-			Contact contactToSave = new Contact(
-				id: Int32.Parse(contactIDHidden.Value),
-				tournamentID: tournament.ID,
-				type: (Contact.ContactTypes)Int32.Parse(contactType.SelectedValue),
-				title: null,
-				firstName : firstName.Text,
-				lastName : lastName.Text,
-				telephoneNumber : telephoneNumber.Text,
-				email : email.Text,
-                dateOfBirth : (Nullable<DateTime>)null,
-                squadNumber : null
-			);
-			if (contactToSave.ID == 0) {
-				if (Request.QueryString.Get("team_id") != null) {
-					contactID = iContact.SQLInsertAndReturnID<Contact>(contactToSave);
-					iTeam.SQLUpdatePrimaryContactID(team.ID, contactID);
-				}
-				else if (Request.QueryString.Get("club_id") != null) {
-					contactID = iContact.SQLInsertAndReturnID<Contact>(contactToSave);
-					iClub.SQLUpdatePrimaryContactID(club.ID,contactID);
-				}			
-				else {
-					iContact.SQLInsert<Contact>(contactToSave);			
-				}
-			}
-			else {
-				iContact.SQLUpdate<Contact>(contactToSave);
-			}
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 
+			    Contact contactToSave = new Contact(
+				    id: Int32.Parse(contactIDHidden.Value),
+				    tournamentID: tournament.ID,
+				    type: (Contact.ContactTypes)Int32.Parse(contactType.SelectedValue),
+				    title: null,
+				    firstName : firstName.Text,
+				    lastName : lastName.Text,
+				    telephoneNumber : telephoneNumber.Text,
+				    email : email.Text,
+                    dateOfBirth : (Nullable<DateTime>)null,
+                    squadNumber : null
+			    );
+			    if (contactToSave.ID == 0) {
+				    if (Request.QueryString.Get("team_id") != null) {
+					    contactID = iContact.SQLInsertAndReturnID<Contact>(contactToSave);
+					    iTeam.SQLUpdatePrimaryContactID(team.ID, contactID);
+				    }
+				    else if (Request.QueryString.Get("club_id") != null) {
+					    contactID = iContact.SQLInsertAndReturnID<Contact>(contactToSave);
+					    iClub.SQLUpdatePrimaryContactID(club.ID,contactID);
+				    }			
+				    else {
+					    iContact.SQLInsert<Contact>(contactToSave);			
+				    }
+			    }
+			    else {
+				    iContact.SQLUpdate<Contact>(contactToSave);
+			    }
+            }
 			if (Request.QueryString.Get("team_id") != null) {
 				Response.Redirect("~/UI/Teams/TeamForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString());
 			}

@@ -52,8 +52,10 @@ namespace GoTournamental.UI.Planner {
                 hostClubContactName.Text = tournament.HostClub.PrimaryContact.FirstName + " " + tournament.HostClub.PrimaryContact.LastName;
                 hostClubContactTelephone.Text = tournament.HostClub.PrimaryContact.TelephoneNumber;
                 hostClubContactEmail.Text = tournament.HostClub.PrimaryContact.Email;
-                importClubsLink.NavigateUrl = "~/UI/IO/ImportData.aspx?Version=1&TournamentID="+tournament.ID.ToString();
-				clubsInvitedFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
+                if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                    importClubsLink.NavigateUrl = "~/UI/IO/ImportData.aspx?Version=1&TournamentID="+tournament.ID.ToString();
+                }
+                clubsInvitedFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 
                 if (!IsPostBack) {
                     BindClubs();
@@ -151,7 +153,9 @@ namespace GoTournamental.UI.Planner {
         protected void ClubsInvitedGridView_RowUpdating(object sender, GridViewUpdateEventArgs e) {
             HiddenField clubIDHidden = (HiddenField)clubsInvitedGridView.Rows[e.RowIndex].FindControl("ClubIDHidden");
             DropDownList attendanceTypesList = (DropDownList)clubsInvitedGridView.Rows[e.RowIndex].FindControl("AttendanceTypesList");
-            iClub.SQLUpdateAttendanceType(Int32.Parse(clubIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                iClub.SQLUpdateAttendanceType(Int32.Parse(clubIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
+            }
             clubsInvitedGridView.EditIndex = -1;
             BindClubs();
         }

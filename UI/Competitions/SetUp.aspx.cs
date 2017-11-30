@@ -83,10 +83,6 @@ namespace GoTournamental.UI.Organiser {
                 competitionLink.Text = EnumExtensions.GetStringValue(competition.AgeBand);
                 competitionLink.NavigateUrl = "~/UI/Competitions/CompetitionView?TournamentID="+tournament.ID.ToString()+"&competition_id=" + competition.ID.ToString();
 
-                //if (competition.CountHostTeamsAttendingCompetition() > 0) {
-
-                //}
-
                 #region Assigning Text To Columns
                 e.Row.Cells[5].Text = competition.CountHostTeamsAttendingCompetition().ToString();
 				if (competition.FixtureTurnaround == Tournament.FixtureTurnarounds.Fifteen || (competition.FixtureTurnaround == Tournament.FixtureTurnarounds.Undefined && tournament.FixtureTurnaround == Tournament.FixtureTurnarounds.Fifteen)) {
@@ -101,7 +97,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();						
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";
@@ -121,7 +117,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();						
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";
@@ -141,7 +137,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";
@@ -170,7 +166,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();						
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";
@@ -190,7 +186,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();						
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";
@@ -210,7 +206,7 @@ namespace GoTournamental.UI.Organiser {
 							e.Row.Cells[7].Text = competition.CountTeamsAcceptedInviteForCompetition().ToString();						
 						}
                         if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) > 0) {
-						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " More required";
+						    e.Row.Cells[8].Text = (teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())).ToString() + " Available places";
                         }
                         else if ((teamsRequired - competition.CountHostTeamsAttendingCompetition() - competition.CountTeamsAcceptedInviteForCompetition() -(competition.CountTeamsAttendingCompetition() - competition.CountHostTeamsAttendingCompetition())) == 0) {
 						    e.Row.Cells[8].Text = "Fully subscribed";

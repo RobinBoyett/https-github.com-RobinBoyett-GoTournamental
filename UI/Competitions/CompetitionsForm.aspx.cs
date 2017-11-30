@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -11,6 +14,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class CompetitionsForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
  		List<Competition> competitions = new List<Competition>();
@@ -70,24 +74,26 @@ namespace GoTournamental.UI.Organiser {
 		}
 
         protected void SaveButton_Click(object sender, EventArgs e) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 
-			foreach (ListItem li in ageBandsList.Items) {
-				if (li.Selected == true) {
+			    foreach (ListItem li in ageBandsList.Items) {
+				    if (li.Selected == true) {
 
-					bool ageBandExists = true;
-					ageBandExists = iCompetition.SQLAgeBandExistsForTournament(tournament.ID, (Competition.AgeBands)Int32.Parse(li.Value));
+					    bool ageBandExists = true;
+					    ageBandExists = iCompetition.SQLAgeBandExistsForTournament(tournament.ID, (Competition.AgeBands)Int32.Parse(li.Value));
 
-					if (ageBandExists == false) {
-						Competition competition = new Competition(
-							tournamentID : tournament.ID , 
-							ageBand : (Competition.AgeBands)Int32.Parse(li.Value)
-						);
-						iCompetition.SQLInsert<Competition>(competition);
-					}
+					    if (ageBandExists == false) {
+						    Competition competition = new Competition(
+							    tournamentID : tournament.ID , 
+							    ageBand : (Competition.AgeBands)Int32.Parse(li.Value)
+						    );
+						    iCompetition.SQLInsert<Competition>(competition);
+					    }
 
-				}
+				    }
 
-			}
+			    }
+            }
             Response.Redirect("~/UI/Competitions/CompetitionsList.aspx?TournamentID="+tournament.ID.ToString());
 
         }

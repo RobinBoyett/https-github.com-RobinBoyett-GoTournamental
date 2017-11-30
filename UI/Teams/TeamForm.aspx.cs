@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
 using GoTournamental.API;
+using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
@@ -12,6 +15,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class TeamForm : Page {
 
         #region Declare Domain Objects & Page Variables
+		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
  		List<Competition> competitions = new List<Competition>();
@@ -166,36 +170,39 @@ namespace GoTournamental.UI.Organiser {
         }
 
 		protected int TeamSave() {
-			int savedTeamID = 0;
-			teamToSave = new Team(
-				id : Int32.Parse(teamIDHidden.Value), 
-				clubID : Int32.Parse(clubIDHidden.Value), 
-				competitionID : Int32.Parse(ageBands.SelectedValue), 
-				groupID : null, 
-				name : TeamName.Text , 
-                attendanceType : (Domains.AttendanceTypes)Int32.Parse(attendanceType.SelectedValue) ,
-				primaryContactID : primaryContactID.Value == "0" ? (int?)null : Int32.Parse(primaryContactID.Value),
-                registered : registered.Checked == true ? true : false
-			);
+		    int savedTeamID = 0;
+ 		    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 
-			if (teamToSave.Name == null || teamToSave.Name == "") {
-				if (teamToSave.CompetitionID != null) {
-					competition = iCompetition.SQLSelect<Competition, int>((int)teamToSave.CompetitionID);
-					teamToSave.Name = "'" + EnumExtensions.GetStringValue(competition.AgeBand) + "'";
-				}
-				else {
-					teamToSave.Name = "[Undefined]";
-				}
-			}
-			if (teamToSave.ID == 0) {
-				savedTeamID = iTeam.SQLInsertAndReturnID<Team>(teamToSave);
-			}
-			else {
-				iTeam.SQLUpdate<Team>(teamToSave);
-				savedTeamID = Int32.Parse(teamIDHidden.Value);
-			}
+			    teamToSave = new Team(
+				    id : Int32.Parse(teamIDHidden.Value), 
+				    clubID : Int32.Parse(clubIDHidden.Value), 
+				    competitionID : Int32.Parse(ageBands.SelectedValue), 
+				    groupID : null, 
+				    name : TeamName.Text , 
+                    attendanceType : (Domains.AttendanceTypes)Int32.Parse(attendanceType.SelectedValue) ,
+				    primaryContactID : primaryContactID.Value == "0" ? (int?)null : Int32.Parse(primaryContactID.Value),
+                    registered : registered.Checked == true ? true : false
+			    );
 
-			return savedTeamID;
+			    if (teamToSave.Name == null || teamToSave.Name == "") {
+				    if (teamToSave.CompetitionID != null) {
+					    competition = iCompetition.SQLSelect<Competition, int>((int)teamToSave.CompetitionID);
+					    teamToSave.Name = "'" + EnumExtensions.GetStringValue(competition.AgeBand) + "'";
+				    }
+				    else {
+					    teamToSave.Name = "[Undefined]";
+				    }
+			    }
+			    if (teamToSave.ID == 0) {
+				    savedTeamID = iTeam.SQLInsertAndReturnID<Team>(teamToSave);
+			    }
+			    else {
+				    iTeam.SQLUpdate<Team>(teamToSave);
+				    savedTeamID = Int32.Parse(teamIDHidden.Value);
+			    }
+
+            }
+		    return savedTeamID;
 		}
 
         protected void LinkToContactAdd_Click(object sender, EventArgs e) {

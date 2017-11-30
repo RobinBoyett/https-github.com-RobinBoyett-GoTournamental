@@ -33,6 +33,7 @@ namespace GoTournamental.UI.Planner {
         DataList clubsDataList = new DataList();
 
 		int competitionID = 0;
+        private bool isDemoTournament = false;
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
         protected enum RequestVersion {
@@ -40,10 +41,8 @@ namespace GoTournamental.UI.Planner {
             TeamsList = 1,
 			TeamDelete = 2,
             ClubDelete = 3
-        }
-		
+        }		
 		#endregion
-
 		#region Declare UI Controls
 		Label teamDirectoryTitle = new Label();
 		#endregion
@@ -57,6 +56,9 @@ namespace GoTournamental.UI.Planner {
             }
 			if (Request.QueryString.Get("TournamentID") != null) {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
+                if (tournament.ID == 1) {
+                    isDemoTournament = true;
+                }
  				teamDirectoryTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 				competitions = iCompetition.SQLSelectForTournament(tournament.ID, false);
 				clubs = iClub.SQLSelectClubsForTournament(tournament.ID).Where(i => i.AttendanceType != API.Domains.AttendanceTypes.Deleted).ToList();
@@ -74,7 +76,7 @@ namespace GoTournamental.UI.Planner {
 			}
 
 			LinkToClubsAdd.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
-			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 				LinkToClubsAdd.Visible = true;
 			}
 
@@ -88,11 +90,15 @@ namespace GoTournamental.UI.Planner {
         protected void ManagePageVersion(RequestVersion pageVersion) {
 			switch (pageVersion) {
 				case RequestVersion.TeamDelete:
-					iTeam.SQLDeleteWithCascade<Team>(team);
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+					    iTeam.SQLDeleteWithCascade<Team>(team);
+                    }
 					Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
 					break;
 				case RequestVersion.ClubDelete:
-					iClub.SQLDeleteWithCascade<Club>(club);
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+					    iClub.SQLDeleteWithCascade<Club>(club);
+                    }
 					Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
 					break;
                 case RequestVersion.TeamsList:
@@ -109,8 +115,9 @@ namespace GoTournamental.UI.Planner {
                 Club club = (Club)e.Item.DataItem;
 				HyperLink requestDeleteClubLink = (HyperLink)e.Item.FindControl("RequestDeleteClubLink");
 				requestDeleteClubLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete this Club? All the relevant teams and fixtures will also deleted.')");
-				requestDeleteClubLink.NavigateUrl = "ClubsList.aspx?version=3&TournamentID=" + tournament.ID.ToString() + "&club_id="+club.ID.ToString();
-
+			    if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                    requestDeleteClubLink.NavigateUrl = "ClubsList.aspx?version=3&TournamentID=" + tournament.ID.ToString() + "&club_id="+club.ID.ToString();
+                }       
                 Table colourTable = (Table)e.Item.FindControl("ColourTable");
                 TableRow colourTableRow = (TableRow)colourTable.FindControl("ColourTableRow");
                 TableCell clubAndTeamNameCell = (TableCell)colourTableRow.FindControl("ClubAndTeamNameCell");
@@ -131,7 +138,7 @@ namespace GoTournamental.UI.Planner {
 				else {
 					linkToClubEdit.Text = club.Name;
 				}
-				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 					linkToClubEdit.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
 				}
 				HyperLink linkToClubItinary = (HyperLink)e.Item.FindControl("LinkToClubItinary");
@@ -139,7 +146,7 @@ namespace GoTournamental.UI.Planner {
 
 				HyperLink linkToTeamsAdd = (HyperLink)e.Item.FindControl("LinkToTeamsAdd");
 				linkToTeamsAdd.NavigateUrl = "~/UI/Teams/TeamForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
-				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 					requestDeleteClubLink.Visible = true;
 					linkToTeamsAdd.Visible = true;
 				}
@@ -168,9 +175,8 @@ namespace GoTournamental.UI.Planner {
                 HyperLink linkToTeamEdit = (HyperLink)e.Item.FindControl("LinkToTeamEdit");
 
                 linkToTeamEdit.Text = team.Name;
-				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 					requestDeleteTeamLink.Visible = true;
-
 					linkToTeamEdit.NavigateUrl = "~/UI/Teams/TeamForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&team_id="+team.ID.ToString();
 				}
 				HyperLink linkToTeamItinary = (HyperLink)e.Item.FindControl("LinkToTeamItinary");

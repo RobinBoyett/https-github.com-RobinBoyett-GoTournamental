@@ -43,7 +43,7 @@ namespace GoTournamental.ORM.Organiser {
             return teams;
         }
 		public IEnumerable<int> CountGroupsForCompetitionWhereFixturesUnderway(int competitionID) {
-            IEnumerable<int> teams = this.Database.SqlQuery<int>("SELECT dbo.CountGroupsForCompetitionWhereFixturesUnderway({0})", competitionID);
+            IEnumerable<int> teams = this.Database.SqlQuery<int>("SELECT Planner.CompetitionCountGroupsWhereFixturesUnderway({0})", competitionID);
             return teams;
         }
         public IEnumerable<int> CountPlayingAreasForCompetition(int competitionID) {

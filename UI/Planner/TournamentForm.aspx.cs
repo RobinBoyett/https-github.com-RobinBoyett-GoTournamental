@@ -190,7 +190,7 @@ namespace GoTournamental.UI.Planner {
 		protected void ManageClaimSecurity() {
 			if (!identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournamentID.ToString())) {
 				pageVersion = RequestVersion.FeatureNotAvailable;
-				featureUnavailableLabel.Text = "This page is unavailable as you are the registered Owner for this Tournament";
+				featureUnavailableLabel.Text = "This page is unavailable as you are not the registered Owner for this Tournament";
 			}
 		}
 		

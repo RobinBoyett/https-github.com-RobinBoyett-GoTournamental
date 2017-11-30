@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Identity;
 using GoTournamental.API.Utilities;
@@ -146,7 +148,9 @@ namespace GoTournamental.UI.Organiser {
         protected void TeamAttendanceGridView_RowUpdating(object sender, GridViewUpdateEventArgs e) {
             HiddenField teamIDHidden = (HiddenField)teamAttendanceGridView.Rows[e.RowIndex].FindControl("TeamIDHidden");
             DropDownList attendanceTypesList = (DropDownList)teamAttendanceGridView.Rows[e.RowIndex].FindControl("AttendanceTypesList");
-            iTeam.SQLUpdateAttendanceType(Int32.Parse(teamIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                iTeam.SQLUpdateAttendanceType(Int32.Parse(teamIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
+            } 
             teamAttendanceGridView.EditIndex = -1;
             BindTeams();
         }

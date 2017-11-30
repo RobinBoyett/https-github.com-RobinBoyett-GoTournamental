@@ -19,7 +19,23 @@ namespace GoTournamental.BLL.Organiser {
         public const int footballMaxSquadSize = 16;
         public const int rugbyMaxTeamSize = 15;
         public const int rugbyMaxSquadSize = 22;
-
+        //public enum Sports {
+        //    Undefined = 0,
+        //    [DescriptionAttribute("Football / Soccer Juniors")] FootballJunior = 1,
+        //    [DescriptionAttribute("Football / Soccer")] FootballSenior = 2,
+        //    [DescriptionAttribute("Rugby")] Rugby = 3,
+        //    Hockey = 4
+        //    //Tennis = 4,
+        //    //Badminton = 5,
+        //    //Judo = 6,
+        //    //[DescriptionAttribute("Martial Arts")] MartialArts = 7
+        //}
+        //public enum TournamentTypes {
+        //    Undefined = 0,
+        //    [DescriptionAttribute("Tournament / Festival")] Festival = 1,
+        //    [DescriptionAttribute("League Competition")] League = 2,
+        //    [DescriptionAttribute("Cup Competition")] Cup = 3,
+        //}
         public enum TournamentTypes {
             Undefined = 0,
             [DescriptionAttribute("Football - Juniors")] FootballJunior = 1,

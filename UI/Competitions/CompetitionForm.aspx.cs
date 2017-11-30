@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
+using GoTournamental.API.Identity;
 using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
@@ -10,6 +13,7 @@ namespace GoTournamental.UI.Organiser {
     public partial class CompetitionForm : Page {
 
         #region Declare Domain Objects & Page Variables
+ 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
         Tournament tournament = new Tournament();
         ITournament iTournament = new Tournament();
         Competition competition = new Competition();
@@ -276,65 +280,68 @@ namespace GoTournamental.UI.Organiser {
 		}
 
 		protected bool SavePageData() {
-			bool reCalculateFixtures = false;
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    bool reCalculateFixtures = false;
 
-			if (competitionStartDate.SelectedValue != "") {
-				startTimeText = competitionStartDate.SelectedValue;
-			}
-			if (competitionStartDate.SelectedValue != "" && competitionStartHour.SelectedValue != "" && competitionStartMinute.SelectedValue != "") {
-				startTimeText = startTimeText + " " + competitionStartHour.SelectedValue + ":"+competitionStartMinute.SelectedValue+":00";
-			}
-            if ((Int32.Parse(fixtureHalvesNumber.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) {
-                fixtureOverRun = true;
+			    if (competitionStartDate.SelectedValue != "") {
+				    startTimeText = competitionStartDate.SelectedValue;
+			    }
+			    if (competitionStartDate.SelectedValue != "" && competitionStartHour.SelectedValue != "" && competitionStartMinute.SelectedValue != "") {
+				    startTimeText = startTimeText + " " + competitionStartHour.SelectedValue + ":"+competitionStartMinute.SelectedValue+":00";
+			    }
+                if ((Int32.Parse(fixtureHalvesNumber.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) {
+                    fixtureOverRun = true;
+                }
+                competitionToSave = new Competition(
+				    id : competition.ID ,
+				    tournamentID : tournament.ID ,
+				    ageBand : Competition.AgeBands.Undefined ,
+				    startTime : startTimeText.Length > 0 ? DateTime.Parse(startTimeText) : (Nullable<DateTime>)null ,
+				    session : (Competition.Sessions)Int32.Parse(session.SelectedValue) ,
+				    competitionFormat : (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue) ,
+				    fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
+                    fixtureHalvesNumber : fixtureOverRun == true ? Tournament.FixtureHalvesNumbers.Undefined : (Tournament.FixtureHalvesNumbers)Int32.Parse(fixtureHalvesNumber.SelectedValue) ,
+                    fixtureHalvesLength : fixtureOverRun == true ? Tournament.FixtureHalvesLengths.Undefined : (Tournament.FixtureHalvesLengths)Int32.Parse(fixtureHalvesLength.SelectedValue) ,
+				    teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
+				    squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) 
+                );
+
+			    //if (!iFixture.FixturesUnderway(competition) == true &&
+			    //	(competition.FixtureTurnaround != (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ||
+			    //	competition.StartTime != DateTime.Parse(startTimeText) ||
+			    //	competition.CompetitionFormat != (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue))) {
+			    //	reCalculateFixtures = true;
+			    //}
+
+			    iCompetition.SQLUpdate<Competition>(competitionToSave);
+
+			    return reCalculateFixtures;
             }
-            competitionToSave = new Competition(
-				id : competition.ID ,
-				tournamentID : tournament.ID ,
-				ageBand : Competition.AgeBands.Undefined ,
-				startTime : startTimeText.Length > 0 ? DateTime.Parse(startTimeText) : (Nullable<DateTime>)null ,
-				session : (Competition.Sessions)Int32.Parse(session.SelectedValue) ,
-				competitionFormat : (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue) ,
-				fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
-                fixtureHalvesNumber : fixtureOverRun == true ? Tournament.FixtureHalvesNumbers.Undefined : (Tournament.FixtureHalvesNumbers)Int32.Parse(fixtureHalvesNumber.SelectedValue) ,
-                fixtureHalvesLength : fixtureOverRun == true ? Tournament.FixtureHalvesLengths.Undefined : (Tournament.FixtureHalvesLengths)Int32.Parse(fixtureHalvesLength.SelectedValue) ,
-				teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
-				squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) 
-            );
-
-			//if (!iFixture.FixturesUnderway(competition) == true &&
-			//	(competition.FixtureTurnaround != (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ||
-			//	competition.StartTime != DateTime.Parse(startTimeText) ||
-			//	competition.CompetitionFormat != (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue))) {
-			//	reCalculateFixtures = true;
-			//}
-
-			iCompetition.SQLUpdate<Competition>(competitionToSave);
-
-			return reCalculateFixtures;
 		}
 		
 		protected void SaveButton_Click(object sender, EventArgs e) {
-			bool reCalculateFixtures = false;
-			reCalculateFixtures = SavePageData();
-			//if (reCalculateFixtures == true) {
-			//	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=3&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
-			//}
-			//else {
-			//	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
-			//}
-            //if (competition.CompetitionFormat == Competition.CompetitionFormats.Cup) {
-            //    Response.Redirect("~/UI/KnockoutView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
-            //}
-            //else {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			    bool reCalculateFixtures = false;
+			    reCalculateFixtures = SavePageData();
+			    //if (reCalculateFixtures == true) {
+			    //	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=3&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+			    //}
+			    //else {
+			    //	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
+			    //}
+                //if (competition.CompetitionFormat == Competition.CompetitionFormats.Cup) {
+                //    Response.Redirect("~/UI/KnockoutView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+                //}
+                //else {
 
-            if (fixtureOverRun) {
-                Response.Write("<script language=javascript>alert('The fixture lengths selected are longer than the turnaround');</script>");
+                if (fixtureOverRun) {
+                    Response.Write("<script language=javascript>alert('The fixture lengths selected are longer than the turnaround');</script>");
+                }
+                else {
+                    Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+                }
+                //}
             }
-            else {
-                Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
-            }
-            //}
-
         }
 
     }

@@ -66,8 +66,7 @@ public partial class SetUpMenu : System.Web.UI.UserControl {
             if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
                 linkToRegistration.Visible = true;
                 linkToRegistration.NavigateUrl = "~/UI/Planner/ClubRegistrationForm.aspx?TournamentID=" + tournament.ID.ToString() + "&version=1&club_id=" + tournament.HostClub.ID.ToString();
-            }
- 
+            } 
             
 			if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated) {
 				linkToContacts.Visible = true;

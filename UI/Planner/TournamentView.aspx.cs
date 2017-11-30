@@ -102,7 +102,7 @@ namespace GoTournamental.UI.Planner {
 					if (tournamentContact.TelephoneNumber != null && tournamentContact.TelephoneNumber != "") {
 						contactTelephone.Text += "<br>" + tournamentContact.TelephoneNumber + "&nbsp;&nbsp;";
 					}
-					if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+					if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
 						contactEditLink.Text = "[Edit Contact]";
 						contactEditLink.NavigateUrl = "/UI/Planner/ContactForm?version=2&TournamentID="+tournament.ID.ToString()+"&ContactType=2&contact_id="+tournamentContact.ID.ToString();
 					}
@@ -147,30 +147,31 @@ namespace GoTournamental.UI.Planner {
 					}
 
 					noCompetitions.Text = tournament.CountCompetitionsForTournament().ToString();
-					noCompetitions.NavigateUrl = "~/UI/CompetitionsList?TournamentID=" + tournament.ID.ToString();
+					noCompetitions.NavigateUrl = "~/UI/Competitions/CompetitionsList?TournamentID=" + tournament.ID.ToString();
 
 					noTeamsAttending.Text = tournament.CountTeamsForTournament(Domains.AttendanceTypes.Attending).ToString();
-					noTeamsAttending.NavigateUrl = "~/UI/Planner/ClubsList?TournamentID=" + tournament.ID.ToString();
+					noTeamsAttending.NavigateUrl = "~/UI/Planner/ClubsList?Version=1&TournamentID=" + tournament.ID.ToString();
 
 					numberOfFixturesScheduled.Text = tournament.CountFixturesScheduledForTournament().ToString();
-					numberOfFixturesScheduled.NavigateUrl = "~/UI/FixturesList?TournamentID=" + tournament.ID.ToString();
+					numberOfFixturesScheduled.NavigateUrl = "~/UI/Competitions/FixturesList?TournamentID=" + tournament.ID.ToString();
 
 				}
 
 				if (tournament.HostClub != null && tournament.HostClub.LogoFile != null && tournament.HostClub.LogoFile != "") {
                     clubLogo.ImageUrl = "~/Uploads/Tournament" + tournament.ID.ToString() + "/Logos/" + tournament.HostClub.LogoFile;
-					uploadClubLogoLink.Text = "[Delete your host club logo]";
-				    uploadClubLogoLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete the host club logo?')");
-					uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1&Version=2";
+   					uploadClubLogoLink.Text = "[Delete your host club logo]";
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+	    			    uploadClubLogoLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete the host club logo?')");
+		    			uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1&Version=2";
+                    }
 				}
-				else if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+				else if (!isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
                     clubLogo.ImageUrl = "~/Images/GTLogo.png";
                     clubLogo.Height = 230;
                     clubLogo.Width = 250;
 					uploadClubLogoLink.Text = "[Replace with your host club logo]";
                     if (!isDemoTournament ) {
     					uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1";
-             
                     }
 				}
 
