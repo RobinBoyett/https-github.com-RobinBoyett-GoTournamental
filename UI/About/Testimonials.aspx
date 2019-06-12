@@ -27,6 +27,22 @@
                 <tr><td colspan="2">&nbsp;</td></tr>
                 <tr>
                     <td style="width:120px; vertical-align:top;">
+                        <asp:Image ImageUrl="~/Images/TestimonialLogos/EastbourneBorough.png" Height="100" Width="100" runat="server" />
+                    </td>
+                    <td style="text-align: left;">
+                        <h5><b>Eastbourne Borough FC</b></h5>
+                        This is the first year Eastbourne Borough have run their Youth tournament in a few years and I wanted a tournament that ran seamlessly. 
+                        I had heard about a system called Go Tournamental that takes care of everything from registering teams to working out fixtures and updating 
+                        league tables. It seemed too good to be true, but it was amazing!! Nothing went wrong, and the support received from Martin was second to none, 
+                        he even spent the first morning of the tournament with me to make sure everything was running smoothly.
+                        There is no doubt that I will be using Go Tournamental for next year’s tournament. 
+                        <br /><br />
+                        Geoff Moule - <i>Eastbourne Borough Youth Secretary</i>
+                    </td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr>
+                    <td style="width:120px; vertical-align:top;">
                         <asp:Image ImageUrl="~/Images/TestimonialLogos/JarvisBrook.jpg" Height="100" Width="100" runat="server" />
                     </td>
                     <td style="text-align: left;">

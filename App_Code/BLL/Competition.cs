@@ -44,8 +44,13 @@ namespace GoTournamental.BLL.Organiser
             [DescriptionAttribute("Under 13 Girls")] Under13Girls = 23,
             [DescriptionAttribute("Under 17 Boys")] Under17Boys = 24,
             [DescriptionAttribute("Under 6s")] Under6s = 25,
-            Veterans = 26
-
+            Veterans = 26,
+            [DescriptionAttribute("Under 8 Girls")] Under8Girls = 27,
+            [DescriptionAttribute("Under 9 Girls")] Under9Girls = 28,
+            [DescriptionAttribute("Under 10 Girls")] Under10Girls = 29,
+            [DescriptionAttribute("Under 11 Girls")] Under11Girls = 30,
+            [DescriptionAttribute("Under 17 / Under 18")] Under1718 = 31,
+            [DescriptionAttribute("Under 11 Dev")] Under11Dev = 32
         }
         public enum CompetitionFormats 
         {

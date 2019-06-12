@@ -240,13 +240,21 @@ namespace GoTournamental.UI.Organiser
 					generateFixturesButton.Visible = true;
                     generateFixturesButton.Text = "Generate Fixtures For All Groups";
 				}
-				else if (!competition.FixturesUnderwayForCompetition() && iCompetition.CountGroupsForCompetition(competition.ID) > 0 && (iCompetition.CountGroupsForCompetition(competition.ID) != competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID))) 
+                else if (!competition.FixturesUnderwayForCompetition()
+                         && iCompetition.CountGroupsForCompetition(competition.ID) > 0
+                         && (iCompetition.CountGroupsForCompetition(competition.ID) != competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID)))
                 {
-					generateFixturesButton.Visible = true;
+                    generateFixturesButton.Visible = true;
                     generateFixturesButton.Text = "Generate Fixtures For All Groups";
+                }
+                else if (iCompetition.CountGroupsForCompetition(competition.ID) > 0
+				         && (iCompetition.CountGroupsForCompetition(competition.ID) != competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID)))
+				{
+				    generateFixturesButton.Visible = true;
+				    generateFixturesButton.Text = "Generate Fixtures For Remaining Groups";
 				}
 
-				if (competition.CountFixturesForCompetition() > 0 &&  pageVersion != RequestVersion.ReCalculateGroups)
+                if (competition.CountFixturesForCompetition() > 0 &&  pageVersion != RequestVersion.ReCalculateGroups)
                 {
 					noFixturesInCompetition.Text = competition.CountFixturesForCompetition().ToString() + " - You can still regenerate fixtures for groups where the fixtures are not underway.";
 				}

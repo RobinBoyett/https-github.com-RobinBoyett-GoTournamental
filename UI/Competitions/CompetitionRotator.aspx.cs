@@ -69,6 +69,8 @@ namespace GoTournamental.UI.Organiser
 
             AssignUIControls();
 
+
+
 			if (Request.QueryString.Get("TournamentID") != null)
             {
 				tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
@@ -95,9 +97,13 @@ namespace GoTournamental.UI.Organiser
 
  			tournamentTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 
-            LoadCompetitionRotator();
+            if (tournament.StartTime <= DateTime.Now)
+            {
+                LoadCompetitionRotator();
+            }
 
-		}
+
+        }
             
         protected void AssignUIControls() 
         {
