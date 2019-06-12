@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
-using GoTournamental.API;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.API.Identity;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-	public partial class Terms : Page {
+	public partial class Terms : Page 
+    {
 
         GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
 		AdvertPanel advert300x250 = new AdvertPanel();
 
-		protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e)
+        {
 
             TermsAndConditionsLink.NavigateUrl = "~/Documents/GTTerms.pdf";
 
-            if (HttpContext.Current.User.Identity.GetUserId() != null && !identityHelper.RoleExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentOwner")) {
+            if (HttpContext.Current.User.Identity.GetUserId() != null && !identityHelper.RoleExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentOwner")) 
+            {
                 TermsSignatoryPanel.Visible = true;
             }
 
@@ -31,7 +31,8 @@ namespace GoTournamental.UI.Organiser {
 
 		}
 
-        protected void SaveTermsSigned_Click(object sender, EventArgs e) {
+        protected void SaveTermsSigned_Click(object sender, EventArgs e) 
+        {
             CheckBox saveTermsSigned = (CheckBox)TermsSignatoryPanel.FindControl("TermsSigned");
             if (saveTermsSigned.Checked == true) {
                 ITermsSignatory iTermsSignatory = new TermsSignatory();

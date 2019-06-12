@@ -9,16 +9,19 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Planner {
+namespace GoTournamental.BLL.Planner
+{
 
-    public class Club: IClub {
+    public class Club: IClub 
+    {
 
 		#region Constructors
 		public Club() {}
         public Club(
 			int id, int tournamentID, string name, Domains.AttendanceTypes attendanceType, string websiteURL, string logoFile, string twitter, string colourPrimary, string colourSecondary, 
 			int? affiliation, string affiliationNumber, int? primaryContactID
-			) {
+		) 
+        {
             this.ID = id;
             this.TournamentID = tournamentID;
             this.Name = name;
@@ -47,11 +50,14 @@ namespace GoTournamental.BLL.Planner {
         public int? Affiliation { get; set; }
         public string AffiliationNumber { get; set; }
         public int? PrimaryContactID { get; set; }
-        public Contact PrimaryContact {
-            get {
+        public Contact PrimaryContact 
+        {
+            get 
+            {
                 Contact contact = new Contact();
                 IContact iContact = new Contact();
-                if (this.PrimaryContactID != null) {
+                if (this.PrimaryContactID != null) 
+                {
                     contact = iContact.SQLSelect<Contact, int?>(PrimaryContactID);
                 }
                 return contact;
@@ -61,18 +67,23 @@ namespace GoTournamental.BLL.Planner {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input))
+            {
                 ClubDbContext context = new ClubDbContext();
-				if (!SQLClubExistsForTournament(((Club)(object)input).TournamentID, ((Club)(object)input).Name)) {
+				if (!SQLClubExistsForTournament(((Club)(object)input).TournamentID, ((Club)(object)input).Name)) 
+                {
 					context.Clubs.Add((Club)(object)input);
 					context.SaveChanges();
 				}
             }	
 		}      
-        public int SQLInsertAndReturnID<T>(T input) {
+        public int SQLInsertAndReturnID<T>(T input)
+        {
             int ret = 0;
-            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input)) {
+            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input)) 
+            {
                 ClubDbContext context = new ClubDbContext();
                 context.Clubs.Add((Club)(object)input);
                 context.SaveChanges();
@@ -80,28 +91,34 @@ namespace GoTournamental.BLL.Planner {
             }
             return ret;
         }
-        public T SQLSelect<T, U>(U id) {
+        public T SQLSelect<T, U>(U id) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club selected = context.Clubs.Where(i => i.ID == (int)(object)id).SingleOrDefault();
             return (T)(object)selected;
         }
-        public Club SQLSelectHostClubForTournament(int tournamentID) {
+        public Club SQLSelectHostClubForTournament(int tournamentID) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club club = context.Clubs.Where(i => i.TournamentID == tournamentID  && i.AttendanceType == Domains.AttendanceTypes.HostClub).SingleOrDefault();
             return club; 
         }
-        public List<Club> SQLSelectClubsForTournament(int tournamentID) {
+        public List<Club> SQLSelectClubsForTournament(int tournamentID) 
+        {
             ClubDbContext context = new ClubDbContext();
             List<Club> selectedList = context.Clubs.Where(i => i.TournamentID == tournamentID).OrderBy(i => i.Name).ToList();
             return selectedList;
         }
-        public List<Club> GetCompetitionClubsAll(int competitionID) {
+        public List<Club> GetCompetitionClubsAll(int competitionID) 
+        {
             ClubDbContext context = new ClubDbContext();
 			List<Club> clubList = context.GetCompetitionClubsAll(competitionID).ToList();
 			return clubList;
         }		
-		public void SQLUpdate<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input)) {
+		public void SQLUpdate<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Club, T>(input)) 
+            {
                 ClubDbContext context = new ClubDbContext();
                 Club updated = (Club)(object)input;
                 Club selected = context.Clubs.Single(i => i.ID == updated.ID);
@@ -115,54 +132,64 @@ namespace GoTournamental.BLL.Planner {
                 context.SaveChanges();
             }
         }
-		public void SQLUpdatePrimaryContactID(int id, int primaryContactID) {
+		public void SQLUpdatePrimaryContactID(int id, int primaryContactID) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club selected = context.Clubs.Single(i => i.ID == id);
 			selected.PrimaryContactID = primaryContactID;
             context.SaveChanges();
 		}
-		public void SQLUpdateAttendanceType(int id, Domains.AttendanceTypes attendanceType) {
+		public void SQLUpdateAttendanceType(int id, Domains.AttendanceTypes attendanceType) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club selected = context.Clubs.Single(i => i.ID == id);
 			selected.AttendanceType = attendanceType;
             context.SaveChanges();
 		}
-        public void SQLDeleteWithCascade<T>(T input) {
+        public void SQLDeleteWithCascade<T>(T input) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club clubToDelete = (Club)(object)input;
             context.SQLClubDeleteWithCascade(clubToDelete.ID);
         }
 
-        public Club GetClubForPrimaryContactID(int primaryContactID) {
+        public Club GetClubForPrimaryContactID(int primaryContactID) 
+        {
             ClubDbContext context = new ClubDbContext();
             Club club = context.Clubs.Where(i => i.PrimaryContactID == primaryContactID).SingleOrDefault();
 			return club;
 		}
-		public void SQLUpdateClubLogoFile(int id, string logoFile) {
+		public void SQLUpdateClubLogoFile(int id, string logoFile)
+        {
             ClubDbContext context = new ClubDbContext();
             Club selected = context.Clubs.Single(i => i.ID == id);
 			selected.LogoFile = logoFile;
             context.SaveChanges();
 		}        
-		public int SQLGetClubIDForClubName(int tournamentID, string clubName) {
+		public int SQLGetClubIDForClubName(int tournamentID, string clubName) 
+        {
             int clubID = 0;
             ClubDbContext context = new ClubDbContext();
             clubID = context.SQLGetClubIDForClubName(tournamentID, clubName).Single();
             return clubID;
         }       
- 		public bool SQLClubExistsForTournament(int tournamentID,  string clubName) {
+ 		public bool SQLClubExistsForTournament(int tournamentID,  string clubName) 
+        {
             ClubDbContext context = new ClubDbContext();
 			bool exists = context.Clubs.Any(i => i.TournamentID == tournamentID && i.Name == clubName);
 			return exists;
 		}
-		public string GenerateClubSecurityCode(Club club) {
+		public string GenerateClubSecurityCode(Club club) 
+        {
 			string ret = "";
-            if (club != null) {
+            if (club != null) 
+            {
 			    ret = Crypto.Hash(club.Name + club.TournamentID.ToString() + "P4!3Sg4t3").Substring(0,8);
             }
 			return ret;
 		}
-		public static ExcelPackage ExportToExcelWorkSheet(ExcelPackage excelPackage, Tournament tournament, bool templateOnly) {
+		public static ExcelPackage ExportToExcelWorkSheet(ExcelPackage excelPackage, Tournament tournament, bool templateOnly) 
+        {
 
 			ExcelWorksheet clubEntriesSheet = excelPackage.Workbook.Worksheets.Add("Clubs");
             int rowIndex = 1;
@@ -171,7 +198,8 @@ namespace GoTournamental.BLL.Planner {
 			List<Club> clubsList = new List<Club>();
 			clubsList = iClub.SQLSelectClubsForTournament(tournament.ID);
 
-            using (ExcelRange range = clubEntriesSheet.Cells["A1:Z1"]) {
+            using (ExcelRange range = clubEntriesSheet.Cells["A1:Z1"]) 
+            {
                 range.Style.Font.Bold = true;
                 range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(Color.SkyBlue);
@@ -185,8 +213,10 @@ namespace GoTournamental.BLL.Planner {
 
             rowIndex = 2;
 
-			if (templateOnly == false) {
-				foreach (Club club in clubsList) {
+			if (templateOnly == false)
+            {
+				foreach (Club club in clubsList)
+                {
 					clubEntriesSheet.Cells[rowIndex, 1].Value = club.Name;
 					clubEntriesSheet.Cells[rowIndex, 2].Value = club.PrimaryContact.FirstName;
 					clubEntriesSheet.Cells[rowIndex, 3].Value = club.PrimaryContact.LastName;
@@ -204,7 +234,8 @@ namespace GoTournamental.BLL.Planner {
 
     }
 
-    public interface IClub : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable, ISQLDeleteCascadable {
+    public interface IClub : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable, ISQLDeleteCascadable 
+    {
         int ID { get; }
         int TournamentID { get; }
         string Name { get; }

@@ -13,6 +13,10 @@
     <HexCode>#FF0000</HexCode>
   </Colour>
   <Colour>
+    <Name>Pink</Name>
+    <HexCode>#FFC0CB</HexCode>
+  </Colour>  
+  <Colour>
     <Name>Orange</Name>
     <HexCode>#FF4500</HexCode>
   </Colour>

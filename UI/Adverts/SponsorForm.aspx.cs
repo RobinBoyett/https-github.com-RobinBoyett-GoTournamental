@@ -6,9 +6,11 @@ using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class SponsorForm : Page {
+    public partial class SponsorForm : Page
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -18,7 +20,8 @@ namespace GoTournamental.UI.Organiser {
         IAdvertiser iAdvertiser = new Advertiser();
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
-        protected enum RequestVersion {
+        protected enum RequestVersion
+        {
             Undefined = 0,
             SponsorInsert = 1,
             SponsorEdit = 2,
@@ -34,32 +37,39 @@ namespace GoTournamental.UI.Organiser {
         TextBox sponsorURL = new TextBox();
         #endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
             AssignControlsAll();
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 				tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
 				sponsorFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
             }
-            if (Request.QueryString.Get("version") != null) {
+            if (Request.QueryString.Get("version") != null)
+            {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
-            if (Request.QueryString.Get("sponsor_id") != null) {
+            if (Request.QueryString.Get("sponsor_id") != null)
+            {
 				sponsor = iAdvertiser.SQLSelect<Advertiser, int>(Int32.Parse(Request.QueryString.Get("sponsor_id"))); 
             }
 
             ManagePageVersion(pageVersion);
 
         }
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			sponsorFormTitle = (Label)SponsorFormPanel.FindControl("SponsorFormTitle");
 			formTitle = (Label)SponsorFormPanel.FindControl("FormTitle");
 			sponsorIDHidden = (HiddenField)SponsorFormPanel.FindControl("SponsorIDHidden");
             sponsorName = (TextBox)SponsorFormPanel.FindControl("SponsorName");
             sponsorURL = (TextBox)SponsorFormPanel.FindControl("SponsorURL"); 
         }
-        protected void ManagePageVersion(RequestVersion pageVersion) {
-			switch (pageVersion) {
+        protected void ManagePageVersion(RequestVersion pageVersion) 
+        {
+			switch (pageVersion) 
+            {
 				case RequestVersion.SponsorDelete:
                     SponsorDelete();
                     break;
@@ -74,32 +84,40 @@ namespace GoTournamental.UI.Organiser {
             }
         }
 
-        protected void SponsorEditFormLoad() {
-			if (!IsPostBack) {
+        protected void SponsorEditFormLoad() 
+        {
+			if (!IsPostBack) 
+            {
 				sponsorIDHidden.Value = sponsor.ID.ToString();
 				sponsorName.Text = sponsor.AdvertiserName;
 				sponsorURL.Text = sponsor.WebsiteURL;
 			}		
         }
-        protected void SponsorDelete() {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+        protected void SponsorDelete() 
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
                 iAdvertiser.SQLDelete<Advertiser>(sponsor);
             }
             Response.Redirect("~/UI/Adverts/SponsorsList.aspx?TournamentID="+tournament.ID.ToString());
         }
 
-        protected void SaveButton_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+        protected void SaveButton_Click(object sender, EventArgs e) 
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 			    Advertiser sponsorToSave = new Advertiser(
 				    id: Int32.Parse(sponsorIDHidden.Value),
 				    tournamentID: tournament.ID,
 				    advertiserName: sponsorName.Text,
 				    websiteURL: sponsorURL.Text
 			    );
-                if (sponsorToSave.ID == 0) {
+                if (sponsorToSave.ID == 0)
+                {
                     iAdvertiser.SQLInsert<Advertiser>(sponsorToSave);
                 }
-			    else {
+			    else 
+                {
 				    iAdvertiser.SQLUpdate<Advertiser>(sponsorToSave);
 			    }
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,9 +7,11 @@ using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class SponsorsList : Page {
+    public partial class SponsorsList : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -27,20 +28,24 @@ namespace GoTournamental.UI.Organiser {
 		Label sponsorsListTitle = new Label();
 		#endregion
 		
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
             AssignControlsAll();
 
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 				tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
  				sponsorsListTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 			}
 
-			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 	            LinkToSponsorAdd.NavigateUrl = "~/UI/Adverts/SponsorForm.aspx?version=1&TournamentID=" + tournament.ID.ToString();
 				LinkToSponsorAdd.Visible = true;
 			}
-			else {
+			else
+            {
 				setUpMenu.Visible = false;
 			}
 
@@ -53,17 +58,21 @@ namespace GoTournamental.UI.Organiser {
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll() 
+        {
 			advert300x600 = (AdvertPanel)SponsorsListPanel.FindControl("Advert300x600");
 			tournamentMenu = (TournamentMenu)SponsorsListPanel.FindControl("TournamentMenuControl");
 			setUpMenu = (SetUpMenu)SponsorsListPanel.FindControl("SetUpMenuControl");
 			sponsorsListTitle = (Label)SponsorsListPanel.FindControl("SponsorsListTitle");
 		}
 
-		protected void SponsorsDataList_ItemDataBound(Object sender, DataListItemEventArgs e) {
-			if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) {
+		protected void SponsorsDataList_ItemDataBound(Object sender, DataListItemEventArgs e) 
+        {
+			if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
 				Advertiser sponsor = (Advertiser)e.Item.DataItem;
-				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
 					HyperLink deleteSponsorLink = (HyperLink)e.Item.FindControl("DeleteSponsorLink");
 					deleteSponsorLink.Visible = true;
 					deleteSponsorLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete this item?')");

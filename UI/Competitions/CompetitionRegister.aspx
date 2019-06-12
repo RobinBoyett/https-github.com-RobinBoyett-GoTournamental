@@ -12,7 +12,7 @@
 	<Navigation:SetUpMenu id="SetUpMenuControl" runat="server" />						
     <asp:Panel ID="CompetitionRegisterPanel" runat="server">
         <br /><br />
-        <asp:CheckBoxList ID="TeamsInCompetitionList" RepeatColumns="2" Width="500"  runat="server" />
+        <asp:CheckBoxList ID="TeamsInCompetitionList" RepeatColumns="2" Width="700"  runat="server" />
         <br />
         <asp:Button ID="SaveButton" Text="Save" OnClick="SaveButton_Click" runat="server" />
 

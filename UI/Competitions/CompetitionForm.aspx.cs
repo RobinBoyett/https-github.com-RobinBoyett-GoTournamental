@@ -8,9 +8,11 @@ using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class CompetitionForm : Page {
+    public partial class CompetitionForm : Page
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -21,7 +23,6 @@ namespace GoTournamental.UI.Organiser {
         Competition competitionToSave = new Competition();
         IFixture iFixture = new Fixture();
 
-
 		private string hourText = "";
 		private string minuteText = "";
 		private string startTimeText = "";
@@ -30,7 +31,8 @@ namespace GoTournamental.UI.Organiser {
         bool fixtureOverRun = false;		
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
-        protected enum RequestVersion {
+        protected enum RequestVersion
+        {
             Undefined = 0,
             CompetitionEdit = 1,
 			TeamDelete = 2
@@ -47,7 +49,7 @@ namespace GoTournamental.UI.Organiser {
 		DropDownList competitionStartMinute = new DropDownList();
 		DropDownList session = new DropDownList();
 		DropDownList fixtureTurnaround = new DropDownList();
-		DropDownList fixtureHalvesNumber = new DropDownList();
+		DropDownList fixtureStructure = new DropDownList();
 		DropDownList fixtureHalvesLength = new DropDownList();
 		DropDownList teamSize = new DropDownList();
  		DropDownList squadSize = new DropDownList();
@@ -55,36 +57,44 @@ namespace GoTournamental.UI.Organiser {
 		Button saveButton = new Button();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
             AssignControlsAll();
 
-			if (Request.QueryString.Get("version") != null) {
+			if (Request.QueryString.Get("version") != null)
+            {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
 				//playingAreaList = iPlayingArea.SQLSelectForTournament(tournament.ID);
             }
-			if (Request.QueryString.Get("competition_id") != null) {
+			if (Request.QueryString.Get("competition_id") != null)
+            {
 				competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
 				competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
-                //if (competition.CompetitionFormat == Competition.CompetitionFormats.Cup) {
+                //if (competition.CompetitionFormat == Competition.CompetitionFormats.Cup) 
+                //{
                 //    linkToCompetitionSummary.NavigateUrl = "~/UI/KnockoutView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
                 //}
-                //else {
+                //else 
+                //{
                 linkToCompetitionSummary.NavigateUrl = "~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
                 //}
 				//playingAreasInUseInSession = iPlayingArea.SQLSelectInUseForTournamentSession(tournament.ID, competition.ID);
             }        
-			//if (Request.QueryString.Get("team_id") != null) {
+			//if (Request.QueryString.Get("team_id") != null)
+            //{
 			//	team = iTeam.SQLSelect<Team, int>(Int32.Parse(Request.QueryString.Get("team_id")));
 			//}
 
             ManagePageVersion(pageVersion);
 
         }
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			competitionTitle = (Label)CompetitionFormPanel.FindControl("CompetitionTitle");
 			ageBand = (Label)CompetitionFormPanel.FindControl("AgeBand");
 			linkToCompetitionSummary = (HyperLink)CompetitionFormPanel.FindControl("LinkToCompetitionSummary");
@@ -94,15 +104,17 @@ namespace GoTournamental.UI.Organiser {
 			competitionStartMinute = (DropDownList)CompetitionFormPanel.FindControl("CompetitionStartMinute");
 			session = (DropDownList)CompetitionFormPanel.FindControl("Session"); 
 			fixtureTurnaround = (DropDownList)CompetitionFormPanel.FindControl("FixtureTurnaround"); 
-			fixtureHalvesNumber = (DropDownList)CompetitionFormPanel.FindControl("FixtureHalvesNumber"); 
+			fixtureStructure = (DropDownList)CompetitionFormPanel.FindControl("FixtureStructure"); 
 			fixtureHalvesLength = (DropDownList)CompetitionFormPanel.FindControl("FixtureHalvesLength"); 
  			teamSize = (DropDownList)CompetitionFormPanel.FindControl("TeamSize"); 
 			squadSize = (DropDownList)CompetitionFormPanel.FindControl("SquadSize"); 
 			competitionFormat = (DropDownList)CompetitionFormPanel.FindControl("CompetitionFormat");
 			saveButton = (Button)CompetitionFormPanel.FindControl("SaveButton");
         }
-        protected void ManagePageVersion(RequestVersion pageVersion) {
-			switch (pageVersion) {
+        protected void ManagePageVersion(RequestVersion pageVersion) 
+        {
+			switch (pageVersion) 
+            {
 				//case RequestVersion.TeamDelete:
 				//	iTeam.SQLDeleteWithCascade<Team>(team);
 				//	Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
@@ -113,7 +125,8 @@ namespace GoTournamental.UI.Organiser {
             }
         }
 
-        protected void CompetitionEditFormLoad() {
+        protected void CompetitionEditFormLoad() 
+        {
 			CompetitionStartDateLoad();
 			CompetitionStartHourLoad();
 			CompetitionStartHourMinuteLoad();
@@ -126,34 +139,42 @@ namespace GoTournamental.UI.Organiser {
  			CompetitionFormatLoad();
 
 			ageBand.Text = EnumExtensions.GetStringValue(competition.AgeBand);
-			if (!IsPostBack) {
+			if (!IsPostBack) 
+            {
 				noTeamsAttending.Text = competition.CountTeamsAttendingCompetition().ToString();
-				if (competition.StartTime.HasValue) {
+				if (competition.StartTime.HasValue)
+                {
 
 					competitionStartDate.SelectedValue = competition.StartTime.Value.ToShortDateString();
 
 					hourText = competition.StartTime.Value.Hour.ToString();
-					if (hourText.Length == 1) {
+					if (hourText.Length == 1)
+                    {
 						hourText = "0" + hourText;
 					}
-					foreach (ListItem li in competitionStartHour.Items) {
-						if (li.Value == hourText) {
+					foreach (ListItem li in competitionStartHour.Items)
+                    {
+						if (li.Value == hourText)
+                        {
 							li.Selected = true;
 						}
 					}
 					minuteText = competition.StartTime.Value.Minute.ToString();
-					if (minuteText.Length == 1) {
+					if (minuteText.Length == 1) 
+                    {
 						minuteText = "0" + minuteText;
 					}
-					foreach (ListItem li in competitionStartMinute.Items) {
-						if (li.Value == minuteText) {
+					foreach (ListItem li in competitionStartMinute.Items)
+                    {
+						if (li.Value == minuteText)
+                        {
 							li.Selected = true;
 						}
 					}
 				}
 				session.SelectedValue = EnumExtensions.GetIntValue(competition.Session).ToString();
 				fixtureTurnaround.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureTurnaround).ToString();
-				fixtureHalvesNumber.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureHalvesNumber).ToString();
+				fixtureStructure.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureStructure).ToString();
 				fixtureHalvesLength.SelectedValue = EnumExtensions.GetIntValue(competition.FixtureHalvesLength).ToString();
 				teamSize.SelectedValue = EnumExtensions.GetIntValue(competition.TeamSize).ToString();
 				squadSize.SelectedValue = EnumExtensions.GetIntValue(competition.SquadSize).ToString();
@@ -163,133 +184,179 @@ namespace GoTournamental.UI.Organiser {
 
 		}
         
-		protected void CompetitionStartDateLoad() {
+		protected void CompetitionStartDateLoad() 
+        {
 			competitionStartDate.Items.Add(new ListItem(tournament.StartTime.Value.ToShortDateString(), tournament.StartTime.Value.ToShortDateString()));
-			if (tournament.EndTime.HasValue) {
+			if (tournament.EndTime.HasValue)
+            {
 				DateTime loopEnd = (DateTime)tournament.StartTime;
-				do {
+				do 
+                {
 					loopEnd = loopEnd.AddDays(1);
 					competitionStartDate.Items.Add(new ListItem(loopEnd.ToShortDateString(), loopEnd.ToShortDateString()));
 				}
 				while (loopEnd <= tournament.EndTime);
 			}
-			else {
+			else 
+            {
 				competitionStartDate.SelectedValue = tournament.StartTime.Value.ToShortDateString();
 			}
 		}
-		protected void CompetitionStartHourLoad() {
-			for (int i = 6; i <= 20; i++ ) {
+		protected void CompetitionStartHourLoad() 
+        {
+			for (int i = 6; i <= 20; i++ ) 
+            {
 				hourText = i.ToString();
-				if (hourText.Length == 1) {
+				if (hourText.Length == 1)
+                {
 					hourText = "0" + hourText;
 				}
 				competitionStartHour.Items.Add(new ListItem(hourText, hourText));
 			}
 		}
-		protected void CompetitionStartHourMinuteLoad() {
-			for (int i = 0; i <= 60; i = i + 10 ) {
+		protected void CompetitionStartHourMinuteLoad() 
+        {
+			for (int i = 0; i <= 60; i = i + 10 )
+            {
 				minuteText = i.ToString();
-				if (minuteText.Length == 1) {
+				if (minuteText.Length == 1)
+                {
 					minuteText = "0" + minuteText;
 				}
 				competitionStartMinute.Items.Add(new ListItem(minuteText, minuteText));
 			}
 		}		
-		protected void SessionLoad() {
+		protected void SessionLoad() 
+        {
 			Array sessionEnum = Enum.GetValues(typeof(Competition.Sessions));
-            if (session.Items.Count < 2) {
-                foreach (Enum type in sessionEnum) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+            if (session.Items.Count < 2)
+            {
+                foreach (Enum type in sessionEnum)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0) 
+                    {
                         session.Items.Add(new ListItem(EnumExtensions.GetStringValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
 		}		
-		protected void FixtureTurnaroundLoad() {
+		protected void FixtureTurnaroundLoad() 
+        {
 			Array fixtureTurnaroundEnum = Enum.GetValues(typeof(Tournament.FixtureTurnarounds));
-            if (fixtureTurnaround.Items.Count < 2) {
-                foreach (Enum type in fixtureTurnaroundEnum) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+            if (fixtureTurnaround.Items.Count < 2)
+            {
+                foreach (Enum type in fixtureTurnaroundEnum)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0) 
+                    {
                         fixtureTurnaround.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
 		}						
- 		protected void FixtureHalvesNumberLoad() {
-        	Array fixtureHalvesNumberEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesNumbers));
-            if (fixtureHalvesNumber.Items.Count < 2) {
-                foreach (Enum type in fixtureHalvesNumberEnum) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
-                        fixtureHalvesNumber.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
+ 		protected void FixtureHalvesNumberLoad() 
+        {
+        	Array fixtureHalvesNumberEnum = Enum.GetValues(typeof(Tournament.FixtureStructures));
+            if (fixtureStructure.Items.Count < 2)
+            {
+                foreach (Enum type in fixtureHalvesNumberEnum)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0)
+                    {
+                        fixtureStructure.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
         }       
-  		protected void FixtureHalvesLengthLoad() {
+  		protected void FixtureHalvesLengthLoad() 
+        {
 			Array fixtureHalvesLengthEnum = Enum.GetValues(typeof(Tournament.FixtureHalvesLengths));
-            if (fixtureHalvesLength.Items.Count < 2) {
-                foreach (Enum type in fixtureHalvesLengthEnum) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+            if (fixtureHalvesLength.Items.Count < 2) 
+            {
+                foreach (Enum type in fixtureHalvesLengthEnum)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0) 
+                    {
                         fixtureHalvesLength.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
         }       
 	
-		protected void TeamSizeLoad() {
+		protected void TeamSizeLoad() 
+        {
 			Array teamSizeEnum = Enum.GetValues(typeof(Domains.NumberOfParticipants));
-            if (teamSize.Items.Count < 2) {
-				if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && (competition.AgeBand == Competition.AgeBands.Under7s || competition.AgeBand == Competition.AgeBands.Under8s)) {
+            if (teamSize.Items.Count < 2) 
+            {
+				if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && (competition.AgeBand == Competition.AgeBands.Under7s || competition.AgeBand == Competition.AgeBands.Under8s)) 
+                {
 					teamSize.Items.Add(new ListItem("4", "4"));
 					teamSize.Items.Add(new ListItem("5", "5"));
 					teamSize.Items.Add(new ListItem("6", "6"));
 				}
-				else if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && (competition.AgeBand == Competition.AgeBands.Under9s || competition.AgeBand == Competition.AgeBands.Under10s)) {
+				else if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && (competition.AgeBand == Competition.AgeBands.Under9s || competition.AgeBand == Competition.AgeBands.Under10s)) 
+                {
 					teamSize.Items.Add(new ListItem("5", "5"));
 					teamSize.Items.Add(new ListItem("6", "6"));
 					teamSize.Items.Add(new ListItem("7", "7"));
 				}
-				else {
-					foreach (Enum type in teamSizeEnum) {
-						if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && EnumExtensions.GetIntValue(type) > 4 && EnumExtensions.GetIntValue(type) <= 11) {
+				else 
+                {
+					foreach (Enum type in teamSizeEnum)
+                    {
+						if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && EnumExtensions.GetIntValue(type) > 4 && EnumExtensions.GetIntValue(type) <= 11) 
+                        {
 							teamSize.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
 						}
 					}
 				}
             }
 		}		
-		protected void SquadSizeLoad() {
+		protected void SquadSizeLoad()
+        {
 			Array squadSizeEnum = Enum.GetValues(typeof(Domains.NumberOfParticipants));
-            if (squadSize.Items.Count < 2) {
-                foreach (Enum type in squadSizeEnum) {
-                    if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && EnumExtensions.GetIntValue(type) > 4 && EnumExtensions.GetIntValue(type) <= 13) {
+            if (squadSize.Items.Count < 2) 
+            {
+                foreach (Enum type in squadSizeEnum) 
+                {
+                    if (tournament.TournamentType == Tournament.TournamentTypes.FootballJunior && EnumExtensions.GetIntValue(type) > 4 && EnumExtensions.GetIntValue(type) <= 13) 
+                    {
                         squadSize.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
 		}			
-		protected void CompetitionFormatLoad() {
+		protected void CompetitionFormatLoad() 
+        {
             Array enumValues = Enum.GetValues(typeof(Competition.CompetitionFormats));
-            if (competitionFormat.Items.Count < 2) {
-                foreach (Enum type in enumValues) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+            if (competitionFormat.Items.Count < 2) 
+            {
+                foreach (Enum type in enumValues)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0)
+                    {
                         competitionFormat.Items.Add(new ListItem(EnumExtensions.GetStringValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
 		}
 
-		protected bool SavePageData() {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-			    bool reCalculateFixtures = false;
+		protected bool SavePageData() 
+        {
+    	    bool reCalculateFixtures = false;
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
 
-			    if (competitionStartDate.SelectedValue != "") {
+			    if (competitionStartDate.SelectedValue != "") 
+                {
 				    startTimeText = competitionStartDate.SelectedValue;
 			    }
-			    if (competitionStartDate.SelectedValue != "" && competitionStartHour.SelectedValue != "" && competitionStartMinute.SelectedValue != "") {
+			    if (competitionStartDate.SelectedValue != "" && competitionStartHour.SelectedValue != "" && competitionStartMinute.SelectedValue != "")
+                {
 				    startTimeText = startTimeText + " " + competitionStartHour.SelectedValue + ":"+competitionStartMinute.SelectedValue+":00";
 			    }
-                if ((Int32.Parse(fixtureHalvesNumber.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) {
+                if ((Int32.Parse(FixtureStructure.SelectedValue)*Int32.Parse(fixtureHalvesLength.SelectedValue)) > Int32.Parse(fixtureTurnaround.SelectedValue)) 
+                {
                     fixtureOverRun = true;
                 }
                 competitionToSave = new Competition(
@@ -300,47 +367,50 @@ namespace GoTournamental.UI.Organiser {
 				    session : (Competition.Sessions)Int32.Parse(session.SelectedValue) ,
 				    competitionFormat : (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue) ,
 				    fixtureTurnaround : (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ,
-                    fixtureHalvesNumber : fixtureOverRun == true ? Tournament.FixtureHalvesNumbers.Undefined : (Tournament.FixtureHalvesNumbers)Int32.Parse(fixtureHalvesNumber.SelectedValue) ,
+                    fixtureStructure : fixtureOverRun == true ? Tournament.FixtureStructures.Undefined : (Tournament.FixtureStructures)Int32.Parse(fixtureStructure.SelectedValue) ,
                     fixtureHalvesLength : fixtureOverRun == true ? Tournament.FixtureHalvesLengths.Undefined : (Tournament.FixtureHalvesLengths)Int32.Parse(fixtureHalvesLength.SelectedValue) ,
 				    teamSize : (Domains.NumberOfParticipants)Int32.Parse(teamSize.SelectedValue) ,
 				    squadSize : (Domains.NumberOfParticipants)Int32.Parse(squadSize.SelectedValue) 
                 );
 
-			    //if (!iFixture.FixturesUnderway(competition) == true &&
-			    //	(competition.FixtureTurnaround != (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ||
-			    //	competition.StartTime != DateTime.Parse(startTimeText) ||
-			    //	competition.CompetitionFormat != (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue))) {
-			    //	reCalculateFixtures = true;
-			    //}
+                if (!iFixture.FixturesUnderway(competition) == true && competition.CountTeamsRegisteredAtCompetition() > 0 &&
+                    (competition.FixtureTurnaround != (Tournament.FixtureTurnarounds)Int32.Parse(fixtureTurnaround.SelectedValue) ||
+                    competition.StartTime != DateTime.Parse(startTimeText) ||
+                    competition.CompetitionFormat != (Competition.CompetitionFormats)Int32.Parse(competitionFormat.SelectedValue))) 
+                {
+                    reCalculateFixtures = true;
+                }
 
-			    iCompetition.SQLUpdate<Competition>(competitionToSave);
+                iCompetition.SQLUpdate<Competition>(competitionToSave);
 
-			    return reCalculateFixtures;
             }
+		    return reCalculateFixtures;
+
 		}
 		
-		protected void SaveButton_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+		protected void SaveButton_Click(object sender, EventArgs e)
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 			    bool reCalculateFixtures = false;
 			    reCalculateFixtures = SavePageData();
-			    //if (reCalculateFixtures == true) {
-			    //	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=3&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
-			    //}
-			    //else {
-			    //	Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
-			    //}
-                //if (competition.CompetitionFormat == Competition.CompetitionFormats.Cup) {
-                //    Response.Redirect("~/UI/KnockoutView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
-                //}
-                //else {
+                if (reCalculateFixtures == true) 
+                {
+                    Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=3&TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
+                }
+                else
+                {
+                    Response.Redirect("~/UI/Competitions/CompetitionsList?TournamentID=" + tournament.ID.ToString());
+                }
 
-                if (fixtureOverRun) {
+                if (fixtureOverRun) 
+                {
                     Response.Write("<script language=javascript>alert('The fixture lengths selected are longer than the turnaround');</script>");
                 }
-                else {
+                else 
+                {
                     Response.Redirect("~/UI/Competitions/CompetitionView?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString());
                 }
-                //}
             }
         }
 

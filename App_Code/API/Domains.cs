@@ -1,18 +1,20 @@
-using System;
 using System.Web;
-using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace GoTournamental.API {
+namespace GoTournamental.API 
+{
 
-	public abstract class Domains {
+	public abstract class Domains 
+    {
 
         #region Member Enumerations & Collections
-		public enum FAAffiliations {
+		public enum FAAffiliations 
+        {
 			Undefined = 0,
 			EnglishFA = 1
 		}		
-		public enum EnglishCountyFAs {
+		public enum EnglishCountyFAs 
+        {
 			Undefined = 0,
 			[DescriptionAttribute("Amateur Football Alliance")] AmateurFootballAlliance = 1, 
 			Army = 2,
@@ -69,7 +71,8 @@ namespace GoTournamental.API {
 			Wiltshire = 53, 
 			Worcestershire = 54
  		}
-        public enum AttendanceTypes {
+        public enum AttendanceTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Tournament Hosts")] HostClub = 1,
             Pending = 2,
@@ -81,7 +84,8 @@ namespace GoTournamental.API {
             Reserve = 8,
             Deleted = 9
         }
-		public enum KitColours {
+		public enum KitColours
+        {
 			Undefined = 0,
 			White = 1,
 			Maroon = 2,
@@ -94,9 +98,11 @@ namespace GoTournamental.API {
 			SkyBlue = 9,
 			Blue = 10,
 			MidnightBlue = 11,
-			Black = 12
+			Black = 12,
+            Pink = 13
 		}
-		public enum NumberOfParticipants {
+		public enum NumberOfParticipants 
+        {
 			Undefined = 0,
 			One = 1,
 			Two = 2,
@@ -123,22 +129,26 @@ namespace GoTournamental.API {
 			TwentyThree = 23,
 			TwentyFour = 24
 		}
-		public enum GraphicFileTypes {
+		public enum GraphicFileTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute(".png")] PNG = 1,
             [DescriptionAttribute(".jpg")] JPEG = 2,
 	        [DescriptionAttribute(".gif")] GIF = 3
         }
-		public enum GraphicFileClasses {
+		public enum GraphicFileClasses
+        {
             Undefined = 0,
             [DescriptionAttribute("Club Logo")] ClubLogo = 1
         }
 		#endregion
 
 		#region Methods
-		public static string XMLFilePathForDomain(string domainName) {
+		public static string XMLFilePathForDomain(string domainName) 
+        {
 			string xmlFilePath = "";
-			switch(domainName) {
+			switch(domainName) 
+            {
 				case "Colours":
 					xmlFilePath = HttpContext.Current.Server.MapPath(@"~/App_Code/API/Domains/Colours.xml");
 					break;

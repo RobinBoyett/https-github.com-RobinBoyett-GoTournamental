@@ -157,6 +157,11 @@ BEGIN
 	SELECT @GroupID = @@IDENTITY
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 6)
+	INSERT INTO Planner.Groups(CompetitionID, [Name], FixtureTurnaround, FixturesUnderWay)
+	VALUES (5, 'Group 4', 0, 'false')
+	SELECT @GroupID = @@IDENTITY
+	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
+	VALUES (@GroupID, 7)
 	--// Allocate Teams to Groups
 	UPDATE Planner.Teams SET GroupID = 11 WHERE ID = 12
 	UPDATE Planner.Teams SET GroupID = 12 WHERE ID = 13
@@ -174,6 +179,11 @@ BEGIN
 	UPDATE Planner.Teams SET GroupID = 12 WHERE ID = 132
 	UPDATE Planner.Teams SET GroupID = 13 WHERE ID = 145
 
+	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 148
+	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 149
+	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 150
+	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 151
+	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 152
 
 	--// SET-UP UNDER 12s AGE BAND
 	--// Set up Groups and Pitches
@@ -188,18 +198,18 @@ BEGIN
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 4)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 14
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 15
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 29
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 38
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 47
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 52
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 78
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 110
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 112
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 125
-	UPDATE Planner.Teams SET GroupID = 14 WHERE ID = 130
-	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 139
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 14
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 15
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 29
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 38
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 47
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 52
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 78
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 110
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 112
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 125
+	UPDATE Planner.Teams SET GroupID = 15 WHERE ID = 130
+	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 139
 
 
 	--// SET-UP UNDER 13s AGE BAND
@@ -220,24 +230,24 @@ BEGIN
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 5)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 16
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 17
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 30
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 53
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 62
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 63
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 79
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 86
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 87
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 90
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 96
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 106
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 113
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 118
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 120
-	UPDATE Planner.Teams SET GroupID = 16 WHERE ID = 121
-	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 137
-	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 140
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 16
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 17
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 30
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 53
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 62
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 63
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 79
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 86
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 87
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 90
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 96
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 106
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 113
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 118
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 120
+	UPDATE Planner.Teams SET GroupID = 17 WHERE ID = 121
+	UPDATE Planner.Teams SET GroupID = 18 WHERE ID = 137
+	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 140
 
 	--// SET-UP UNDER 14s BOYS AGE BAND
 	--// Set up Groups and Pitches
@@ -252,20 +262,20 @@ BEGIN
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 7)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 18
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 19
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 39
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 80
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 84
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 97
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 98
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 107
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 108
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 114
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 115
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 126
-	UPDATE Planner.Teams SET GroupID = 19 WHERE ID = 138
-	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 141
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 18
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 19
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 39
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 80
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 84
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 97
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 98
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 107
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 108
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 114
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 115
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 126
+	UPDATE Planner.Teams SET GroupID = 20 WHERE ID = 138
+	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 141
 
 
 	--// SET-UP UNDER 15s BOYS AGE BAND
@@ -286,24 +296,24 @@ BEGIN
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 6)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 20
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 21
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 31
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 40
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 48
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 49
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 64
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 68
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 69
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 70
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 81
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 85
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 91
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 99
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 100
-	UPDATE Planner.Teams SET GroupID = 21 WHERE ID = 101
-	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 127
-	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 146
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 20
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 21
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 31
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 40
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 48
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 49
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 64
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 68
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 69
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 70
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 81
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 85
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 91
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 99
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 100
+	UPDATE Planner.Teams SET GroupID = 22 WHERE ID = 101
+	UPDATE Planner.Teams SET GroupID = 23 WHERE ID = 127
+	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 146
 
 
 
@@ -319,17 +329,58 @@ BEGIN
 	SELECT @GroupID = @@IDENTITY
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 6)
+	INSERT INTO Planner.Groups(CompetitionID, [Name], FixtureTurnaround, FixturesUnderWay)
+	VALUES (10, 'Group 3', 0, 'false')
+	SELECT @GroupID = @@IDENTITY
+	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
+	VALUES (@GroupID, 8)
+	INSERT INTO Planner.Groups(CompetitionID, [Name], FixtureTurnaround, FixturesUnderWay)
+	VALUES (10, 'Group 4', 0, 'false')
+	SELECT @GroupID = @@IDENTITY
+	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
+	VALUES (@GroupID, 9)
+	INSERT INTO Planner.Groups(CompetitionID, [Name], FixtureTurnaround, FixturesUnderWay)
+	VALUES (10, 'Group 5', 0, 'false')
+	SELECT @GroupID = @@IDENTITY
+	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
+	VALUES (@GroupID, 10)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 22
-	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 23
-	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 41
-	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 65
-	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 82
-	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 88
-	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 109
-	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 111
-	UPDATE Planner.Teams SET GroupID = 24 WHERE ID = 119
-	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 131
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 22
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 23
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 153
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 154
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 155
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 41
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 65
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 156
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 157
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 158
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 82
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 88
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 159
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 160
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 161
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 109
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 111
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 162
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 163
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 164
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 119
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 131
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 165
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 166
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 167
+	UPDATE Planner.Teams SET GroupID = 25 WHERE ID = 168
+	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 169
+	UPDATE Planner.Teams SET GroupID = 27 WHERE ID = 170
+	UPDATE Planner.Teams SET GroupID = 28 WHERE ID = 171
+	UPDATE Planner.Teams SET GroupID = 29 WHERE ID = 172
+
+
+
+
+
+
 
 
 	--// SET-UP UNDER 19s WOMEN AGE BAND
@@ -340,11 +391,11 @@ BEGIN
 	INSERT INTO Planner.GroupsPlayingAreas (GroupID, PlayingAreaID)
 	VALUES (@GroupID, 7)
 	--// Allocate Teams to Groups
-	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 24
-	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 32
-	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 66
-	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 129
-	UPDATE Planner.Teams SET GroupID = 26 WHERE ID = 147
+	UPDATE Planner.Teams SET GroupID = 30 WHERE ID = 24
+	UPDATE Planner.Teams SET GroupID = 30 WHERE ID = 32
+	UPDATE Planner.Teams SET GroupID = 30 WHERE ID = 66
+	UPDATE Planner.Teams SET GroupID = 30 WHERE ID = 129
+	UPDATE Planner.Teams SET GroupID = 30 WHERE ID = 147
 
 
 

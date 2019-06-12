@@ -1,17 +1,14 @@
 using System;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Collections.Generic;
 using System.IO;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class AdvertPanel : System.Web.UI.UserControl {
+    public partial class AdvertPanel : System.Web.UI.UserControl 
+    {
 
         private Advertiser advertiser = new Advertiser();
         private IAdvertiser iAdvertiser = new Advertiser();
@@ -20,19 +17,23 @@ namespace GoTournamental.UI.Organiser {
 		public Advert.GraphicFileStyles graphicFileStyle = Advert.GraphicFileStyles.Undefined;
 		public int tournamentID = 0;
 
-		protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e) 
+        {
 			Image advertImage = (Image)AdvertImagePanel.FindControl("AdvertImage");
 			advert = iAdvert.GetAdvert(graphicFileStyle, tournamentID);
-			if (File.Exists(Server.MapPath(advert.GraphicFilePath))) {
+			if (File.Exists(Server.MapPath(advert.GraphicFilePath))) 
+            {
 				advertImage.ImageUrl = advert.GraphicFilePath;
 			}
-			else {
+			else 
+            {
 				AdvertImagePanel.Visible = false;
 			}
 
 		}
 
-		protected void AdvertLink_Click(object sender, EventArgs e) {
+		protected void AdvertLink_Click(object sender, EventArgs e) 
+        {
             advertiser = iAdvertiser.SQLSelect<Advertiser, int>(advert.AdvertiserID);
 			iAdvert.AddClickThrough(advert.ID);
 			Response.Write("<script>");

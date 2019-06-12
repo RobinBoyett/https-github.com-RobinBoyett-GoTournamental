@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using GoTournamental.BLL.Planner;
 using GoTournamental.ORM.Organiser;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser
+{
 
-    public class LeagueTable : ILeagueTable {
+    public class LeagueTable : ILeagueTable
+    {
 
 		#region Constructors
         public LeagueTable() { }
-        //public LeagueTable(int id, int position, int teamID, int goalsFor, int goalsAgainst, int goalDifference, int points) {
+        //public LeagueTable(int id, int position, int teamID, int goalsFor, int goalsAgainst, int goalDifference, int points) 
+        //{
         //    this.ID = id;
         //    this.Position = position;
         //    this.TeamID = teamID;
@@ -24,8 +27,10 @@ namespace GoTournamental.BLL.Organiser {
         public int ID { get; set; }
         public int Position { get; set; }
         public int TeamID { get; set; }
-        public Team Team {
-            get {
+        public Team Team
+        {
+            get
+            {
                 Team team = new Team();
                 ITeam iTeam = new Team();
                 team = iTeam.SQLSelect<Team, int>(TeamID);
@@ -43,23 +48,24 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
         #region Methods
-        public List<LeagueTable> GetLeagueTableForGroup(int groupID) {
+        public List<LeagueTable> GetLeagueTableForGroup(int groupID) 
+        {
             LeagueTableDbContext context = new LeagueTableDbContext();
             List<LeagueTable> leagueTables = context.GetLeagueTableForGroup(groupID).ToList();
-             return leagueTables;
+            return leagueTables;
         }
-		//public List<LeagueTable> GetLeagueTableCompetitionFinal(int competitionID, string matchName) {
-		//	LeagueTableDbContext context = new LeagueTableDbContext();
-		//	List<LeagueTable> leagueTables = context.GetLeagueTableForGroup(groupID).ToList();
-		//	return leagueTables;
-		//}       
-		
-		
+        public List<LeagueTable> GetLeagueWinnersForCompetition(int competitionID)
+        {
+            LeagueTableDbContext context = new LeagueTableDbContext();
+            List<LeagueTable> leagueTables = context.GetLeagueWinnersForCompetition(competitionID).ToList();
+            return leagueTables;
+        }
 		#endregion
 
     }
 
-    public interface ILeagueTable {
+    public interface ILeagueTable
+    {
         int ID { get; }
         int Position { get; }
         int TeamID { get; }
@@ -73,6 +79,7 @@ namespace GoTournamental.BLL.Organiser {
         int GoalDifference { get; }
         int Points { get; }
         List<LeagueTable> GetLeagueTableForGroup(int groupID);
+        List<LeagueTable> GetLeagueWinnersForCompetition(int competitionID);
     }
 
 }

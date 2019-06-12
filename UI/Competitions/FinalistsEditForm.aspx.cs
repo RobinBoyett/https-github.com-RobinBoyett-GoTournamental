@@ -10,9 +10,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class FinalistsEditForm : Page {
+    public partial class FinalistsEditForm : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -26,7 +28,6 @@ namespace GoTournamental.UI.Organiser {
         List<Team> teamsInFinals = new List<Team>();
         List<Team> teamsInCompetition = new List<Team>();
 		#endregion
-
         #region Declare page controls
 		Label competitionTitle = new Label();
 		Label ageBand = new Label();
@@ -34,14 +35,17 @@ namespace GoTournamental.UI.Organiser {
         DropDownList replacementTeamList = new DropDownList();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e)
+        {
            
             AssignControlsAll();
 
-			if (Request.QueryString.Get("TournamentID") != null) {
+			if (Request.QueryString.Get("TournamentID") != null)
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
             }
-			if (Request.QueryString.Get("competition_id") != null) {
+			if (Request.QueryString.Get("competition_id") != null)
+            {
 				competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
 				competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 			}        
@@ -51,30 +55,38 @@ namespace GoTournamental.UI.Organiser {
             teamsInCompetition = iTeam.GetCompetitionTeamsAll(competition.ID);
             teamsInCompetition.RemoveAll(i => finalsTeamsIDs.Contains(i.ID));
 
-            if (finalistTeamList.Items.Count < 2) {
-                foreach (Team team in teamsInFinals) {
+            if (finalistTeamList.Items.Count < 2)
+            {
+                foreach (Team team in teamsInFinals)
+                {
                     Club club = iClub.SQLSelect<Club, int>(team.ClubID);
                     finalistTeamList.Items.Add(new ListItem(club.Name + " " + team.Name, team.ID.ToString()));
                 }
             }
-            if (replacementTeamList.Items.Count < 2) {
-                foreach (Team team in teamsInCompetition) {
+            if (replacementTeamList.Items.Count < 2) 
+            {
+                foreach (Team team in teamsInCompetition)
+                {
                     Club club = iClub.SQLSelect<Club, int>(team.ClubID);
                     replacementTeamList.Items.Add(new ListItem(club.Name + " " + team.Name, team.ID.ToString()));
                 }
             }
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			competitionTitle = (Label)FinalistsEditFormPanel.FindControl("CompetitionTitle");
 			ageBand = (Label)FinalistsEditFormPanel.FindControl("AgeBand");
             finalistTeamList = (DropDownList)FinalistsEditFormPanel.FindControl("FinalistTeamList");
             replacementTeamList = (DropDownList)FinalistsEditFormPanel.FindControl("ReplacementTeamList");
 		}
 
-		protected void SaveButton_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-                if (finalistTeamList.SelectedValue != "0" && replacementTeamList.SelectedValue != "0") {
+		protected void SaveButton_Click(object sender, EventArgs e)
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
+                if (finalistTeamList.SelectedValue != "0" && replacementTeamList.SelectedValue != "0")
+                {
                     iFixture.ReplaceFinalistTeamInFixtures(Int32.Parse(finalistTeamList.SelectedValue), Int32.Parse(replacementTeamList.SelectedValue));
                 }
             }

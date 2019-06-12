@@ -9,19 +9,22 @@ using GoTournamental.BLL.Organiser;
 using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
 
-namespace GoTournamental.UI {
+namespace GoTournamental.UI 
+{
 
-	public partial class ContactUsForm : Page {
+	public partial class ContactUsForm : Page 
+    {
 
 		//AdvertPanel advert120x600 = new AdvertPanel();
 
 		#region Declare Domain Objects & Page Variables
 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
-		IContactUs iContactUs = new ContactUs();
-		ContactUs contactUs = new ContactUs();
+		IFeedback iContactUs = new Feedback();
+		Feedback contactUs = new Feedback();
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
-        protected enum RequestVersion {
+        protected enum RequestVersion 
+        {
             Undefined = 0,
             PreRegisterInsert = 1,
             PreRegisterMessage = 2
@@ -41,16 +44,19 @@ namespace GoTournamental.UI {
 		Button deleteButton = new Button();
 		#endregion
 
-		protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e)
+        {
 
             AssignControlsAll();
 
-			if (Request.QueryString.Get("Version") != null) {
+			if (Request.QueryString.Get("Version") != null) 
+            {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
-			if (Request.QueryString.Get("ID") != null) {
- 				contactUs = iContactUs.SQLSelect<ContactUs, int>(Int32.Parse(Request.QueryString.Get("ID"))); 
-           }
+			if (Request.QueryString.Get("ID") != null) 
+            {
+ 				contactUs = iContactUs.SQLSelect<Feedback, int>(Int32.Parse(Request.QueryString.Get("ID"))); 
+            }
 
 			ManagePageVersion(pageVersion);
 			
@@ -60,7 +66,8 @@ namespace GoTournamental.UI {
 
 		}
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll() 
+        {
 			welcomeTextPanel = (Panel)ContactUsFormPanel.FindControl("WelcomeTextPanel");
 			firstName = (TextBox)ContactUsFormPanel.FindControl("FirstName");
 			lastName = (TextBox)ContactUsFormPanel.FindControl("LastName");
@@ -73,8 +80,10 @@ namespace GoTournamental.UI {
 			deleteButton = (Button)ContactUsFormPanel.FindControl("DeleteButton");
 		}
 
-        protected void ManagePageVersion(RequestVersion pageVersion) {
-			switch (pageVersion) {
+        protected void ManagePageVersion(RequestVersion pageVersion)
+        {
+			switch (pageVersion) 
+            {
 				case RequestVersion.PreRegisterMessage:
 					ContactUsMessagePanel.Visible = true;
 					break;
@@ -85,20 +94,26 @@ namespace GoTournamental.UI {
             }
         }
 
-		protected void PreRegisterFormLoad() {
+		protected void PreRegisterFormLoad() 
+        {
 			ContactUsFormPanel.Visible = true;
-			if (contactUs == null) {
+			if (contactUs == null) 
+            {
 				welcomeTextPanel.Visible = true;
 			}
 			Array tournamentTypes = Enum.GetValues(typeof(Tournament.TournamentTypes));
-            if (tournamentType.Items.Count < 2) {
-                foreach (Enum type in tournamentTypes) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+            if (tournamentType.Items.Count < 2) 
+            {
+                foreach (Enum type in tournamentTypes) 
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0)
+                    {
                         tournamentType.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }
-			if (contactUs != null && !IsPostBack) {
+			if (contactUs != null && !IsPostBack) 
+            {
 				firstName.Text = contactUs.FirstName;
 				lastName.Text = contactUs.LastName;
 				email.Text = contactUs.Email;
@@ -108,18 +123,20 @@ namespace GoTournamental.UI {
 				additionalInformation.Text = contactUs.AdditionalInformation;
 				contactUsIDHidden.Value = contactUs.ID.ToString();
 				var user = System.Web.HttpContext.Current.User.Identity.GetUserId();
-				if (user != null && identityHelper.RoleExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "Administrator")) {
+				if (user != null && identityHelper.RoleExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "Administrator")) 
+                {
 					deleteButton.Visible = true;
 				}
 			}
-			else {
+			else 
+            {
 				contactUsIDHidden.Value = "0";
 			}
 		}
 
-		protected void SaveButton_Click(object sender, EventArgs e) {
-
-			ContactUs contactUsToSave = new ContactUs(
+		protected void SaveButton_Click(object sender, EventArgs e) 
+        {
+			Feedback contactUsToSave = new Feedback(
 				id: Int32.Parse(contactUsIDHidden.Value),
 				firstName : firstName.Text,
 				lastName : lastName.Text,
@@ -128,28 +145,31 @@ namespace GoTournamental.UI {
 				telephoneNumber : telephoneNumber.Text,
 				tournamentType : (Tournament.TournamentTypes)Int32.Parse(tournamentType.SelectedValue) ,
 				additionalInformation : additionalInformation.Text,
-				contactDate : DateTime.Now,
-				status : ContactUs.Statuses.New
-			);
+				feedbackDate : DateTime.Now
+            );
 
-			if (contactUsToSave.ID == 0) {
-	            iContactUs.SQLInsert<ContactUs>(contactUsToSave);
+			if (contactUsToSave.ID == 0) 
+            {
+	            iContactUs.SQLInsert<Feedback>(contactUsToSave);
 				Response.Redirect("~/UI/About/ContactUsForm.aspx?version=2");
 			}
-			else {
-	            iContactUs.SQLUpdate<ContactUs>(contactUsToSave);
+			else 
+            {
+	            iContactUs.SQLUpdate<Feedback>(contactUsToSave);
 				Response.Redirect("~/UI/Admin/ContactUsList");
 			}
             EmailNotificationOfNewContact();
 		}
 
-		protected void DeleteButton_Click(object sender, EventArgs e) {
-			iContactUs.SQLDelete<ContactUs>(contactUs);
+		protected void DeleteButton_Click(object sender, EventArgs e) 
+        {
+			iContactUs.SQLDelete<Feedback>(contactUs);
 			Response.Redirect("~/UI/Admin/ContactUsList");
 		
 		}
 
-        protected void EmailNotificationOfNewContact() {
+        protected void EmailNotificationOfNewContact() 
+        {
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.EnableSsl = false;
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -159,7 +179,7 @@ namespace GoTournamental.UI {
             smtpClient.Host = "smtp.WebSiteLive.net";
             smtpClient.Port = 587;
             MailAddress mailFrom = new MailAddress("noreply@gotournamental.com", "Gotournamental");
-            MailAddress mailTo = new MailAddress("martin@gotournamental.com", "Martin Bunte");
+            MailAddress mailTo = new MailAddress("robin.boyett@hotmail.com", "Robin Boyett");
             MailMessage mailMessage = new MailMessage(mailFrom, mailTo);
             mailMessage.Subject = "New Contact Us Entry For GT";
             mailMessage.Body = "http://www.gotournamental.com/UI/Admin/ContactUsList";

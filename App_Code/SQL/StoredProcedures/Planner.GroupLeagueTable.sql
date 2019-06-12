@@ -1,12 +1,3 @@
-USE [GoTournamental]
-GO
-
-/****** Object: SqlProcedure [Planner].[GroupLeagueTable] Script Date: 25/07/2017 11:12:21 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
 
 CREATE PROCEDURE [Planner].[GroupLeagueTable] (
 	@GroupID		int
@@ -121,7 +112,7 @@ BEGIN
 
 	END
 
-	SELECT TeamID AS ID, CAST(ROW_NUMBER() OVER(ORDER BY Points DESC, GoalDifference DESC, GoalsFor DESC) AS int) AS Position, TeamID, Played, Wins, Draws, Defeats, GoalsFor, GoalsAgainst, GoalsFor - GoalsAgainst AS GoalDifference, Points, HiddenPoints
+	SELECT TeamID AS ID, CAST(ROW_NUMBER() OVER(ORDER BY Points DESC, GoalDifference DESC, GoalsFor DESC, GoalsAgainst) AS int) AS Position, TeamID, Played, Wins, Draws, Defeats, GoalsFor, GoalsAgainst, GoalsFor - GoalsAgainst AS GoalDifference, Points, HiddenPoints
 	INTO #AdjustedLeagueTable
 	FROM #TemporaryLeagueTable L
 	INNER JOIN Planner.Teams T ON T.ID = L.TeamID

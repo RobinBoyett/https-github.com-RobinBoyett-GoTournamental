@@ -8,17 +8,16 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [Administration].[ContactUs] (
+CREATE TABLE [Administration].[Feedback] (
     [ID]                    INT            IDENTITY (1, 1) NOT NULL,
     [FirstName]             VARCHAR(MAX)   NOT NULL,
     [LastName]              VARCHAR(MAX)   NOT NULL,
-    [Email]                 VARCHAR(MAX)  NOT NULL,
-    [Organisation]          VARCHAR (100)  NOT NULL,
+    [Email]                 VARCHAR(MAX)   NOT NULL,
+    [Organisation]          VARCHAR (100)  NULL,
     [TelephoneNumber]       VARCHAR(MAX)   NULL,
     [TournamentType]        INT            NULL,
     [AdditionalInformation] VARCHAR (2000) NULL,
-    [ContactDate]           DATETIME       NULL,
-    [Status]                INT            NULL, 
+    [FeedbackDate]           DATETIME       NULL,
     CONSTRAINT [PK_ContactUs] PRIMARY KEY ([ID])
 );
 

@@ -5,13 +5,16 @@ using GoTournamental.API.Utilities;
 using GoTournamental.API.Interface;
 using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Planner {
+namespace GoTournamental.BLL.Planner 
+{
 
-    public class ToolTip: IToolTip {
+    public class ToolTip: IToolTip
+    {
 
 		#region Constructors
 		public ToolTip() {}
- 		public ToolTip(int id, string webPage, string controlID, string toolTipText, string userID, DateTime dateModified) {
+ 		public ToolTip(int id, string webPage, string controlID, string toolTipText, string userID, DateTime dateModified) 
+        {
 			this.ID = id;
             this.WebPage = webPage;
             this.ControlID = controlID;
@@ -31,25 +34,31 @@ namespace GoTournamental.BLL.Planner {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input))
+            {
                 ToolTipDbContext context = new ToolTipDbContext();
                 context.ToolTips.Add((ToolTip)(object)input);
                 context.SaveChanges();
             }
         }
-        public T SQLSelect<T, U>(U id) {
+        public T SQLSelect<T, U>(U id)
+        {
             ToolTipDbContext context = new ToolTipDbContext();
             ToolTip selected = context.ToolTips.Where(i => i.ID == (int)(object)id).SingleOrDefault();
             return (T)(object)selected;
         }
-        public List<ToolTip> SQLSelectForWebPage(string webPage) {
+        public List<ToolTip> SQLSelectForWebPage(string webPage) 
+        {
             ToolTipDbContext context = new ToolTipDbContext();
             List<ToolTip> selectedList = context.ToolTips.Where(i => i.WebPage == webPage).OrderBy(i => i.ID).ToList();
             return selectedList;
         }
-		public void SQLUpdate<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input)) {
+		public void SQLUpdate<T>(T input)
+        {
+            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input)) 
+            {
                 ToolTipDbContext context = new ToolTipDbContext();
                 ToolTip updated = (ToolTip)(object)input;
                 ToolTip selected = context.ToolTips.Single(i => i.ID == updated.ID);
@@ -60,8 +69,10 @@ namespace GoTournamental.BLL.Planner {
                 context.SaveChanges();
             }
         }  
-        public void SQLDelete<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input)) {
+        public void SQLDelete<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<ToolTip, T>(input))
+            {
                 ToolTipDbContext context = new ToolTipDbContext();
                 ToolTip itemToDelete = (ToolTip)(object)input;
                 ToolTip selected = context.ToolTips.Single(i => i.ID == itemToDelete.ID);
@@ -72,7 +83,8 @@ namespace GoTournamental.BLL.Planner {
 		#endregion
 
     }
-    public interface IToolTip : ISQLInsertable, ISQLSelectable, ISQLDeletable {
+    public interface IToolTip : ISQLInsertable, ISQLSelectable, ISQLDeletable 
+    {
         int ID { get; }
         string WebPage { get; }
         string ControlID { get; }

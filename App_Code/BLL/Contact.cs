@@ -9,12 +9,15 @@ using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Organiser;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser
+{
 
-    public class Contact: IContact {
+    public class Contact: IContact 
+    {
 
         #region Member Enumerations & Collections
-        public enum ContactTypes {
+        public enum ContactTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Tournament Organiser")] TournamentOrganiser = 1,
             [DescriptionAttribute("Tournament Contact")] TournamentContact = 2,
@@ -36,7 +39,8 @@ namespace GoTournamental.BLL.Organiser {
         public Contact(
             int id, int tournamentID, ContactTypes type, string title, string firstName, string lastName, string telephoneNumber, string email, 
             DateTime? dateOfBirth, int? squadNumber
-        ) {
+        )
+        {
 			this.ID = id;
 			this.TournamentID = tournamentID;
 			this.Type = type;
@@ -62,11 +66,14 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
         #region Methods
-        public override string ToString() {
+        public override string ToString() 
+        {
             return string.Format("{0} {1} {2}", Title, FirstName, LastName);
         }
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input)) 
+            {
                 ContactDbContext context = new ContactDbContext();
                 Contact contact = (Contact)(object)input;
                 ConvertContactZeroLengthsStringsToNull(contact);
@@ -75,9 +82,11 @@ namespace GoTournamental.BLL.Organiser {
                 context.SaveChanges();
             }
         }       	
-        public int SQLInsertAndReturnID<T>(T input) {
+        public int SQLInsertAndReturnID<T>(T input) 
+        {
             int ret = 0;
-            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input)) {
+            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input)) 
+            {
                 ContactDbContext context = new ContactDbContext();
                 Contact contact = (Contact)(object)input;
                 ConvertContactZeroLengthsStringsToNull(contact);
@@ -88,32 +97,40 @@ namespace GoTournamental.BLL.Organiser {
             }
             return ret;
         }		
-		public T SQLSelect<T, U>(U id) {
+		public T SQLSelect<T, U>(U id) 
+        {
             ContactDbContext context = new ContactDbContext();
             Contact selected = context.Contacts.Where(i => i.ID == (int)(object)id).SingleOrDefault();
-            if (selected != null) {
+            if (selected != null) 
+            {
                 DecryptPersonalData(selected);
             }
             return (T)(object)selected;
         }
-        public List<Contact> SQLSelectForTournament(int tournamentID) {
+        public List<Contact> SQLSelectForTournament(int tournamentID) 
+        {
             ContactDbContext context = new ContactDbContext();
             List<Contact> contactsList = context.Contacts.Where(i => i.TournamentID == tournamentID).OrderBy(i => i.LastName).ThenBy(i => i.FirstName).ToList();
-            foreach (Contact contact in contactsList) {
+            foreach (Contact contact in contactsList) 
+            {
                 DecryptPersonalData(contact);
             }
             return contactsList;
         }
-		public Contact GetTournamentContact(int tournamentID) {
+		public Contact GetTournamentContact(int tournamentID) 
+        {
             ContactDbContext context = new ContactDbContext();
 			Contact contact = context.Contacts.Where(i => i.TournamentID == tournamentID && i.Type == ContactTypes.TournamentContact).SingleOrDefault();
-            if (contact != null) {
+            if (contact != null) 
+            {
                 DecryptPersonalData(contact);
             }
             return contact;
 		}
-		public void SQLUpdate<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input)) {
+		public void SQLUpdate<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Contact, T>(input))
+            {
                 ContactDbContext context = new ContactDbContext();
                 Contact updated = (Contact)(object)input;
                 ConvertContactZeroLengthsStringsToNull(updated);
@@ -130,34 +147,43 @@ namespace GoTournamental.BLL.Organiser {
             }
         }		
 		
-        private static Contact ConvertContactZeroLengthsStringsToNull(Contact contact) {
-            if (contact.FirstName == "") {
+        private static Contact ConvertContactZeroLengthsStringsToNull(Contact contact) 
+        {
+            if (contact.FirstName == "")
+            {
                 contact.FirstName = null;
             };
-            if (contact.LastName == "") {
+            if (contact.LastName == "") 
+            {
                 contact.LastName = null;
             };
-            if (contact.TelephoneNumber == "") {
+            if (contact.TelephoneNumber == "")
+            {
                 contact.TelephoneNumber = null;
             };
-            if (contact.Email == "") {
+            if (contact.Email == "")
+            {
                 contact.Email = null;
             };
             return contact;
         } 
-        public static Contact EncryptPersonalData(Contact unencrypted) {
+        public static Contact EncryptPersonalData(Contact unencrypted) 
+        {
             Contact encrypted = unencrypted;
             encrypted.FirstName = GoTournamentalCryptography.Encrypt(encrypted.FirstName, GoTournamentalCryptography.TournamentPassword(encrypted.TournamentID));
             encrypted.LastName = GoTournamentalCryptography.Encrypt(encrypted.LastName, GoTournamentalCryptography.TournamentPassword(encrypted.TournamentID));
-            if (encrypted.TelephoneNumber != null && encrypted.TelephoneNumber != "") {
+            if (encrypted.TelephoneNumber != null && encrypted.TelephoneNumber != "")
+            {
 			    encrypted.TelephoneNumber = GoTournamentalCryptography.Encrypt(encrypted.TelephoneNumber, GoTournamentalCryptography.TournamentPassword(encrypted.TournamentID));
             }
-            if (encrypted.Email != null && encrypted.Email != "") {
+            if (encrypted.Email != null && encrypted.Email != "") 
+            {
     			encrypted.Email = GoTournamentalCryptography.Encrypt(encrypted.Email, GoTournamentalCryptography.TournamentPassword(encrypted.TournamentID));
             }
             return encrypted;
         }
-        public static Contact DecryptPersonalData(Contact encrypted) {
+        public static Contact DecryptPersonalData(Contact encrypted) 
+        {
             Contact decrypted = encrypted;
             decrypted.FirstName = GoTournamentalCryptography.Decrypt(encrypted.FirstName, GoTournamentalCryptography.TournamentPassword(decrypted.TournamentID));
             decrypted.LastName = GoTournamentalCryptography.Decrypt(encrypted.LastName, GoTournamentalCryptography.TournamentPassword(decrypted.TournamentID));
@@ -169,7 +195,8 @@ namespace GoTournamental.BLL.Organiser {
 
     }
 
-    public interface IContact : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable  {
+    public interface IContact : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable  
+    {
         int ID { get; }
         int TournamentID { get; }
         Contact.ContactTypes Type { get; }

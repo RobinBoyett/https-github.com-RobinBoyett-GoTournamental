@@ -1,19 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
-using GoTournamental.API;
 using GoTournamental.API.Utilities;
 using GoTournamental.API.Interface;
 using GoTournamental.ORM.Organiser;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser 
+{
 
-    public class Document: IDocument {
+    public class Document: IDocument 
+    {
 
 		#region Member Enumerations & Collections
-		public enum DocumentTypes {
+		public enum DocumentTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Tournament Terms & Conditions")] TournamentToCs = 1,
             [DescriptionAttribute("Tournament Rules")] TournamentRules = 2,
@@ -26,7 +26,8 @@ namespace GoTournamental.BLL.Organiser {
 
 		#region Constructors
 		public Document() {}
- 		public Document(int id, int tournamentID, DocumentTypes documentType, string fileName) {
+ 		public Document(int id, int tournamentID, DocumentTypes documentType, string fileName)
+        {
 			this.ID = id;
 			this.TournamentID = tournamentID;
 			this.DocumentType = documentType;
@@ -42,14 +43,17 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Document, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Document, T>(input))
+            {
                 DocumentDbContext context = new DocumentDbContext();
                 context.Documents.Add((Document)(object)input);
                 context.SaveChanges();
             }
         }
- 		public List<Document> GetDocumentsForTournament(int tournamentID) {
+ 		public List<Document> GetDocumentsForTournament(int tournamentID)
+        {
             DocumentDbContext context = new DocumentDbContext();
             List<Document> selectedList = context.Documents.Where(i => i.TournamentID == tournamentID).ToList();
             return selectedList;
@@ -57,7 +61,8 @@ namespace GoTournamental.BLL.Organiser {
 		#endregion
 
     }
-    public interface IDocument: ISQLInsertable {
+    public interface IDocument: ISQLInsertable
+    {
         int ID { get; }
 		int TournamentID { get; }
 		Document.DocumentTypes DocumentType { get; }

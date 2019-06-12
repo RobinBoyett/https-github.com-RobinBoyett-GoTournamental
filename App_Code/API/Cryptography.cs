@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Xml;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 using System.Web.Helpers;
-using GoTournamental.API.Interface;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
-namespace GoTournamental.API.Cryptography {
+namespace GoTournamental.API.Cryptography 
+{
 
-	public class GoTournamentalCryptography {
+	public class GoTournamentalCryptography 
+    {
 
 		#region Methods
-
-		public static string TournamentPassword() {
+		public static string TournamentPassword()
+        {
 			string password = Crypto.Hash("P4!3Sg4t3").Substring(0,8);
 			return password;			
 		}
-		public static string TournamentPassword(int tournamentID) {
+		public static string TournamentPassword(int tournamentID) 
+        {
 			string password = "";
 			ITournament iTournament = new Tournament();
 			Tournament tournament = iTournament.SQLSelect<Tournament, int>(tournamentID);
@@ -27,10 +27,8 @@ namespace GoTournamental.API.Cryptography {
 		}
 
 
-
-
-
-		public static string Encrypt(string unencryptedText, string password) {
+		public static string Encrypt(string unencryptedText, string password) 
+        {
 			RijndaelManaged rijndaelManaged = new RijndaelManaged();
 			byte[] plainText = System.Text.Encoding.Unicode.GetBytes(unencryptedText);
 			byte[] salt = Encoding.ASCII.GetBytes(password.Length.ToString());
@@ -47,10 +45,12 @@ namespace GoTournamental.API.Cryptography {
 			return EncryptedData;
 		}
 
-		public static string Decrypt(string encryptedText, string password) {
+		public static string Decrypt(string encryptedText, string password) 
+        {
 			RijndaelManaged rijndaelManaged = new RijndaelManaged();
 			string decryptedData;
-			try {
+			try 
+            {
 				byte[] encryptedData = Convert.FromBase64String(encryptedText);
 				byte[] salt = Encoding.ASCII.GetBytes(password.Length.ToString());
 				PasswordDeriveBytes secretKey = new PasswordDeriveBytes(password, salt);
@@ -63,7 +63,8 @@ namespace GoTournamental.API.Cryptography {
 				cryptoStream.Close();
 				decryptedData = Encoding.Unicode.GetString(plainText, 0, decryptedCount);
 			}
-			catch {
+			catch 
+            {
 				decryptedData = encryptedText;
 			}
 			return decryptedData;

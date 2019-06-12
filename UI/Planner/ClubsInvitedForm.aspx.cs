@@ -11,9 +11,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Planner {
+namespace GoTournamental.UI.Planner 
+{
 
-    public partial class ClubsInvitedForm : Page {
+    public partial class ClubsInvitedForm : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -25,7 +27,6 @@ namespace GoTournamental.UI.Planner {
         Contact contact = new Contact();
 		int contactID = 0;
         #endregion
-
         #region Declare page controls
         Label clubsInvitedFormTitle = new Label();
         Label hostClubName = new Label();
@@ -42,22 +43,31 @@ namespace GoTournamental.UI.Planner {
         GridView clubsInvitedGridView = new GridView();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
             AssignControlsAll();
 
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
                 hostClubName.Text = tournament.HostClub.Name;
                 hostClubContactName.Text = tournament.HostClub.PrimaryContact.FirstName + " " + tournament.HostClub.PrimaryContact.LastName;
                 hostClubContactTelephone.Text = tournament.HostClub.PrimaryContact.TelephoneNumber;
                 hostClubContactEmail.Text = tournament.HostClub.PrimaryContact.Email;
-                if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+ 
+                if (tournament.ID > 1 && !identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
+                    throw new Exception("Unauthorised access to tournament admin page.");
+                }                
+                if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
                     importClubsLink.NavigateUrl = "~/UI/IO/ImportData.aspx?Version=1&TournamentID="+tournament.ID.ToString();
                 }
                 clubsInvitedFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 
-                if (!IsPostBack) {
+                if (!IsPostBack)
+                {
                     BindClubs();
                 }
 
@@ -65,7 +75,8 @@ namespace GoTournamental.UI.Planner {
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll() 
+        {
 			clubsInvitedFormTitle = (Label)ClubsInvitedFormPanel.FindControl("ClubsInvitedFormTitle");
             hostClubName = (Label)ClubsInvitedFormPanel.FindControl("HostClubName");
             hostClubContactName = (Label)ClubsInvitedFormPanel.FindControl("HostClubContactName");
@@ -81,20 +92,24 @@ namespace GoTournamental.UI.Planner {
             clubsInvitedGridView = (GridView)ClubsInvitedFormPanel.FindControl("ClubsInvitedGridView");
 		}
 
-        protected void BindClubs() {
+        protected void BindClubs() 
+        {
             clubsList =iClub.SQLSelectClubsForTournament(tournament.ID).Where(i => i.AttendanceType != Domains.AttendanceTypes.HostClub).ToList();
             clubsInvitedGridView.DataSource = clubsList;
             clubsInvitedGridView.DataBind();
         }
 
-        protected void ClubsInvitedGridView_RowDataBound(Object sender, GridViewRowEventArgs e) {
-            if (e.Row.RowType == DataControlRowType.DataRow) {
+        protected void ClubsInvitedGridView_RowDataBound(Object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
                 Club club = (Club)e.Row.DataItem;
                 HyperLink linkToClubEdit = (HyperLink)e.Row.FindControl("LinkToClubEdit");
                 HyperLink contactEmail = (HyperLink)e.Row.FindControl("ContactEmail");
 				HyperLink inviteEmail = (HyperLink)e.Row.FindControl("InviteEmail");
 
-                if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
                     linkToClubEdit.Text = club.Name;
 					linkToClubEdit.NavigateUrl = "~/UI/Planner/ClubForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString();
 
@@ -105,10 +120,12 @@ namespace GoTournamental.UI.Planner {
                     mailTo += "%0D%0Dhttp://www.gotournamental.com/UI/Planner/ClubRegistrationForm?TournamentID="+tournament.ID.ToString()+"%26version=1%26club_id="+club.ID.ToString()+"%26UserID="+ iClub.GenerateClubSecurityCode(club);
                     mailTo += "%0D%0DPlease%20refer%20to%20the%20Help%20page%20at%20http://www.gotournamental.com/%20to%20find%20%22how%20to%22%20videos%20in%20case%20you%20need%20help%20registering%20your%20teams";
 
-                    if (club.PrimaryContact.Email != null && club.PrimaryContact.Email != "") {
+                    if (club.PrimaryContact.Email != null && club.PrimaryContact.Email != "")
+                    {
                         inviteEmail.NavigateUrl = "mailto:"+club.PrimaryContact.Email + mailTo;
                     }
-                    else {
+                    else
+                    {
                         inviteEmail.Visible = false;
                         inviteEmail.NavigateUrl = "mailto:[INSERT EMAIL TO]" + mailTo;
                     }
@@ -116,27 +133,33 @@ namespace GoTournamental.UI.Planner {
                 }
                 e.Row.Cells[1].Text = iClub.GenerateClubSecurityCode(club);
 
-				if (club.PrimaryContact != null) {
+				if (club.PrimaryContact != null)
+                {
 					e.Row.Cells[2].Text = club.PrimaryContact.FirstName + " " + club.PrimaryContact.LastName;
 					e.Row.Cells[3].Text = club.PrimaryContact.TelephoneNumber;
-					if (club.PrimaryContact.Email != null && club.PrimaryContact.Email != "") {
+					if (club.PrimaryContact.Email != null && club.PrimaryContact.Email != "")
+                    {
 	    				contactEmail.Text = club.PrimaryContact.Email;
 						contactEmail.NavigateUrl = "mailto:"+club.PrimaryContact.Email;
 					}
 				}
 
-                if (clubsInvitedGridView.EditIndex == -1) { // gridview NOT in edit mode
+                if (clubsInvitedGridView.EditIndex == -1)
+                { // gridview NOT in edit mode
                     Label attendanceLabel = (Label)e.Row.FindControl("AttendanceLabel");
                     attendanceLabel.Text = EnumExtensions.GetStringValue(club.AttendanceType);
                 }
-                if ((e.Row.RowState & DataControlRowState.Edit) > 0) {
+                if ((e.Row.RowState & DataControlRowState.Edit) > 0)
+                {
                     HiddenField clubIDHidden = (HiddenField)e.Row.FindControl("ClubIDHidden");
                     DropDownList attendanceTypesList = (DropDownList)e.Row.FindControl("AttendanceTypesList");
                     clubIDHidden.Value = club.ID.ToString();
 
                     Array enumValues = Enum.GetValues(typeof(Domains.AttendanceTypes));
-                    foreach (Enum type in enumValues) {
-                        if (EnumExtensions.GetIntValue(type) > 0 && EnumExtensions.GetStringValue(type) != "Deleted") {
+                    foreach (Enum type in enumValues)
+                    {
+                        if (EnumExtensions.GetIntValue(type) > 0 && EnumExtensions.GetStringValue(type) != "Deleted")
+                        {
                             attendanceTypesList.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetIntValue(type).ToString()));
                         }
                     }
@@ -146,28 +169,35 @@ namespace GoTournamental.UI.Planner {
 
             }
         }
-        protected void ClubsInvitedGridView_RowEditing(object sender, GridViewEditEventArgs e) {
+        protected void ClubsInvitedGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
             clubsInvitedGridView.EditIndex = e.NewEditIndex;
             BindClubs();
         }
-        protected void ClubsInvitedGridView_RowUpdating(object sender, GridViewUpdateEventArgs e) {
+        protected void ClubsInvitedGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
             HiddenField clubIDHidden = (HiddenField)clubsInvitedGridView.Rows[e.RowIndex].FindControl("ClubIDHidden");
             DropDownList attendanceTypesList = (DropDownList)clubsInvitedGridView.Rows[e.RowIndex].FindControl("AttendanceTypesList");
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
                 iClub.SQLUpdateAttendanceType(Int32.Parse(clubIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
             }
             clubsInvitedGridView.EditIndex = -1;
             BindClubs();
         }
-        protected void ClubsInvitedGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
+        protected void ClubsInvitedGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
             clubsInvitedGridView.EditIndex = -1;
             BindClubs();
         }
 	
-        protected void SaveButton_Click(object sender, EventArgs e) {
+        protected void SaveButton_Click(object sender, EventArgs e)
+        {
 
-			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-				if (clubContactFirstName.Text != "" || clubContactLastName.Text != "" || clubContactTelephoneNumber.Text != "" || clubContactEmail.Text != "") {
+			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
+				if (clubContactFirstName.Text != "" || clubContactLastName.Text != "" || clubContactTelephoneNumber.Text != "" || clubContactEmail.Text != "")
+                {
 					Contact contactToSave = new Contact(
 						id: 0,
 						tournamentID: tournament.ID,

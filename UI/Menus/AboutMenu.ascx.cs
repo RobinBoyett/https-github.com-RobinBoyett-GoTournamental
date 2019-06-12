@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using GoTournamental.BLL.Organiser;
 
-public partial class AboutMenu : System.Web.UI.UserControl {
+public partial class AboutMenu : System.Web.UI.UserControl 
+{
 
     #region Declare Domain Objects & Page Variables
     Tournament tournament = new Tournament();
@@ -19,14 +20,12 @@ public partial class AboutMenu : System.Web.UI.UserControl {
 
 	#endregion
 
-	protected void Page_Load(object sender, EventArgs e) {
-
+	protected void Page_Load(object sender, EventArgs e) 
+    {
 		AssignUIControls();
-
-
-
 	}
-	protected void AssignUIControls() {
+	protected void AssignUIControls() 
+    {
 		//linkToTournament = (HyperLink)TournamentNavigationPanel.FindControl("LinkToTournament");
 
 	}

@@ -11,12 +11,15 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class TeamAttendanceForm : Page {
+    public partial class TeamAttendanceForm : Page 
+    {
 
 	    #region Member Enumerations
-	    public enum OrderBy {
+	    public enum OrderBy
+        {
 		    Undefined = 0,
 		    AgeBand = 1,
             Club = 2,                   
@@ -41,20 +44,29 @@ namespace GoTournamental.UI.Organiser {
         GridView teamAttendanceGridView = new GridView();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
             AssignControlsAll();
 
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null) 
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
     			teamAttendanceTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
+                if (tournament.ID > 1 && !identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+                {
+                    throw new Exception("Unauthorised access to tournament admin page.");
+                }
 			}
 
-            if (!IsPostBack) {
+            if (!IsPostBack) 
+            {
                 orderBy = OrderBy.Undefined;
             }
-            else {
-                switch (orderByList.SelectedValue) {
+            else 
+            {
+                switch (orderByList.SelectedValue) 
+                {
                      case "AgeBand":
                         orderBy = OrderBy.AgeBand;
                         break;
@@ -69,20 +81,22 @@ namespace GoTournamental.UI.Organiser {
                         break;
                 }
             }
-            if (!IsPostBack) {
-                BindTeams();
-            }
+            BindTeams();
+
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll() 
+        {
 			teamAttendanceTitle = (Label)TeamAttendancePanel.FindControl("TeamAttendanceTitle");
             orderByList = (DropDownList)TeamAttendancePanel.FindControl("OrderByList");
             teamAttendanceGridView = (GridView)TeamAttendancePanel.FindControl("TeamAttendanceGridView");
 		}
 
-        protected void BindTeams() {
-            switch (orderBy) {
+        protected void BindTeams() 
+        {
+            switch (orderBy) 
+            {
                  case OrderBy.AgeBand:
                     teamsList = iTeam.SQLSelectForTournament(tournament.ID).OrderBy(i => i.CompetitionID).ToList();
                     break;
@@ -101,8 +115,10 @@ namespace GoTournamental.UI.Organiser {
             teamAttendanceGridView.DataBind();
         }
 
-        protected void TeamAttendanceGridView_RowDataBound(object sender, GridViewRowEventArgs e) {
-            if (e.Row.RowType == DataControlRowType.DataRow) {
+        protected void TeamAttendanceGridView_RowDataBound(object sender, GridViewRowEventArgs e) 
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow) 
+            {
                 Team team = (Team)e.Row.DataItem;
 				IClub iclub = new Club();
                 ICompetition iCompetition = new Competition();
@@ -120,20 +136,24 @@ namespace GoTournamental.UI.Organiser {
 
                 //UI/Teams/TeamForm?version=2&TournamentID=1&club_id=1&team_id=1
 
-                if (teamAttendanceGridView.EditIndex == -1) { // gridview NOT in edit mode
+                if (teamAttendanceGridView.EditIndex == -1) 
+                { // gridview NOT in edit mode
                     Label attendanceLabel = (Label)e.Row.FindControl("AttendanceLabel");
                     attendanceLabel.Text = EnumExtensions.GetStringValue(team.AttendanceType);
                     //linkToTeamEdit2.Text = "Edit";
                     //linkToTeamEdit2.NavigateUrl = "~/UI/Teams/TeamForm?version=2&TournamentID=" + tournament.ID.ToString() + "&club_id=" + team.ClubID.ToString() + "&team_id=" + team.ID.ToString();
                 }
-                if ((e.Row.RowState & DataControlRowState.Edit) > 0) {
+                if ((e.Row.RowState & DataControlRowState.Edit) > 0)
+                {
                     HiddenField teamIDHidden = (HiddenField)e.Row.FindControl("TeamIDHidden");
                     DropDownList attendanceTypesList = (DropDownList)e.Row.FindControl("AttendanceTypesList");
                     teamIDHidden.Value = team.ID.ToString();
 
                     Array enumValues = Enum.GetValues(typeof(Domains.AttendanceTypes));
-                    foreach (Enum type in enumValues) {
-                        if (EnumExtensions.GetIntValue(type) > 0 && EnumExtensions.GetStringValue(type) != "Deleted") {
+                    foreach (Enum type in enumValues) 
+                    {
+                        if (EnumExtensions.GetIntValue(type) > 0 && EnumExtensions.GetStringValue(type) != "Deleted")
+                        {
                             attendanceTypesList.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetIntValue(type).ToString()));
                         }
                     }
@@ -141,20 +161,24 @@ namespace GoTournamental.UI.Organiser {
                 }
 			}
 		}
-        protected void TeamAttendanceGridView_RowEditing(object sender, GridViewEditEventArgs e) {
+        protected void TeamAttendanceGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
             teamAttendanceGridView.EditIndex = e.NewEditIndex;
             BindTeams();
         }
-        protected void TeamAttendanceGridView_RowUpdating(object sender, GridViewUpdateEventArgs e) {
+        protected void TeamAttendanceGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
             HiddenField teamIDHidden = (HiddenField)teamAttendanceGridView.Rows[e.RowIndex].FindControl("TeamIDHidden");
             DropDownList attendanceTypesList = (DropDownList)teamAttendanceGridView.Rows[e.RowIndex].FindControl("AttendanceTypesList");
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
                 iTeam.SQLUpdateAttendanceType(Int32.Parse(teamIDHidden.Value), (Domains.AttendanceTypes)Int32.Parse(attendanceTypesList.SelectedValue));
             } 
             teamAttendanceGridView.EditIndex = -1;
             BindTeams();
         }
-        protected void TeamAttendanceGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
+        protected void TeamAttendanceGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) 
+        {
             teamAttendanceGridView.EditIndex = -1;
             BindTeams();
         }

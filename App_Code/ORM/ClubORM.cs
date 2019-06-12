@@ -4,35 +4,42 @@ using System.Configuration;
 using System.Collections.Generic;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.ORM.Planner {
+namespace GoTournamental.ORM.Planner
+{
 
-    public class ClubDbContext : DbContext {
+    public class ClubDbContext : DbContext
+    {
         public DbSet<Club> Clubs { get; set; }
-        public ClubDbContext()
-            : base(ConfigurationManager.ConnectionStrings["GoTournamentalConnection"].ConnectionString) {
-                Database.SetInitializer<ClubDbContext>(null);
+        public ClubDbContext() : base(ConfigurationManager.ConnectionStrings["GoTournamentalConnection"].ConnectionString)
+        {
+            Database.SetInitializer<ClubDbContext>(null);
         }
-        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) 
+        {
             modelBuilder.Configurations.Add(new ClubConfiguration());
             modelBuilder.HasDefaultSchema("Planner");
             base.OnModelCreating(modelBuilder);
         }
-        public void SQLClubDeleteWithCascade(int clubID) {
+        public void SQLClubDeleteWithCascade(int clubID) 
+        {
             this.Database.ExecuteSqlCommand("EXEC Planner.ClubDeleteWithCascade @clubID = {0}", clubID);
         }
-        public IEnumerable<Club> GetCompetitionClubsAll(int competitionID) {
+        public IEnumerable<Club> GetCompetitionClubsAll(int competitionID) 
+        {
             IEnumerable<Club> clubs = this.Database.SqlQuery<Club>("EXEC Planner.CompetitionClubsAll {0}", competitionID);
             return clubs;
         }
-        public IEnumerable<int> SQLGetClubIDForClubName(int tournamentID, string clubName) {
+        public IEnumerable<int> SQLGetClubIDForClubName(int tournamentID, string clubName)
+        {
             IEnumerable<int> clubID = this.Database.SqlQuery<int>("SELECT Planner.ClubIDForClubName({0}, {1})", tournamentID, clubName);
             return clubID;
         }
 
     }
-    public class ClubConfiguration : EntityTypeConfiguration<Club> {
-        public ClubConfiguration()
-            : base() {
+    public class ClubConfiguration : EntityTypeConfiguration<Club> 
+    {
+        public ClubConfiguration() : base() 
+        {
             HasKey(i => i.ID);
             Property(i => i.TournamentID).HasColumnName("TournamentID");
             Property(i => i.Name).HasColumnName("Name");

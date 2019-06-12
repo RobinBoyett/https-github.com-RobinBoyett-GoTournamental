@@ -54,11 +54,12 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/UI/About/Product">Product</a></li>
-                        <li><a runat="server" href="~/UI/About/Testimonials">Testimonials</a></li>
-                        <li><a runat="server" href="~/UI/About/ContactUsForm">Contact</a></li>
-                        <li><a runat="server" href="~/UI/About/Help">Help</a></li>
                         <li><a runat="server" href="~/UI/About/About">About</a></li>
+                        <li><a runat="server" href="~/UI/About/Mission">Our Mission</a></li>
+                        <li><a runat="server" href="~/UI/About/Testimonials">Testimonials</a></li>
+                        <li><a runat="server" href="~/UI/About/GDPR">GDPR</a></li>
+                        <li><a runat="server" href="~/UI/About/Terms">Terms</a></li>
+                        <li><a runat="server" href="~/UI/About/ContactUsForm">Contact</a></li>
                     </ul>
                     <asp:LoginView ID="GTLoginView" runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
@@ -98,7 +99,7 @@
                         <a href="https://www.facebook.com/gotournamental" target="_blank"><asp:Image ID="FacebookIcon" ImageUrl="~/Images/Icons/FacebookIcon.jpg" runat="server" /></a>&nbsp;
                         <a href="http://twitter.com/gotournamental" target="_blank"><asp:Image ID="TwitterIcon" ImageUrl="~/Images/Icons/TwitterIcon.png" Width="25" Height="20" runat="server" /></a>                  
                         &nbsp;&nbsp;&nbsp;&copy; <%: DateTime.Now.Year %> - GoTournamental Ltd
-                        &nbsp;&nbsp;&nbsp;Version 1.0.0
+                        &nbsp;&nbsp;&nbsp;Version 1.0
                     </p>
                 </footer>
 <%--                <footer>

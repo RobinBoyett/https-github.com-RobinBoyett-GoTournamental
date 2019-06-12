@@ -5,12 +5,15 @@ using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Planner {
+namespace GoTournamental.BLL.Planner 
+{
 
-    public class AdministrativeTask: IAdministrativeTask {
+    public class AdministrativeTask: IAdministrativeTask 
+    {
 
 		#region Member Enumerations & Collections
-        public enum TaskTypes {
+        public enum TaskTypes 
+        {
             Undefined = 0,
             Participation = 1,
             Facilities = 2,
@@ -18,14 +21,16 @@ namespace GoTournamental.BLL.Planner {
             Catering = 4,
             Safety = 5
         }
-        public enum ParticipationTaskTypes {
+        public enum ParticipationTaskTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Invite Clubs")] ParticipantInvitiation = 1,
             [DescriptionAttribute("Collect Fees")] FeeCollection = 2,
             [DescriptionAttribute("Order Trophies")] Trophies = 3,
             [DescriptionAttribute("Book Match Officials")] MatchOfficials = 4
         }
-		public enum FacilitiesTaskTypes {
+		public enum FacilitiesTaskTypes
+        {
             Undefined = 0,
             [DescriptionAttribute("Transport Access, Road Closures etc")] TransportAccess = 1,
             Parking = 2,
@@ -34,7 +39,8 @@ namespace GoTournamental.BLL.Planner {
             [DescriptionAttribute("Public Address System")] PublicAddress = 5,
             [DescriptionAttribute("Litter Collection")] LitterCollection = 6
         } 
-        public enum CommunicationTaskTypes {
+        public enum CommunicationTaskTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Liaison With Neighbours etc")] NeighbourLiaison = 1,
             [DescriptionAttribute("Advertising And Sponsorship")] AdvertisingAndSponsorship = 2,
@@ -42,15 +48,18 @@ namespace GoTournamental.BLL.Planner {
             Photography = 4,
             [DescriptionAttribute("Programme Printing")] ProgrammePrinting = 5
         }
-        public enum CateringTaskTypes {
+        public enum CateringTaskTypes
+        {
             Undefined = 0
         }
-        public enum SafetyTaskTypes {
+        public enum SafetyTaskTypes 
+        {
             Undefined = 0,
             Insurance = 1,
             [DescriptionAttribute("First Aid")] FirstAid = 2
         }
-        public enum TaskStatuses {
+        public enum TaskStatuses 
+        {
             Undefined = 0,
             NotRequired = 1,
             Allocated = 2,
@@ -61,7 +70,8 @@ namespace GoTournamental.BLL.Planner {
 
 		#region Constructors
 		public AdministrativeTask() {}
-        public AdministrativeTask(int id, int tournamentID, TaskTypes taskType, int typeID, TaskStatuses taskStatus) {
+        public AdministrativeTask(int id, int tournamentID, TaskTypes taskType, int typeID, TaskStatuses taskStatus)
+        {
             this.ID = id;
             this.TournamentID = tournamentID;
             this.TaskType = taskType;
@@ -79,14 +89,17 @@ namespace GoTournamental.BLL.Planner {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<AdministrativeTask, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<AdministrativeTask, T>(input))
+            {
                 AdministrativeTaskDbContext context = new AdministrativeTaskDbContext();
                 context.AdministrativeTasks.Add((AdministrativeTask)(object)input);
                 context.SaveChanges();
             }
         }
-        public List<AdministrativeTask> SQLSelectForTournament(int tournamentID) {
+        public List<AdministrativeTask> SQLSelectForTournament(int tournamentID) 
+        {
             AdministrativeTaskDbContext context = new AdministrativeTaskDbContext();
             List<AdministrativeTask> selectedList = context.AdministrativeTasks.Where(i => i.TournamentID == tournamentID).OrderBy(i => i.ID).ToList();
             return selectedList;
@@ -95,7 +108,8 @@ namespace GoTournamental.BLL.Planner {
 
     }
 
-    public interface IAdministrativeTask :ISQLInsertable {
+    public interface IAdministrativeTask :ISQLInsertable 
+    {
         int ID { get; }
         int TournamentID { get; }
         AdministrativeTask.TaskTypes TaskType { get; }

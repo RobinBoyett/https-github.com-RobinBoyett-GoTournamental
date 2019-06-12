@@ -9,9 +9,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class SwapTeamsBetweenGroupsForm : Page {
+    public partial class SwapTeamsBetweenGroupsForm : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -36,14 +38,17 @@ namespace GoTournamental.UI.Organiser {
 		TableRow dropDownsTableRow = new TableRow();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e)
+        {
            
             AssignControlsAll();
 
-			if (Request.QueryString.Get("TournamentID") != null) {
+			if (Request.QueryString.Get("TournamentID") != null) 
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
             }
-			if (Request.QueryString.Get("competition_id") != null) {
+			if (Request.QueryString.Get("competition_id") != null) 
+            {
 				competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
 				competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 				groupsList = iGroup.SQLSelectForCompetition(competition.ID);
@@ -52,14 +57,18 @@ namespace GoTournamental.UI.Organiser {
 			ageBand.Text = "Swap Teams Between Groups For " + EnumExtensions.GetStringValue(competition.AgeBand);
 
 
-			foreach (Group group in groupsList) {
-                if (group.FixturesUnderWay != true) {
+			foreach (Group group in groupsList) 
+            {
+                if (group.FixturesUnderWay != true) 
+                {
                     teamsList = iTeam.SQLSelectForGroup(group.ID);
 				    DropDownList groupMenu = new DropDownList();
 				    groupMenu.ID = group.Name;
-				    if (groupMenu.Items.Count < 2) {
+				    if (groupMenu.Items.Count < 2) 
+                    {
 					    groupMenu.Items.Add(new ListItem(group.Name, ""));
-					    foreach (Team team in teamsList) {
+					    foreach (Team team in teamsList) 
+                        {
 						    Club club = iClub.SQLSelect<Club, int>(team.ClubID);
 						    groupMenu.Items.Add(new ListItem(club.Name	+ " " + team.Name, team.ID.ToString()));
 					    }
@@ -73,48 +82,62 @@ namespace GoTournamental.UI.Organiser {
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			competitionTitle = (Label)SwapTeamsBetweenGroupsFormPanel.FindControl("CompetitionTitle");
 			ageBand = (Label)SwapTeamsBetweenGroupsFormPanel.FindControl("AgeBand");
 			groupsTable = (Table)SwapTeamsBetweenGroupsFormPanel.FindControl("GroupsTable");
 			dropDownsTableRow = (TableRow)groupsTable.FindControl("DropDownsTableRow");
 		}
 
-		protected void SwapTeamsButton_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+		protected void SwapTeamsButton_Click(object sender, EventArgs e) 
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 			    Team teamOne = new Team();
 			    Team teamTwo = new Team();
 			    DropDownList group1 = (DropDownList)dropDownsTableRow.FindControl("Group 1");
-			    if (group1 != null && group1.SelectedIndex > 0) {
-				    if (teamOne.ID == 0) {
+			    if (group1 != null && group1.SelectedIndex > 0) 
+                {
+				    if (teamOne.ID == 0)
+                    {
 					    teamOne = iTeam.SQLSelect<Team, int>(Int32.Parse(group1.SelectedValue));
 				    }
 			    }
-			    if (groupsInCompetition >= 2) {
+			    if (groupsInCompetition >= 2) 
+                {
 				    DropDownList group2 = (DropDownList)dropDownsTableRow.FindControl("Group 2");
-				    if (group2 != null && group2.SelectedIndex > 0 && teamOne.ID == 0) {
+				    if (group2 != null && group2.SelectedIndex > 0 && teamOne.ID == 0) 
+                    {
 					    teamOne = iTeam.SQLSelect<Team, int>(Int32.Parse(group2.SelectedValue));
 				    }
-				    else if (group2.SelectedIndex > 0 && teamTwo.ID == 0) {
+				    else if (group2.SelectedIndex > 0 && teamTwo.ID == 0)
+                    {
 					    teamTwo = iTeam.SQLSelect<Team, int>(Int32.Parse(group2.SelectedValue));
 				    }
 			    }			
-			    if (groupsInCompetition >= 3) {
+			    if (groupsInCompetition >= 3)
+                {
 				    DropDownList group3 = (DropDownList)dropDownsTableRow.FindControl("Group 3");
-				    if (group3 != null && group3.SelectedIndex > 0 && teamOne.ID == 0) {
+				    if (group3 != null && group3.SelectedIndex > 0 && teamOne.ID == 0) 
+                    {
 					    teamOne = iTeam.SQLSelect<Team, int>(Int32.Parse(group3.SelectedValue));
 				    }
-				    else if (group3.SelectedIndex > 0 && teamTwo.ID == 0) {
+				    else if (group3.SelectedIndex > 0 && teamTwo.ID == 0) 
+                    {
 					    teamTwo = iTeam.SQLSelect<Team, int>(Int32.Parse(group3.SelectedValue));
 				    }
 			    }
-			    if (groupsInCompetition > 3) {
+			    if (groupsInCompetition > 3) 
+                {
 				    DropDownList group4 = (DropDownList)dropDownsTableRow.FindControl("Group 4");
-				    if (group4 != null && group4.SelectedIndex > 0 && teamTwo.ID == 0) {
+				    if (group4 != null && group4.SelectedIndex > 0 && teamTwo.ID == 0) 
+                    {
 					    teamTwo = iTeam.SQLSelect<Team, int>(Int32.Parse(group4.SelectedValue));
 				    }
 			    }
-			    if (teamOne.ID != 0 && teamTwo.ID != 0) {
+			    if (teamOne.ID != 0 && teamTwo.ID != 0)
+                {
 				    iCompetition.SwapTeamsBetweenGroupsWithCascadeToFixtures(teamOne.ID, teamTwo.ID);
 			    }
             }

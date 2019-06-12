@@ -3,7 +3,8 @@ AS
 
 BEGIN
 	
-	TRUNCATE TABLE Administration.ContactUs
+	TRUNCATE TABLE Administration.Testimonials
+	TRUNCATE TABLE Administration.Feedback
 	TRUNCATE TABLE Administration.Exceptions
 	TRUNCATE TABLE Administration.TermsSignatories
 	TRUNCATE TABLE Administration.FileImportAudits

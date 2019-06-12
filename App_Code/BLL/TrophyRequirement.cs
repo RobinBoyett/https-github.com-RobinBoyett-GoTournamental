@@ -1,20 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using GoTournamental.API;
-using GoTournamental.API.Interface;
-using GoTournamental.API.Utilities;
-using GoTournamental.ORM.Organiser;
+﻿using System.ComponentModel;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser 
+{
 
-    public class TrophyRequirement: ITrophyRequirement {
+    public class TrophyRequirement: ITrophyRequirement 
+    {
 
         #region Member Enumerations
-        public enum AwardTypes {
+        public enum AwardTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Player: Participation")] PlayerParticipation = 1,
             [DescriptionAttribute("Player: Winner")] PlayerWinner = 2,
@@ -22,7 +16,8 @@ namespace GoTournamental.BLL.Organiser {
             [DescriptionAttribute("Team: Winner")] TeamWinner = 4,
             [DescriptionAttribute("Team: Runner-Up")] RunnerUp = 5
         }
-        public enum TrophyTypes {
+        public enum TrophyTypes 
+        {
             Undefined = 0,
             [DescriptionAttribute("Not Required")] NotRequired = 1,
             Medal = 2,
@@ -34,7 +29,8 @@ namespace GoTournamental.BLL.Organiser {
 
         #region Constructors
         public TrophyRequirement() { }
-        public TrophyRequirement(int id, int competitionID, AwardTypes awardType, TrophyTypes trophyType, int? numberRequired, string engraving) {
+        public TrophyRequirement(int id, int competitionID, AwardTypes awardType, TrophyTypes trophyType, int? numberRequired, string engraving) 
+        {
 			this.ID = id;
             this.CompetitionID = competitionID;
             this.AwardType = awardType;
@@ -61,7 +57,8 @@ namespace GoTournamental.BLL.Organiser {
 
     }
 
-    public interface ITrophyRequirement  {
+    public interface ITrophyRequirement  
+    {
         int ID { get; }
         int CompetitionID { get; }
         TrophyRequirement.AwardTypes AwardType { get; }

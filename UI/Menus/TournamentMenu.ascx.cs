@@ -1,15 +1,11 @@
 using System;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
-using Microsoft.AspNet.Identity;
 using GoTournamental.API.Identity;
-using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
-public partial class TournamentMenu : System.Web.UI.UserControl {
+public partial class TournamentMenu : System.Web.UI.UserControl
+{
 
     #region Declare Domain Objects & Page Variables
 	GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -29,28 +25,33 @@ public partial class TournamentMenu : System.Web.UI.UserControl {
 	HyperLink linkToSponsorsList = new HyperLink();
 	#endregion
 
-	protected void Page_Load(object sender, EventArgs e) {
+	protected void Page_Load(object sender, EventArgs e)
+    {
 
 		AssignUIControls();
 
-        if (Request.QueryString.Get("TournamentID") != null) {
+        if (Request.QueryString.Get("TournamentID") != null)
+        {
 	        tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
 			competitions = iCompetition.SQLSelectForTournament(tournament.ID, false);
 			contacts = iContact.SQLSelectForTournament(tournament.ID);
         }
 
 		// Disable navigation if a tournament is still undefined
-		if (Request.RawUrl.Contains("TournamentForm?Version=1")) {
+		if (Request.RawUrl.Contains("TournamentForm?Version=1"))
+        {
 			linkToTournament.Visible = false;
 			linkToFixtures.Visible = false;
 			linkToCompetitionRotator.Visible = false;
 			linkToDocuments.Visible = false;
 			linkToSponsorsList.Visible = false;
 		}
-		else {
+		else
+        {
 			linkToTournament.NavigateUrl = "~/UI/Planner/TournamentView.aspx?TournamentID=" + tournament.ID.ToString();
 
-            if (tournament.StartTime <= DateTime.Now) {
+            if (tournament.StartTime <= DateTime.Now) 
+            {
                 linkToFixtures.Visible = true;
 			    linkToFixtures.NavigateUrl = "~/UI/Competitions/FixturesList.aspx?TournamentID=" + tournament.ID.ToString();
             }
@@ -64,7 +65,8 @@ public partial class TournamentMenu : System.Web.UI.UserControl {
 
 	}
 	
-	protected void AssignUIControls() {
+	protected void AssignUIControls()
+    {
 		linkToTournament = (HyperLink)TournamentNavigationPanel.FindControl("LinkToTournament");
 		linkToFixtures = (HyperLink)TournamentNavigationPanel.FindControl("LinkToFixtures");
 		linkToCompetitionRotator = (HyperLink)TournamentNavigationPanel.FindControl("LinkToCompetitionRotator");

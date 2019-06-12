@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,9 +13,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class GroupAllocationForm : Page {
+    public partial class GroupAllocationForm : Page
+    {
 
         #region Declare Domain Objects & Page Variables
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -45,7 +48,8 @@ namespace GoTournamental.UI.Organiser {
 		private int groupID = 0;
 
         private RequestVersion pageVersion = RequestVersion.Undefined;
-        protected enum RequestVersion {
+        protected enum RequestVersion
+        {
             Undefined = 0,
             CompetitionEdit = 1,
 			TeamDelete = 2,
@@ -53,7 +57,6 @@ namespace GoTournamental.UI.Organiser {
 			ReCalculateGroups = 4
         }
         #endregion
-
         #region Declare page controls
 		Label competitionTitle = new Label();
 		Label ageBand = new Label();
@@ -77,31 +80,42 @@ namespace GoTournamental.UI.Organiser {
 		Button saveButton = new Button();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
             AssignControlsAll();
 
-			if (Request.QueryString.Get("version") != null) {
+			if (Request.QueryString.Get("version") != null)
+            {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
 				playingAreaList = iPlayingArea.SQLSelectForTournament(tournament.ID).OrderBy(i => i.ID).ToList();
+
+                if (tournament.ID > 1 && !identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+                {
+                    throw new Exception("Unauthorised access to tournament admin page.");
+                }
             }
-			if (Request.QueryString.Get("competition_id") != null) {
+			if (Request.QueryString.Get("competition_id") != null) 
+            {
 				competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
 				competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 				linkToCompetitionSummary.NavigateUrl = "~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id="+competition.ID.ToString();
 				playingAreasInUseInSession = iPlayingArea.SQLSelectInUseForTournamentSession(tournament.ID, competition.ID);
             }        
-			if (Request.QueryString.Get("team_id") != null) {
+			if (Request.QueryString.Get("team_id") != null) 
+            {
                 team = iTeam.SQLSelect<Team, int>(Int32.Parse(Request.QueryString.Get("team_id")));
             }
 
             ManagePageVersion(pageVersion);
 
         }
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			competitionTitle = (Label)GroupAllocationFormPanel.FindControl("CompetitionTitle");
 			ageBand = (Label)GroupAllocationFormPanel.FindControl("AgeBand");
 			linkToCompetitionSummary = (HyperLink)GroupAllocationFormPanel.FindControl("LinkToCompetitionSummary");
@@ -123,20 +137,24 @@ namespace GoTournamental.UI.Organiser {
 			generateFixturesButton = (Button)GroupAllocationFormPanel.FindControl("GenerateFixturesButton");
 			saveButton = (Button)GroupAllocationFormPanel.FindControl("SaveButton");
         }
-        protected void ManagePageVersion(RequestVersion pageVersion) {
-			switch (pageVersion) {
+        protected void ManagePageVersion(RequestVersion pageVersion) 
+        {
+			switch (pageVersion) 
+            {
 				case RequestVersion.ReCalculateGroups:
                     CompetitionEditFormLoad();
 					break;
                 case RequestVersion.ReCalculateFixtures:
-                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+                    {
                         iFixture.DeleteFixturesForCompetition(competition.ID);
 	    				iFixture.GenerateFixturesForCompetition(tournament, competition);		
                     }
 					Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
                     break;
 				case RequestVersion.TeamDelete:
-                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                    {
 					    iTeam.SQLDeleteWithCascade<Team>(team);
 					    iFixture.DeleteFixturesForCompetition(competition.ID);
 					    iFixture.GenerateFixturesForCompetition(tournament, competition);		
@@ -149,9 +167,11 @@ namespace GoTournamental.UI.Organiser {
             }
         }
 
-        protected void CompetitionEditFormLoad() {
+        protected void CompetitionEditFormLoad() 
+        {
 			ageBand.Text = EnumExtensions.GetStringValue(competition.AgeBand);
-			if (!IsPostBack) {
+			if (!IsPostBack) 
+            {
 				noTeamsAttending.Text = competition.CountTeamsAttendingCompetition().ToString();
 
                 
@@ -163,28 +183,36 @@ namespace GoTournamental.UI.Organiser {
 					competition.Session != null && competition.Session != Competition.Sessions.Undefined &&
 					competition.FixtureTurnaround != null && competition.FixtureTurnaround != Tournament.FixtureTurnarounds.Undefined && 
 					competition.CompetitionFormat != null && competition.CompetitionFormat != Competition.CompetitionFormats.Undefined
-				)) {
+				)) 
+                {
 					groupsEditPanel.Visible = true;
 					competitionNoGroupsMandatory.Enabled = true;
 					playingAreasMandatory.Enabled = true;
 				}
 
-				if (competition.CountGroupsForCompetition() == 0 || pageVersion == RequestVersion.ReCalculateGroups) {
+				if (competition.CountGroupsForCompetition() == 0 || pageVersion == RequestVersion.ReCalculateGroups) 
+                {
 					groupAllocationPanel.Visible = true;
 					competitionNoGroups.Items[0].Text = "Select number of Groups";
 					Array groupEnum = Enum.GetValues(typeof(Group.NumberOfGroups));
-					if (competitionNoGroups.Items.Count < 2) {
-						foreach (Enum type in groupEnum) {
-							if (EnumExtensions.GetIntValue(type) > 0) {
+					if (competitionNoGroups.Items.Count < 2) 
+                    {
+						foreach (Enum type in groupEnum) 
+                        {
+							if (EnumExtensions.GetIntValue(type) > 0)
+                            {
 								competitionNoGroups.Items.Add(new ListItem(EnumExtensions.GetIntValue(type).ToString(), EnumExtensions.GetIntValue(type).ToString()));
 							}
 						}
 					}
 					int i = 0;
-					foreach (PlayingArea playingArea in playingAreaList) {
+					foreach (PlayingArea playingArea in playingAreaList)
+                    {
 						playingAreasList.Items.Add(new ListItem("&nbsp;"+playingArea.Name, playingArea.ID.ToString()));
-						foreach (PlayingArea playingAreaUsed in playingAreasInUseInSession) {
-							if (playingArea.ID == playingAreaUsed.ID) {
+						foreach (PlayingArea playingAreaUsed in playingAreasInUseInSession)
+                        {
+							if (playingArea.ID == playingAreaUsed.ID) 
+                            {
 								playingAreasList.Items[i].Enabled = false;
 							}
 						}
@@ -193,43 +221,52 @@ namespace GoTournamental.UI.Organiser {
 					swapTeamsBetweenGroupsLink.Visible = false;
                     replaceATeamLink.Visible = false;
 				}
-				else {
+				else
+                {
 					noGroupsInCompetition.Text = competition.CountGroupsForCompetition().ToString();
 				}
 
-				if (competition.CountTeamsAttendingCompetition() > 0 && competition.CountGroupsForCompetition() == 0) {
+				if (competition.CountTeamsAttendingCompetition() > 0 && competition.CountGroupsForCompetition() == 0) 
+                {
 					noGroupsInCompetition.Text = "The teams are not allocated to Groups";
 				}
-                else if (!competition.FixturesUnderwayForCompetition()) {
+                else if (!competition.FixturesUnderwayForCompetition()) 
+                {
                     reAllocateTeamsIntoNewGroups.Visible = true;
                 }
 
-				if (competition.CountGroupsForCompetition() > 0 && competition.CountFixturesForCompetition() == 0) {
+				if (competition.CountGroupsForCompetition() > 0 && competition.CountFixturesForCompetition() == 0)
+                {
 					generateFixturesButton.Visible = true;
                     generateFixturesButton.Text = "Generate Fixtures For All Groups";
 				}
-				else if (!competition.FixturesUnderwayForCompetition() && iCompetition.CountGroupsForCompetition(competition.ID) > 0 && (iCompetition.CountGroupsForCompetition(competition.ID) != competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID))) {
+				else if (!competition.FixturesUnderwayForCompetition() && iCompetition.CountGroupsForCompetition(competition.ID) > 0 && (iCompetition.CountGroupsForCompetition(competition.ID) != competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID))) 
+                {
 					generateFixturesButton.Visible = true;
                     generateFixturesButton.Text = "Generate Fixtures For All Groups";
 				}
 
-				if (competition.CountFixturesForCompetition() > 0 &&  pageVersion != RequestVersion.ReCalculateGroups) {
+				if (competition.CountFixturesForCompetition() > 0 &&  pageVersion != RequestVersion.ReCalculateGroups)
+                {
 					noFixturesInCompetition.Text = competition.CountFixturesForCompetition().ToString() + " - You can still regenerate fixtures for groups where the fixtures are not underway.";
 				}
-				else if (pageVersion != RequestVersion.ReCalculateGroups) {
+				else if (pageVersion != RequestVersion.ReCalculateGroups) 
+                {
 					noFixturesInCompetition.Text = "The Fixtures have not yet been generated";
                     //if (competition.CountGroupsForCompetition() > 0) {
                     //    generateFixturesButton.Visible = true;
                     //}
 				}
 
-                if ((competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID) == competition.CountGroupsForCompetition() - 1) || (competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID) == competition.CountGroupsForCompetition())) {
+                if ((competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID) == competition.CountGroupsForCompetition() - 1) || (competition.CountGroupsForCompetitionWhereFixturesUnderway(competition.ID) == competition.CountGroupsForCompetition()))
+                {
                     swapTeamsBetweenGroupsLink.Visible = false;
                 }
 
 				
 			}
-			if (pageVersion != RequestVersion.ReCalculateGroups) {
+			if (pageVersion != RequestVersion.ReCalculateGroups) 
+            {
 				groupsList = iGroup.SQLSelectForCompetition(competition.ID);
 				groupsDataList.DataSource = groupsList;
 				groupsDataList.DataBind();
@@ -240,20 +277,25 @@ namespace GoTournamental.UI.Organiser {
 
 		}
         
-		protected void GroupsDataList_ItemDataBound(Object sender, DataListItemEventArgs e) {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) {
+		protected void GroupsDataList_ItemDataBound(Object sender, DataListItemEventArgs e) 
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) 
+            {
                 Group group = (Group)e.Item.DataItem;
 				GroupPlayingArea groupPlayingArea = iGroupPlayingArea.SQLGroupPlayingAreaForGroupID(group.ID);
 				PlayingArea playingArea = iPlayingArea.SQLSelect<PlayingArea, int>(groupPlayingArea.PlayingAreaID);
                 Label groupName = (Label)e.Item.FindControl("GroupName");
                 Label registrationStatus = (Label)e.Item.FindControl("RegistrationStatus");
-                if (group.GetNumberOfTeamsInGroup() > 0 && (group.GetNumberOfTeamsInGroup() == group.GetNumberOfTeamsRegisteredInGroup())) {
+                if (group.GetNumberOfTeamsInGroup() > 0 && (group.GetNumberOfTeamsInGroup() == group.GetNumberOfTeamsRegisteredInGroup()))
+                {
                     registrationStatus.Text = "All Teams in Group Registered";
-                    if (group.FixturesUnderWay == true) {
+                    if (group.FixturesUnderWay == true) 
+                    {
                         registrationStatus.Text += " - Fixtures Underway";
                     }
                 }
-                else if (group.GetNumberOfTeamsInGroup() > 0 && (group.GetNumberOfTeamsInGroup() != group.GetNumberOfTeamsRegisteredInGroup())) {
+                else if (group.GetNumberOfTeamsInGroup() > 0 && (group.GetNumberOfTeamsInGroup() != group.GetNumberOfTeamsRegisteredInGroup())) 
+                {
                     registrationStatus.Text = group.GetNumberOfTeamsRegisteredInGroup().ToString() + " Out Of " + group.GetNumberOfTeamsInGroup().ToString() + " Teams in Group Registered";
                     registrationStatus.ForeColor = Color.Crimson;
                 }
@@ -266,14 +308,18 @@ namespace GoTournamental.UI.Organiser {
                 groupName.Text = group.Name + " - " + playingArea.Name;
 			}
         }
-        protected void TeamsListForGroup_ItemDataBound(Object sender, DataListItemEventArgs e) {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) {				
+        protected void TeamsListForGroup_ItemDataBound(Object sender, DataListItemEventArgs e) 
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {				
 				Team team = (Team)e.Item.DataItem;
 				ITeam iTeam = (Team)e.Item.DataItem;
 				HyperLink requestDeleteLink = (HyperLink)e.Item.FindControl("RequestDeleteLink");
-                if (team.GroupID != null) {
+                if (team.GroupID != null)
+                {
                     Group group = iGroup.SQLSelect<Group, int>((int)team.GroupID);
-                    if (group.FixturesUnderWay == true) {
+                    if (group.FixturesUnderWay == true)
+                    {
                         requestDeleteLink.Visible = false;
                     }
                 }
@@ -292,19 +338,23 @@ namespace GoTournamental.UI.Organiser {
 
 
                 TableCell colourPrimaryCell = (TableCell)colourTableRow.FindControl("ColourPrimaryCell");
-                if (club.ColourPrimary != null) {
+                if (club.ColourPrimary != null) 
+                {
                     colourPrimaryCell.BackColor = Color.FromName(club.ColourPrimary.ToString());
                 }
                 TableCell colourSecondaryCell = (TableCell)colourTableRow.FindControl("ColourSecondaryCell");
-                if (club.ColourSecondary != null) {
+                if (club.ColourSecondary != null) 
+                {
                     colourSecondaryCell.BackColor = Color.FromName(club.ColourSecondary.ToString());
                 }
             }
         }
 	
-		protected void AllocateTeamsIntoGroupsWithPlayingAreas() {
+		protected void AllocateTeamsIntoGroupsWithPlayingAreas() 
+        {
 
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
 
 			    groupsInCompetition = iCompetition.CountGroupsForCompetition(competition.ID);
@@ -312,14 +362,18 @@ namespace GoTournamental.UI.Organiser {
 			    int noGroups = Int32.Parse(competitionNoGroups.SelectedValue);
 			    int playingAreaID = 0;
 			    ArrayList playingAreaIDs = new ArrayList();
-			    foreach (ListItem li in playingAreasList.Items) {
-				    if (li.Selected == true) {
+			    foreach (ListItem li in playingAreasList.Items)
+                {
+				    if (li.Selected == true) 
+                    {
 					    playingAreaIDs.Add(Int32.Parse(li.Value));
 				    }
 			    }
-			    if (groupsInCompetition == 0) {
+			    if (groupsInCompetition == 0) 
+                {
 				    groupsInCompetition = noGroups;
-				    for (int i = 1; i <= groupsInCompetition; i++) {
+				    for (int i = 1; i <= groupsInCompetition; i++)
+                    {
 					    Group group = new Group(id: 0, competitionID: competition.ID, name: "Group " + i.ToString(), fixtureTurnaround : 0 , fixturesUnderWay: false);
 					    groupID = iGroup.SQLInsertAndReturnID<Group>(group);
 					    playingAreaID = (int)playingAreaIDs[i-1];
@@ -331,8 +385,10 @@ namespace GoTournamental.UI.Organiser {
 			    List<Group> groupsList = iGroup.SQLSelectForCompetition(competition.ID);
 			    groupsInCompetition = groupsList.Count;
 			    int currentGroup = 0;
-			    foreach (Team team in teamsInCompetition) {
-				    if (currentGroup == groupsInCompetition) {
+			    foreach (Team team in teamsInCompetition) 
+                {
+				    if (currentGroup == groupsInCompetition) 
+                    {
 					    currentGroup = 0;
 				    }
 				    iTeam.SQLUpdateGroupID(team.ID, groupsList[currentGroup].ID);
@@ -341,20 +397,26 @@ namespace GoTournamental.UI.Organiser {
             }
 		}
 
-		protected void AllocateTeamsToGroups_Click(object sender, EventArgs e) {
+		protected void AllocateTeamsToGroups_Click(object sender, EventArgs e) 
+        {
 			AllocateTeamsIntoGroupsWithPlayingAreas();
 			Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
 		}
 		
-        protected void ReAllocateTeamsIntoNewGroups_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+        protected void ReAllocateTeamsIntoNewGroups_Click(object sender, EventArgs e) 
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
 			    iCompetition.DeleteGroupsForCompetitionWithCascadeToFixtures(competition.ID);
             }
             Response.Redirect("~/UI/Competitions/GroupAllocationForm?version=1&TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());
         }
 
-		protected void GenerateFixtureButton_Click(object sender, EventArgs e) {
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+		protected void GenerateFixtureButton_Click(object sender, EventArgs e) 
+        {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) 
+            {
+		        iFixture.DeleteFixturesForCompetition(competition.ID);
 			    iFixture.GenerateFixturesForCompetition(tournament, competition);		
             }
             Response.Redirect("~/UI/Competitions/CompetitionView.aspx?TournamentID="+tournament.ID.ToString()+"&competition_id="+competition.ID.ToString());

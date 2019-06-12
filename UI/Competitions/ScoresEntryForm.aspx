@@ -48,7 +48,6 @@
                             </asp:TemplateField>
                             <asp:BoundField HeaderText="'Away'" ItemStyle-Width="260" ItemStyle-Font-Size="Small" />
                             <asp:BoundField HeaderText="Pitch" ItemStyle-Width="50" ItemStyle-Font-Size="Small" />
-                            <asp:BoundField HeaderText="Referee" ItemStyle-Width="120" ItemStyle-Font-Size="Small" />
                        </Columns>
                     </asp:GridView>
                 </ItemTemplate>

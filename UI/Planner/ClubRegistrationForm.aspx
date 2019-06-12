@@ -23,7 +23,7 @@
         <tr>
             <td>
 
-                <table style="width:750px;">
+                <table style="width:550px;">
                     <tr>
                         <td style="width:175px; line-height:16px;"><h4><asp:Label ID="FormTitle" runat="server" /></h4></td>
                         <td>&nbsp;</td>
@@ -45,10 +45,10 @@
                              Club Colours:<div style="color:red; display:inline; line-height:2;">*</div>
                         </td>
                         <td>
-                           <asp:DropDownList ID="ClubColourPrimary" AppendDataBoundItems="true" runat="server">
+                           <asp:DropDownList ID="ClubColourPrimary" AppendDataBoundItems="true" Enabled="false" runat="server">
 					            <asp:ListItem Value="">Primary Colour&nbsp;</asp:ListItem>                      
                            </asp:DropDownList>
-                           <asp:DropDownList ID="ClubColourSecondary" AppendDataBoundItems="true" runat="server">
+                           <asp:DropDownList ID="ClubColourSecondary" AppendDataBoundItems="true" Enabled="false" runat="server">
 					            <asp:ListItem Value="">Secondary Colour</asp:ListItem>                      
                             </asp:DropDownList>
                         </td>
@@ -58,11 +58,11 @@
                             English County FA:
                         </td>
                         <td>
-                            <asp:DropDownList ID="Affiliation" AppendDataBoundItems="true" runat="server">
+                            <asp:DropDownList ID="Affiliation" AppendDataBoundItems="true" Enabled="false" runat="server">
 	                            <asp:ListItem Value="0">Select</asp:ListItem>                      
                             </asp:DropDownList>&nbsp;&nbsp;
                             Affiliation No.
-                            <asp:TextBox ID="AffiliationNumber" Width="80" runat="server" />
+                            <asp:TextBox ID="AffiliationNumber" Width="80" Enabled="false" runat="server" />
                         </td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
@@ -71,7 +71,7 @@
                             Contact Type:
                         </td>
                         <td style="width:1100px;">
-                            <asp:DropDownList ID="ContactType" AppendDataBoundItems="true" runat="server">
+                            <asp:DropDownList ID="ContactType" AppendDataBoundItems="true" Enabled="false" runat="server">
 					            <asp:ListItem Value="0">Select</asp:ListItem>              
                             </asp:DropDownList>
                         </td>
@@ -82,8 +82,8 @@
                         </td>
                         <td>
                             <asp:HiddenField ID="ContactIDHidden" runat="server" />
-                            <asp:TextBox ID="FirstName" Width="120" Height="26" runat="server" />
-                            <asp:TextBox ID="LastName" Width="150" Height="26" runat="server" />
+                            <asp:TextBox ID="FirstName" Width="120" Height="26" Enabled="false" runat="server" />
+                            <asp:TextBox ID="LastName" Width="150" Height="26" Enabled="false" runat="server" />
 				            <ajaxToolkit:TextBoxWatermarkExtender ID="FirstNameWatermark" runat="server" TargetControlID="FirstName" WatermarkText="e.g. Gordon" />
  				            <ajaxToolkit:TextBoxWatermarkExtender ID="LastNameWatermark" runat="server" TargetControlID="LastName" WatermarkText="e.g. Strachan" />              																		 
                         </td>
@@ -93,7 +93,7 @@
                             Telephone Number:
                         </td>
                         <td>
-                            <asp:TextBox ID="TelephoneNumber" Width="150" Height="26" runat="server" />
+                            <asp:TextBox ID="TelephoneNumber" Width="150" Height="26" Enabled="false" runat="server" />
                         </td>
                     </tr>
                     <tr>
@@ -101,14 +101,14 @@
                             Email:
                         </td>
                         <td>
-                            <asp:TextBox ID="Email" Width="400" Height="26" runat="server" />
+                            <asp:TextBox ID="Email" Width="400" Height="26" Enabled="false" runat="server" />
                         </td>
                     </tr>             
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                           <asp:Button ID="SaveClubButton" Text="Save" OnClick="SaveClubButton_Click" runat="server" />
+                           <asp:Button ID="SaveClubButton" Text="Save" OnClick="SaveClubButton_Click" Enabled="false" runat="server" />
                            &nbsp;&nbsp;See how to register your teams&nbsp;<a href="https://www.youtube.com/watch?v=HErov9aH1j8" target="_blank"><asp:Image id="Image5" ImageUrl="~/Images/Icons/youtube.png" Height="14" Width="20" runat="server" /></a>
                            <br />
                         </td>
@@ -139,6 +139,8 @@
     <br />
     <asp:Panel ID="TeamsRegistrationPanel" Visible="false" runat="server">
     <b>Registered Teams</b>
+    Use the form below to add each team that you wish to enter into the tournament. Select the age group from the Competition drop down, then enter the
+    team name and your contact details, then click Save. Once you have saved each team, you may add others. 
     <table style="width:1250px;">
         <tr>
             <td colspan="6">

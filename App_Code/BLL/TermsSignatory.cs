@@ -1,21 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using OfficeOpenXml;
+﻿using System.Linq;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Organiser;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser 
+{
 
-    public class TermsSignatory: ITermsSignatory {
+    public class TermsSignatory: ITermsSignatory
+    {
 
 		#region Constructors
 		public TermsSignatory() {}
-        public TermsSignatory(int id, string userID, string userName) {
+        public TermsSignatory(int id, string userID, string userName) 
+        {
 			this.ID = id;
             this.UserID = userID;
             this.UserName = userName;
@@ -29,23 +26,29 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<TermsSignatory, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<TermsSignatory, T>(input)) 
+            {
                 TermsSignatoryDbContext context = new TermsSignatoryDbContext();
                 TermsSignatory existing = context.TermsSignatories.Where(i => i.UserID == ((TermsSignatory)(object)input).UserID).SingleOrDefault();
-                if (existing == null) {
+                if (existing == null)
+                {
                     context.TermsSignatories.Add((TermsSignatory)(object)input);
                     context.SaveChanges();
                 }
             }
         }
-        public T SQLSelect<T, U>(U id) {
+        public T SQLSelect<T, U>(U id)
+        {
             TermsSignatoryDbContext context = new TermsSignatoryDbContext();
             TermsSignatory selected = context.TermsSignatories.Where(i => i.ID == (int)(object)id).SingleOrDefault();
             return (T)(object)selected;
         }
-        public void SQLDelete<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<TermsSignatory, T>(input)) {
+        public void SQLDelete<T>(T input)
+        {
+            if (ObjectExtensions.ObjectTypesMatch<TermsSignatory, T>(input)) 
+            {
                 TermsSignatoryDbContext context = new TermsSignatoryDbContext();
                 TermsSignatory itemToDelete = (TermsSignatory)(object)input;
                 TermsSignatory selected = context.TermsSignatories.Single(i => i.ID == itemToDelete.ID);
@@ -56,7 +59,8 @@ namespace GoTournamental.BLL.Organiser {
 		#endregion
 
     }
-    public interface ITermsSignatory :ISQLInsertable, ISQLSelectable, ISQLDeletable {
+    public interface ITermsSignatory :ISQLInsertable, ISQLSelectable, ISQLDeletable 
+    {
         int ID { get; }
         string UserID { get; }
         string UserName { get; }

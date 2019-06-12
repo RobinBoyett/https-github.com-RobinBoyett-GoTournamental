@@ -28,6 +28,7 @@
                 <asp:DropDownList ID="TournamentType" AppendDataBoundItems="true" OnSelectedIndexChanged="TournamentType_SelectedIndexChanged" AutoPostBack="true" runat="server">
 					<asp:ListItem Value="0">Select Sport</asp:ListItem>              
                 </asp:DropDownList>
+                <asp:PlaceHolder ID="TournamentTypeTip" runat="server" />
                 <asp:RequiredFieldValidator ID="TournamentTypeMandatory" InitialValue="0" ErrorMessage="Please select a Tournament Type" Text="<" ForeColor="Crimson" ControlToValidate="TournamentType" SetFocusOnError="true" Font-Size="12px" runat="server" />				
             </td>
         </tr> 
@@ -38,6 +39,7 @@
             <td style="width:1100px;">
                 <asp:HiddenField ID="HostClubIDHidden" runat="server" />
                 <asp:TextBox ID="HostClubName" Width="400" Height="26" runat="server" />
+                <asp:PlaceHolder ID="HostClubNameTip" runat="server" />
                 <asp:RequiredFieldValidator ID="HostClubNameMandatory" ErrorMessage="Please enter a Host Club Name" Text="<" ForeColor="Crimson" ControlToValidate="HostClubName" SetFocusOnError="true" Font-Size="12px" runat="server" />				
 				<ajaxToolkit:TextBoxWatermarkExtender ID="HostClubNameWatermark" runat="server" TargetControlID="HostClubName" WatermarkText="e.g. Broad Beech Juniors" />																		 
             </td>
@@ -129,7 +131,7 @@
 					<asp:ListItem Value="0">Select</asp:ListItem>              
                 </asp:DropDownList>
                 Minutes
-                <asp:DropDownList ID="FixtureHalvesNumber" AppendDataBoundItems="true" runat="server">
+                <asp:DropDownList ID="FixtureStructure" AppendDataBoundItems="true" runat="server">
 					<asp:ListItem Value="0">Select</asp:ListItem>              
                 </asp:DropDownList>
                 no. of halves

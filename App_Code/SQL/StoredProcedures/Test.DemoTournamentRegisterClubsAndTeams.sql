@@ -993,7 +993,7 @@ BEGIN
 
 
 
-	--// WWheatswell
+	--// Wheatswell
 	INSERT INTO Planner.Clubs (TournamentID, Name, AttendanceType, ColourPrimary, ColourSecondary, Affiliation, AffiliationNumber, PrimaryContactID)
 	VALUES (@TournamentID, 'Wheatswell Old Vic', 5, 'Red', 'White', 27, '000776', NULL)
  	SELECT @ClubID = @@IDENTITY
@@ -1004,8 +1004,7 @@ BEGIN
 	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
 	VALUES (@ClubID, 6, NULL, 'Goblins', 5, @ContactID, 'false')
 
-
-
+	--// Wroughtley
 	INSERT INTO Planner.Clubs (TournamentID, Name, AttendanceType, ColourPrimary, ColourSecondary, Affiliation, AffiliationNumber, PrimaryContactID)
 	VALUES (@TournamentID, 'Wroughtley', 4, 'Red', 'White', 27, '005330', NULL)
  	SELECT @ClubID = @@IDENTITY
@@ -1067,5 +1066,158 @@ BEGIN
 
 
 
+	--// Supplementary teams for 4 groups in Under 11's
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, 'Xw2mttwMFeoKKaF3Cdcwog==', 'l8lBSC0EkbzVPRnx63zbkA==',  'bQOwd8k1SyvsbdHb0Wt5BRjGqaYqnit+Fk5CjduHo4w=', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (9, 5, NULL, 'Ospreys', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, 'x3upFGlu8bp/VHNFyCU28g==', 'gOtHampdmhtnmg8IiZeCWQ==', '', '3YEFWKBbAf9kzMpZPNiGp6nHddk7B9BJKm5JAyiVNu5oCiyIXHWhk5wFN5/4lW7C')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (17, 5, NULL, 'Lapwings', 5, @ContactID, 'false')
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '0i9ibLtTwL9Uw4Iym+2a8w==', 'lnOPPei6Of1WfInwW/TSbw==', '+Z0kvOz+g8BOhC0RJ4UVCykBtb4r+WDbr4x2HvQF0UA=', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (20, 5, NULL, 'Wanderers', 5, @ContactID, 'false')
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '7lcGPAPj/usNyK4sC5XUDg==', 'XXEL6RWEejMivygRpeVTTQ==', '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (23, 5, NULL, 'Hornets', 5, @ContactID, 'false')
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, 'l+pAcmdQcMPuQgq62NVWIA==', 'uVs2U2iDcvO7aI1r6mWDzQ==',  'ZrcGlkSwAPVjYBkLdQ7W4jti9U0yI6l10YJiDbPqhn4=', 'o65Rbs4cZCHMixoMRVit9HL9aD2Bg6bOifunAQbJZuYb8dywFWEVjdqcFOlkf5wU')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (29, 5, NULL, 'Tigers', 5, @ContactID, 'false')
+
+
+
+	-- supplementary teams for U 16s
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (1, 10, NULL, 'Wellingtons', 1, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (1, 10, NULL, 'Halifaxes', 1, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (1, 10, NULL, 'Lysanders', 1, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (5, 10, NULL, 'Cossacks', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (7, 10, NULL, 'Hawks', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (7, 10, NULL, 'Ravens', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (11, 10, NULL, 'Tigers', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (11, 10, NULL, 'Lions', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (15, 10, NULL, 'Racers', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (16, 10, NULL, 'Under 16s', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (19, 10, NULL, 'Vikings', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (20, 10, NULL, 'Psychos', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (26, 10, NULL, 'Harlequins', 5, @ContactID, 'false')	
+
+ 	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (26, 10, NULL, 'Saracens', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (26, 10, NULL, 'Barbarians', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (27, 10, NULL, 'Impalas', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (27, 10, NULL, 'Ellands', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (31, 10, NULL, 'Bluebirds', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (34, 10, NULL, 'Ozone', 5, @ContactID, 'false')	
+
+	INSERT INTO [Planner].[Contacts] (TournamentID, [Type], Title, FirstName, LastName, TelephoneNumber, Email)
+	VALUES (@TournamentID, 4, NULL, '', '',  '', '')
+ 	SELECT @ContactID = @@IDENTITY
+	INSERT INTO Planner.Teams (ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered)
+	VALUES (34, 10, NULL, 'Lightning', 5, @ContactID, 'false')	
 
 END

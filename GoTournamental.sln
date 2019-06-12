@@ -1,27 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoTournamental", "..\..\WebSites\GoTournamental\", "{A17F7B7C-FF7A-4F24-AE90-84BEC1F5A17B}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoTournamental", ".", "{A17F7B7C-FF7A-4F24-AE90-84BEC1F5A17B}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_7267"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\WebSites\GoTournamental\"
+		Debug.AspNetCompiler.PhysicalPath = "..\GoTournamental\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7267\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_7267"
-		Release.AspNetCompiler.PhysicalPath = "..\..\WebSites\GoTournamental\"
+		Release.AspNetCompiler.PhysicalPath = "..\GoTournamental\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7267\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "7267"
-		SlnRelativePath = "..\..\WebSites\GoTournamental\"
+		SlnRelativePath = "..\GoTournamental\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
@@ -35,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FBCBC07-AF5B-49CA-85B6-A17844FCD456}
 	EndGlobalSection
 EndGlobal

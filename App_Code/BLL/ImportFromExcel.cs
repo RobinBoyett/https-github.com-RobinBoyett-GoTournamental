@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Data.Entity.Infrastructure;
 using System.Collections.Generic;
-using System.ComponentModel;
 using GoTournamental.API.Interface;
 using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Organiser;
 
-namespace GoTournamental.BLL.Organiser {
+namespace GoTournamental.BLL.Organiser
+{
 
-	public class FileImportStatus: IFileImportStatus {
+	public class FileImportStatus: IFileImportStatus
+    {
 
 		#region Constructors
         public FileImportStatus() { }
-        public FileImportStatus(int numberOfRecords, List<string> messages) {
+        public FileImportStatus(int numberOfRecords, List<string> messages) 
+        {
 			this.NumberOfRecords = numberOfRecords;
 			this.Messages = messages;
 		}
@@ -25,15 +25,18 @@ namespace GoTournamental.BLL.Organiser {
 		#endregion
 
 	}
-	public interface IFileImportStatus {
+	public interface IFileImportStatus
+    {
 		int NumberOfRecords { get; }
 		List<string> Messages { get; }
 	}
 
-    public class FileImportAudit: IFileImportAudit {
+    public class FileImportAudit: IFileImportAudit 
+    {
 
         #region Member Enumerations & Collections
-        public enum FileTypes {
+        public enum FileTypes 
+        {
             Undefined = 0,
             Excel = 1
         }
@@ -43,7 +46,8 @@ namespace GoTournamental.BLL.Organiser {
         public FileImportAudit() { }
         public FileImportAudit(
             int id, int tournamentID, FileImportAudit.FileTypes fileType, int? noClubs, int? noCompetitions, int? noTeams, int? noPrimaryOfficials, int? noSponsors
-        ) {
+        ) 
+        {
             this.ID = id;
             this.TournamentID = tournamentID;
             this.FileType = fileType;
@@ -67,8 +71,10 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<FileImportAudit, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<FileImportAudit, T>(input)) 
+            {
                 FileImportAuditDbContext context = new FileImportAuditDbContext();
                 context.FileImportAudits.Add((FileImportAudit)(object)input);
                 context.SaveChanges();
@@ -78,7 +84,8 @@ namespace GoTournamental.BLL.Organiser {
         #endregion
 
     }
-    public interface IFileImportAudit: ISQLInsertable    {
+    public interface IFileImportAudit: ISQLInsertable    
+    {
         int ID { get; }
         int TournamentID { get; }
         FileImportAudit.FileTypes FileType { get; }
@@ -89,18 +96,23 @@ namespace GoTournamental.BLL.Organiser {
         int? NoSponsors { get; }
     }
 
-	public abstract class DataImportFromExcel {		
-		public static DateTime? CleanDateField(string dateField) {
+	public abstract class DataImportFromExcel 
+    {		
+		public static DateTime? CleanDateField(string dateField) 
+        {
 			DateTime? cleanDate = new DateTime();
 			int intDate;
 			bool dateIsInt = int.TryParse(dateField, out intDate);
-			if (dateIsInt) {
+			if (dateIsInt) 
+            {
 				cleanDate = DateTime.FromOADate(intDate);
 			}
-			else if (dateField.Length != 0 && dateField != "1/1/0001 12:00:00 AM" && dateField != "1/1/1753 12:00:00 AM") {
+			else if (dateField.Length != 0 && dateField != "1/1/0001 12:00:00 AM" && dateField != "1/1/1753 12:00:00 AM") 
+            {
 				cleanDate = (Convert.ToDateTime(dateField));
 			}
-			else {
+			else 
+            {
 				cleanDate = null;
 			}
 			return cleanDate;

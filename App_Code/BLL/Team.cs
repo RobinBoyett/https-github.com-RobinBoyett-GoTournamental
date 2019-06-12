@@ -6,15 +6,18 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.ORM.Planner;
 
-namespace GoTournamental.BLL.Planner {
+namespace GoTournamental.BLL.Planner 
+{
 
-    public class Team: ITeam {
+    public class Team: ITeam 
+    {
 
 		#region Constructors
 		public Team() {}
         public Team(
             int id, int clubID, int? competitionID, int? groupID, string name, Domains.AttendanceTypes attendanceType, int? primaryContactID, bool? registered
-        ) {
+        )
+        {
             this.ID = id;
             this.ClubID = clubID;
 			this.CompetitionID = competitionID;
@@ -29,8 +32,10 @@ namespace GoTournamental.BLL.Planner {
         #region Properties
         public int ID { get; set; }
         public int ClubID { get; set; }
-        public Club Club {
-            get {
+        public Club Club 
+        {
+            get 
+            {
                 IClub iClub = new Club();
                 Club club = iClub.SQLSelect<Club, int?>(this.ClubID);
                 return club;
@@ -41,11 +46,14 @@ namespace GoTournamental.BLL.Planner {
         public string Name { get; set; }
         public Domains.AttendanceTypes AttendanceType { get; set; }
         public int? PrimaryContactID { get; set; }
-        public Contact PrimaryContact {
-            get {
+        public Contact PrimaryContact
+        {
+            get 
+            {
                 Contact contact = new Contact();
                 IContact iContact = new Contact();
-                if (this.PrimaryContactID != null) {
+                if (this.PrimaryContactID != null) 
+                {
                     contact = iContact.SQLSelect<Contact, int?>(PrimaryContactID);
                 }
                 return contact;
@@ -55,19 +63,24 @@ namespace GoTournamental.BLL.Planner {
         #endregion
 
         #region Methods
-        public override string ToString() {
+        public override string ToString() 
+        {
             return string.Format("{0}", Name);
         }	
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input)) {
+        public void SQLInsert<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input))
+            {
                 TeamDbContext context = new TeamDbContext();
                 context.Teams.Add((Team)(object)input);
                 context.SaveChanges();
             }
         }
-        public int SQLInsertAndReturnID<T>(T input) {
+        public int SQLInsertAndReturnID<T>(T input) 
+        {
             int ret = 0;
-            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input)) {
+            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input))
+            {
                 TeamDbContext context = new TeamDbContext();
                 context.Teams.Add((Team)(object)input);
                 context.SaveChanges();
@@ -75,35 +88,42 @@ namespace GoTournamental.BLL.Planner {
             }
             return ret;
         }  
-        public T SQLSelect<T, U>(U id) {
+        public T SQLSelect<T, U>(U id) 
+        {
             TeamDbContext context = new TeamDbContext();
             Team selected = context.Teams.Where(i => i.ID == (int)(object)id).SingleOrDefault();
             return (T)(object)selected;
         }
         
-		public List<Team> SQLSelectForGroup(int groupID) {
+		public List<Team> SQLSelectForGroup(int groupID) 
+        {
             TeamDbContext context = new TeamDbContext();
             List<Team> selectedList = context.Teams.Where(i => i.GroupID == groupID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }
-        public List<Team> GetCompetitionTeamsAll(int competitionID) {
+        public List<Team> GetCompetitionTeamsAll(int competitionID) 
+        {
             TeamDbContext context = new TeamDbContext();
             List<Team> selectedList = context.GetCompetitionTeamsAll(competitionID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }	       
-        public List<Team> GetCompetitionFinalsTeams(int competitionID) {
+        public List<Team> GetCompetitionFinalsTeams(int competitionID) 
+        {
             TeamDbContext context = new TeamDbContext();
             List<Team> selectedList = context.GetCompetitionFinalsTeams(competitionID).OrderBy(i => i.ID).ToList();
             return selectedList;
         }	       
-        public List<Team> SQLSelectForTournament(int tournamentID) {
+        public List<Team> SQLSelectForTournament(int tournamentID) 
+        {
             TeamDbContext context = new TeamDbContext();
             List<Team> selectedList = context.GetTeamsForTournament(tournamentID).OrderBy(i => i.ID).ToList();
             return selectedList;
         } 		
 		
-		public void SQLUpdate<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input)) {
+		public void SQLUpdate<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<Team, T>(input))
+            {
                 TeamDbContext context = new TeamDbContext();
                 Team updated = (Team)(object)input;
                 Team selected = context.Teams.Single(i => i.ID == updated.ID);
@@ -114,46 +134,53 @@ namespace GoTournamental.BLL.Planner {
                 context.SaveChanges();
             }
         }    
-		public void SQLUpdateGroupID(int id, int groupID) {
+		public void SQLUpdateGroupID(int id, int groupID) 
+        {
             TeamDbContext context = new TeamDbContext();
             Team selected = context.Teams.Single(i => i.ID == id);
 			selected.GroupID = groupID;
             context.SaveChanges();
 		}	
-		public void SQLUpdatePrimaryContactID(int id, int primaryContactID) {
+		public void SQLUpdatePrimaryContactID(int id, int primaryContactID) 
+        {
             TeamDbContext context = new TeamDbContext();
             Team selected = context.Teams.Single(i => i.ID == id);
 			selected.PrimaryContactID = primaryContactID;
             context.SaveChanges();
 		}
-        public void SQLUpdateAttendanceType(int id, Domains.AttendanceTypes attendanceType) {
+        public void SQLUpdateAttendanceType(int id, Domains.AttendanceTypes attendanceType)
+        {
             TeamDbContext context = new TeamDbContext();
             Team selected = context.Teams.Single(i => i.ID == id);
             selected.AttendanceType = attendanceType;
             context.SaveChanges();
         }			
-        public void SQLUpdateRegistration(int id, bool registration) {
+        public void SQLUpdateRegistration(int id, bool registration) 
+        {
             TeamDbContext context = new TeamDbContext();
             Team selected = context.Teams.Single(i => i.ID == id);
             selected.Registered = registration;
             context.SaveChanges();
         }
-
-        public void SQLDeleteWithCascade<T>(T input) {
+        public void SQLDeleteWithCascade<T>(T input)
+        {
             TeamDbContext context = new TeamDbContext();
             Team teamToDelete = (Team)(object)input;
             context.ExecuteTeamDeleteWithCascade(teamToDelete.ID);
 		}		
-		public Team SQLGetTeamForPrimaryContactID(int? id) {
+		public Team SQLGetTeamForPrimaryContactID(int? id) 
+        {
             Team team = new Team();
             TeamDbContext context = new TeamDbContext();
             team = context.Teams.Where(i => i.PrimaryContactID == id).SingleOrDefault();
             return team;
         }
-		public Competition GetCompetition() {
+		public Competition GetCompetition() 
+        {
 			ICompetition iCompetition = new Competition();
 			Competition competition = new Competition();
-			if (this.CompetitionID != null) {
+			if (this.CompetitionID != null) 
+            {
 				competition = iCompetition.SQLSelect<Competition, int>((int)this.CompetitionID);
 			}
 			return competition;
@@ -162,7 +189,8 @@ namespace GoTournamental.BLL.Planner {
 
     }
 
-    public interface ITeam : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable, ISQLDeleteCascadable  {
+    public interface ITeam : ISQLInsertable, ISQLInsertableReturningID, ISQLSelectable, ISQLUpdateable, ISQLDeleteCascadable  
+    {
         int ID { get; }
         int ClubID { get; }
         Club Club { get; }

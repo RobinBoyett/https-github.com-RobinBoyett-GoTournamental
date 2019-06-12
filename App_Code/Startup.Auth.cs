@@ -5,14 +5,17 @@ using Owin;
 
 namespace GoTournamental
 {
-    public partial class Startup {
+    public partial class Startup
+    {
 
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301883
-        public void ConfigureAuth(IAppBuilder app) {
+        public void ConfigureAuth(IAppBuilder app) 
+        {
             // Enable the application to use a cookie to store information for the signed in user
             // and also store information about a user logging in with a third party login provider.
             // This is required if your application allows users to login
-            app.UseCookieAuthentication(new CookieAuthenticationOptions {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions 
+            {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login")
             });

@@ -18,6 +18,6 @@ BEGIN
 	
 	SELECT ID, ClubID, CompetitionID, GroupID, Name, AttendanceType, PrimaryContactID, Registered 
 	FROM Planner.Teams 
-	WHERE CompetitionID = @CompetitionID
+	WHERE CompetitionID = @CompetitionID AND AttendanceType IN (1, 5)
 
 END

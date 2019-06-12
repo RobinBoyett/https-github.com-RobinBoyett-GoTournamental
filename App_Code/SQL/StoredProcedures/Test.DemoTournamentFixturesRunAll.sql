@@ -146,6 +146,9 @@ BEGIN
 	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 130
 	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 131
 
+
+
+	--#####################################
 	UPDATE [Planner].[Fixtures] SET HomeTeamID = 28, HomeTeamScore = 1, AwayTeamID = 27, AwayTeamScore = 2 WHERE ID = 132
 	UPDATE [Planner].[Fixtures] SET HomeTeamID = 11, HomeTeamScore = 1, AwayTeamID = 144, AwayTeamScore = 0 WHERE ID = 133
 	UPDATE [Planner].[Fixtures] SET HomeTeamID = 45, HomeTeamScore = 3, AwayTeamID = 46, AwayTeamScore = 1 WHERE ID = 134
@@ -395,51 +398,129 @@ BEGIN
 
 	--// Run Under 16s Boys
 
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 360
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 361
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 362
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 363
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 364
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 365
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 1 WHERE ID = 366
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 367
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 3 WHERE ID = 368
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 369
-
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 4 WHERE ID = 370
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 371
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 372
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 373
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 374
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 375
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 2 WHERE ID = 376
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 377
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 1 WHERE ID = 378
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 379
-
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 82, HomeTeamScore = 4, AwayTeamID = 23, AwayTeamScore = 1 WHERE ID = 380
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 41, HomeTeamScore = 2, AwayTeamID = 131, AwayTeamScore = 0 WHERE ID = 381
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 109, HomeTeamScore = 1, AwayTeamID = 65, AwayTeamScore = 2 WHERE ID = 382
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 111, HomeTeamScore = 1, AwayTeamID = 22, AwayTeamScore = 2 WHERE ID = 383
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 82, HomeTeamScore = 2, AwayTeamID = 41, AwayTeamScore = 1 WHERE ID = 384
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 65, HomeTeamScore = 0, AwayTeamID = 22, AwayTeamScore = 3 WHERE ID = 385
-
-	--// Run Under 19s Women
-
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 386
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 387
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 388
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 389
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 378
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 379
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 1 WHERE ID = 380
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 381
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 382
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 383
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 384
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 385
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 386
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 387
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 4 WHERE ID = 388
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 5, AwayTeamScore = 2 WHERE ID = 389
 	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 390
 	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 391
 	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 392
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 0 WHERE ID = 393
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 394
-	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 395
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 393
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 0 WHERE ID = 394
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 395
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 396
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 397
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 398
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 399
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 400
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 3 WHERE ID = 401
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 3 WHERE ID = 402
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 403
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 404
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 405
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 406
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 1 WHERE ID = 407
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 408
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 1 WHERE ID = 409
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 410
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 411
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 412
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 413
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 414
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 2 WHERE ID = 415
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 6, AwayTeamScore = 0 WHERE ID = 416
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 417
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 418
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 419
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 420
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 421
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 422
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 423
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 424
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 0 WHERE ID = 425
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 3 WHERE ID = 426
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 0 WHERE ID = 427
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 428
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 429
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 4 WHERE ID = 430
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 431
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 432
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 433
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 434
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 435
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 0 WHERE ID = 436
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 437
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 7, AwayTeamScore = 1 WHERE ID = 438
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 439
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 440
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 441
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 442
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 443
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 3 WHERE ID = 444
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 445
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 446
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 4 WHERE ID = 447
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 448
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 449
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 3 WHERE ID = 450
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 451
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 452
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 2 WHERE ID = 453
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 1 WHERE ID = 454
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 455
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 456
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 0 WHERE ID = 457
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 458
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 459
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 460
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 1 WHERE ID = 461
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 462
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 463
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 464
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 465
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 1 WHERE ID = 466
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 467
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 3 WHERE ID = 468
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 5, AwayTeamScore = 0 WHERE ID = 469
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 470
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 3 WHERE ID = 471
+	UPDATE [Planner].[Fixtures] SET HomeTeamScore = 4, AwayTeamScore = 2 WHERE ID = 472
 
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 147, HomeTeamScore = 2, AwayTeamID = 66, AwayTeamScore = 1 WHERE ID = 398
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 24, HomeTeamScore = 0, AwayTeamID = 129, AwayTeamScore = 2 WHERE ID = 399
-	UPDATE [Planner].[Fixtures] SET HomeTeamID = 147, HomeTeamScore = 4, AwayTeamID = 129, AwayTeamScore = 1 WHERE ID = 401
+
+
+	--472
+
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 82, HomeTeamScore = 4, AwayTeamID = 23, AwayTeamScore = 1 WHERE ID = 380
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 41, HomeTeamScore = 2, AwayTeamID = 131, AwayTeamScore = 0 WHERE ID = 381
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 109, HomeTeamScore = 1, AwayTeamID = 65, AwayTeamScore = 2 WHERE ID = 382
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 111, HomeTeamScore = 1, AwayTeamID = 22, AwayTeamScore = 2 WHERE ID = 383
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 82, HomeTeamScore = 2, AwayTeamID = 41, AwayTeamScore = 1 WHERE ID = 384
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 65, HomeTeamScore = 0, AwayTeamID = 22, AwayTeamScore = 3 WHERE ID = 385
+
+	--// Run Under 19s Women
+
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 0 WHERE ID = 386
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 387
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 388
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 1 WHERE ID = 389
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 390
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 0 WHERE ID = 391
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 1, AwayTeamScore = 2 WHERE ID = 392
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 3, AwayTeamScore = 0 WHERE ID = 393
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 2, AwayTeamScore = 2 WHERE ID = 394
+	--UPDATE [Planner].[Fixtures] SET HomeTeamScore = 0, AwayTeamScore = 1 WHERE ID = 395
+
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 147, HomeTeamScore = 2, AwayTeamID = 66, AwayTeamScore = 1 WHERE ID = 398
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 24, HomeTeamScore = 0, AwayTeamID = 129, AwayTeamScore = 2 WHERE ID = 399
+	--UPDATE [Planner].[Fixtures] SET HomeTeamID = 147, HomeTeamScore = 4, AwayTeamID = 129, AwayTeamScore = 1 WHERE ID = 401
 
 
 END

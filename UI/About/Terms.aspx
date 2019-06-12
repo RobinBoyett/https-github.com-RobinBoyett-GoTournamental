@@ -1,12 +1,9 @@
 ﻿<%@ Page Title="GoTournamental - Terms And Conditions" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="Terms.aspx.cs" Inherits="GoTournamental.UI.Organiser.Terms" %>
-<%@ Register TagPrefix="Navigation" TagName="AboutMenu" Src="~/UI/Menus/AboutMenu.ascx" %>
 <%@ Register TagPrefix="Advertisements" TagName="AdvertPanel" Src="~/UI/Adverts/AdvertPanel.ascx" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <br />
     <div class="well">
-	<Navigation:AboutMenu id="AboutMenuControl" runat="server" />	
-    <br />
     <asp:Panel ID="TermsPanel" runat="server">
     						
     <div class="row">

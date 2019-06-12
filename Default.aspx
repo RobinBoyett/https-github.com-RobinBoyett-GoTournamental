@@ -26,7 +26,7 @@
                     to <a href="/UI/About/ContactUsForm.aspx">Contact Us</a> for a trial tournament.
                 </p>
                  <p style="font-size:medium;">
-                    The annual tournament or festival is usually your club's biggest income stream. Don't let it drive you mad - GoTournamental!
+                    The annual tournament or festival is usually your club's biggest income stream. Don't let it drive you mad, just GoTournamental!
                 </p>
                 <p>
                     <a href="/UI/Planner/TournamentsList.aspx">Search Tournaments &raquo;</a>

@@ -10,9 +10,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Planner {
+namespace GoTournamental.UI.Planner 
+{
 
-    public partial class ClubForm : Page {
+    public partial class ClubForm : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -34,7 +36,6 @@ namespace GoTournamental.UI.Planner {
             ClubEdit = 2
         }
         #endregion
-
         #region Declare page controls
         Label clubFormTitle = new Label();
 		Label formTitle = new Label();
@@ -51,27 +52,31 @@ namespace GoTournamental.UI.Planner {
 		Label primaryContactEmail = new Label();
 		#endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
-
+        protected void Page_Load(object sender, EventArgs e) 
+        {
             AssignControlsAll();
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
 				tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
 				clubFormTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
 				competitions = iCompetition.SQLSelectForTournament(tournament.ID, false);
 				clubs = iClub.SQLSelectClubsForTournament(tournament.ID);
 				contacts = iContact.SQLSelectForTournament(tournament.ID);
             }
-            if (Request.QueryString.Get("version") != null) {
+            if (Request.QueryString.Get("version") != null) 
+            {
                 pageVersion = (RequestVersion)Int32.Parse(Request.QueryString.Get("version"));
             }
-            if (Request.QueryString.Get("club_id") != null) {
+            if (Request.QueryString.Get("club_id") != null) 
+            {
 				club = iClub.SQLSelect<Club, int>(Int32.Parse(Request.QueryString.Get("club_id"))); 
             }
 			
             ManagePageVersion(pageVersion);
 
         }
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll() 
+        {
 			clubFormTitle = (Label)ClubFormPanel.FindControl("ClubFormTitle");
 			formTitle = (Label)ClubFormPanel.FindControl("FormTitle");
 			clubIDHidden = (HiddenField)ClubFormPanel.FindControl("ClubIDHidden");
@@ -86,8 +91,10 @@ namespace GoTournamental.UI.Planner {
             primaryContactPhone = (Label)ClubFormPanel.FindControl("PrimaryContactPhone");
 			primaryContactEmail = (Label)ClubFormPanel.FindControl("PrimaryContactEmail");
 		}
-        protected void ManagePageVersion(RequestVersion pageVersion) {
-			switch (pageVersion) {
+        protected void ManagePageVersion(RequestVersion pageVersion)
+        {
+			switch (pageVersion) 
+            {
 				case RequestVersion.ClubEdit:
                     ClubEditFormLoad();
 					formTitle.Text = "Edit Club";
@@ -99,72 +106,92 @@ namespace GoTournamental.UI.Planner {
             }
         }
 
-        protected void ClubEditFormLoad() {
+        protected void ClubEditFormLoad() 
+        {
             Array attendanceTypeEnumValues = Enum.GetValues(typeof(Domains.AttendanceTypes));
-            if (attendanceType.Items.Count < 2) {
-                foreach (Enum type in attendanceTypeEnumValues) {
-                    if (EnumExtensions.GetIntValue(type) > 0 &&  EnumExtensions.GetStringValue(type) != "Deleted") {
+            if (attendanceType.Items.Count < 2)
+            {
+                foreach (Enum type in attendanceTypeEnumValues)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0 &&  EnumExtensions.GetStringValue(type) != "Deleted")
+                    {
                         attendanceType.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetIntValue(type).ToString()));
                     }
                 }
             }	
 		
             Array kitColourEnumValues = Enum.GetValues(typeof(Domains.KitColours));
-			if (clubColourPrimary.Items.Count < 2) {
-                foreach (Enum type in kitColourEnumValues) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+			if (clubColourPrimary.Items.Count < 2) 
+            {
+                foreach (Enum type in kitColourEnumValues) 
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0) 
+                    {
                         clubColourPrimary.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetStringValue(type).ToString()));
                     }
                 }
 			}
-            foreach (ListItem item in clubColourPrimary.Items) {
+            foreach (ListItem item in clubColourPrimary.Items)
+            {
                 item.Attributes.Add("style", "background-color:" + item.Value + "; color:" + item.Value);
 			}  
     
-			if (clubColourSecondary.Items.Count < 2) {
-                foreach (Enum type in kitColourEnumValues) {
-                    if (EnumExtensions.GetIntValue(type) > 0) {
+			if (clubColourSecondary.Items.Count < 2)
+            {
+                foreach (Enum type in kitColourEnumValues)
+                {
+                    if (EnumExtensions.GetIntValue(type) > 0)
+                    {
                         clubColourSecondary.Items.Add(new ListItem(EnumExtensions.GetStringValue(type), EnumExtensions.GetStringValue(type).ToString()));
                     }
                 }
 			}
-            foreach (ListItem item in clubColourSecondary.Items) {
+            foreach (ListItem item in clubColourSecondary.Items)
+            {
                 item.Attributes.Add("style", "background-color:" + item.Value + "; color:" + item.Value);
             }  
 
-    		if (club.PrimaryContactID == null || club.PrimaryContactID == 0) {
+    		if (club.PrimaryContactID == null || club.PrimaryContactID == 0)
+            {
                 addContactButton.Visible = true;
 			}
-			else if (club.PrimaryContactID > 0) {
+			else if (club.PrimaryContactID > 0)
+            {
 				primaryContact.Visible = true;
 				primaryContact.Text = club.PrimaryContact.ToString();
                 editContactButton.Visible = true;
                 //linkToContactEdit.NavigateUrl = "~/UI/Planner/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString();
 			}
 	
-			if (!IsPostBack) {
+			if (!IsPostBack)
+            {
 				clubIDHidden.Value = club.ID.ToString();
 				clubName.Text = club.Name;
 				attendanceType.SelectedValue = EnumExtensions.GetIntValue(club.AttendanceType).ToString();
-                if (club.AttendanceType == Domains.AttendanceTypes.HostClub) {
+                if (club.AttendanceType == Domains.AttendanceTypes.HostClub) 
+                {
                     attendanceType.Enabled = false;
                 }
 				clubColourPrimary.SelectedValue = club.ColourPrimary;
 				clubColourSecondary.SelectedValue = club.ColourSecondary;
 				primaryContactID.Value = club.PrimaryContactID == null ? "0" : club.PrimaryContactID.ToString();
-				if (club.PrimaryContact.TelephoneNumber != null && club.PrimaryContact.TelephoneNumber!= "") {
+				if (club.PrimaryContact.TelephoneNumber != null && club.PrimaryContact.TelephoneNumber!= "")
+                {
 					primaryContactPhone.Text = club.PrimaryContact.TelephoneNumber;
 					primaryContactPhone.Visible = true;
 				}
-				if (club.PrimaryContact.Email != null && club.PrimaryContact.Email!= "") {
+				if (club.PrimaryContact.Email != null && club.PrimaryContact.Email!= "")
+                {
 					primaryContactEmail.Text = club.PrimaryContact.Email;
 					primaryContactEmail.Visible = true;
 				}
 			}		
         }
 
-        protected void SaveClubData() {
- 		    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+        protected void SaveClubData() 
+        {
+ 		    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
                Club clubToSave = new Club(
                     id: Int32.Parse(clubIDHidden.Value),
                     tournamentID: tournament.ID,
@@ -181,26 +208,30 @@ namespace GoTournamental.UI.Planner {
                 );
                 bool alreadyExists = false;
                 alreadyExists = (clubToSave.ID != 0 || iClub.SQLClubExistsForTournament(tournament.ID, clubName.Text));
-                if (alreadyExists) {
+                if (alreadyExists) 
+                {
                     iClub.SQLUpdate<Club>(clubToSave);
                     Response.Write("<script language=javascript>alert('There is already a Club with this name in the Tournament.');</script>");
                 }
-                else {
+                else
+                {
                     clubID = iClub.SQLInsertAndReturnID<Club>(clubToSave);
                 }
             }
         }
 
-
-        protected void AddContactButton_Click(object sender, EventArgs e) {
+        protected void AddContactButton_Click(object sender, EventArgs e) 
+        {
             SaveClubData();
-            Response.Redirect("~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+clubID.ToString());
+            Response.Redirect("~/UI/Planner/ContactForm.aspx?version=1&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString());
         }
-        protected void EditContactButton_Click(object sender, EventArgs e) {
+        protected void EditContactButton_Click(object sender, EventArgs e)
+        {
             SaveClubData();
             Response.Redirect("~/UI/Planner/ContactForm.aspx?version=2&TournamentID="+tournament.ID.ToString()+"&club_id="+club.ID.ToString()+"&contact_id="+club.PrimaryContactID.ToString());
         }
-        protected void SaveButton_Click(object sender, EventArgs e) {
+        protected void SaveButton_Click(object sender, EventArgs e) 
+        {
             SaveClubData();
 			Response.Redirect("~/UI/Planner/ClubsList.aspx?version=1&TournamentID="+tournament.ID.ToString());
         }

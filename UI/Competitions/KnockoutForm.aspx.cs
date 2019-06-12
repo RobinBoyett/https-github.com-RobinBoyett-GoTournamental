@@ -12,9 +12,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class KnockoutForm : Page {
+    public partial class KnockoutForm : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
         GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -33,7 +35,6 @@ namespace GoTournamental.UI.Organiser {
         string hourString = "";
         string minuteString = "";
         #endregion
-
         #region Declare page controls
         Label competitionTitle = new Label();
         HyperLink linkToCompetitionSummary = new HyperLink();
@@ -44,21 +45,25 @@ namespace GoTournamental.UI.Organiser {
         CustomValidator playingAreasMandatory = new CustomValidator();
         #endregion
 		
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
             AssignControlsAll();
 
-            if (Request.QueryString.Get("TournamentID") != null) {
+            if (Request.QueryString.Get("TournamentID") != null)
+            {
                 tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
                 playingAreaList = iPlayingArea.SQLSelectForTournament(tournament.ID);
                 competitionTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
             }
-            if (Request.QueryString.Get("competition_id") != null) {
+            if (Request.QueryString.Get("competition_id") != null) 
+            {
                 competition = iCompetition.SQLSelect<Competition, int>(Int32.Parse(Request.QueryString.Get("competition_id")));
                 teamsList = iTeam.GetCompetitionTeamsAll(competition.ID).Where(i => i.AttendanceType == Domains.AttendanceTypes.HostClub || i.AttendanceType == Domains.AttendanceTypes.Attending).ToList();
                 linkToCompetitionSummary.NavigateUrl = "~/UI/Competitions/CompetitionView.aspx?TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
             }
-            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+            if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
                 linkToCompetitionSummary.Visible = true;
             }
             
@@ -66,7 +71,8 @@ namespace GoTournamental.UI.Organiser {
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
             competitionTitle = (Label)KnockoutViewPanel.FindControl("CompetitionTitle");
             linkToCompetitionSummary = (HyperLink)KnockoutViewPanel.FindControl("LinkToCompetitionSummary");
             ageBand = (Label)KnockoutViewPanel.FindControl("AgeBand");
@@ -76,17 +82,22 @@ namespace GoTournamental.UI.Organiser {
             competitorsList = (DataList)KnockoutViewPanel.FindControl("CompetitorsList");
         }
 
-        protected void CompetitionViewLoad() {
+        protected void CompetitionViewLoad()
+        {
             ageBand.Text = EnumExtensions.GetStringValue(competition.AgeBand);
-            if (competition.CountTeamsAttendingCompetition() != 0) {
+            if (competition.CountTeamsAttendingCompetition() != 0) 
+            {
                 noTeamsAttending.Text = competition.CountTeamsAttendingCompetition().ToString();
                 noTeamsAttending.NavigateUrl = "~/UI/Planner/ClubsList?version=1&TournamentID=" + tournament.ID.ToString() + "&competition_id=" + competition.ID.ToString();
             }
             int i = 0;
-            foreach (PlayingArea playingArea in playingAreaList) {
+            foreach (PlayingArea playingArea in playingAreaList) 
+            {
                 playingAreasList.Items.Add(new ListItem("&nbsp;" + playingArea.Name, playingArea.ID.ToString()));
-                foreach (PlayingArea playingAreaUsed in playingAreasInUseInSession) {
-                    if (playingArea.ID == playingAreaUsed.ID) {
+                foreach (PlayingArea playingAreaUsed in playingAreasInUseInSession)
+                {
+                    if (playingArea.ID == playingAreaUsed.ID) 
+                    {
                         playingAreasList.Items[i].Enabled = false;
                     }
                 }
@@ -98,8 +109,10 @@ namespace GoTournamental.UI.Organiser {
 
 
         }        
-        protected void CompetitorsList_ItemDataBound(Object sender, DataListItemEventArgs e) {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) {
+        protected void CompetitorsList_ItemDataBound(Object sender, DataListItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
                 Team team = (Team)e.Item.DataItem;
                 Club club = new Club();
                 club = iClub.SQLSelect<Club, int>(team.ClubID);
@@ -112,18 +125,21 @@ namespace GoTournamental.UI.Organiser {
                 teamNameLabel.Text = team.Name;
 
                 TableCell colourPrimaryCell = (TableCell)colourTableRow.FindControl("ColourPrimaryCell");
-                if (club.ColourPrimary != null) {
+                if (club.ColourPrimary != null) 
+                {
                     colourPrimaryCell.BackColor = Color.FromName(club.ColourPrimary.ToString());
                 }
                 TableCell colourSecondaryCell = (TableCell)colourTableRow.FindControl("ColourSecondaryCell");
-                if (club.ColourSecondary != null) {
+                if (club.ColourSecondary != null) 
+                {
                     colourSecondaryCell.BackColor = Color.FromName(club.ColourSecondary.ToString());
                 }
             }
         }
 
  
-        protected void MakeDrawButton_Click(object sender, EventArgs e) {
+        protected void MakeDrawButton_Click(object sender, EventArgs e)
+        {
 
         }
 

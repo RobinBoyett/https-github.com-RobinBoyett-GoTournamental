@@ -9,9 +9,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 
 
-namespace GoTournamental.UI.Planner {
+namespace GoTournamental.UI.Planner 
+{
 
-    public partial class TournamentView : Page {
+    public partial class TournamentView : Page 
+    {
 
         #region Declare Domain Objects & Page Variables
 		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -45,7 +47,7 @@ namespace GoTournamental.UI.Planner {
         Label playingAreaType = new Label();
         Label noOfPlayingAreas = new Label();
 		Label fixtureTurnaround = new Label();
-        Label fixtureHalvesNumber = new Label();
+        Label fixtureStructure = new Label();
         Label fixtureHalvesLength = new Label();
 		Label teamSize = new Label();
 		Label squadSize = new Label();
@@ -62,87 +64,106 @@ namespace GoTournamental.UI.Planner {
 		//AdvertPanel advert728By90 = new AdvertPanel();
         #endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
             AssignUIControls();
             AssignRequestsToVariables();
 
-            if (tournament != null) {
+            if (tournament != null)
+            {
 	
 				tournamentTitle.Text = tournament.HostClub.Name + " " + tournament.Name;
                 linkToTournamentEdit.NavigateUrl = "~/UI/Planner/TournamentForm.aspx?version=2&TournamentID=" + tournament.ID.ToString();
 
-                if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
                     linkToTournamentEdit.Visible = true;
                 }
 
                 tournamentType.Text = EnumExtensions.GetStringValue(tournament.TournamentType);
-				if (tournament.EndTime.HasValue && tournament.EndTime != null) {
+				if (tournament.EndTime.HasValue && tournament.EndTime != null) 
+                {
 					tournamentDate.Text = DateTimeExtensions.FormatDateRange((DateTime)tournament.StartTime, (DateTime)tournament.EndTime) + ",&nbsp;&nbsp;fixtures commence " + DateTimeExtensions.TimeHoursAndMinutes(tournament.StartTime.Value);
 				}
-				else {
+				else
+                {
                     tournamentDate.Text = DateTimeExtensions.LongDateWithLongDay(tournament.StartTime.Value) + ",&nbsp;&nbsp;fixtures commence " + DateTimeExtensions.TimeHoursAndMinutes(tournament.StartTime.Value);
 				}
 
 				tournamentVenue.Text = tournament.Venue;
 				tournamentPostcode.Text = tournament.Postcode;
 
-				if (tournament.GoogleMapsURL != null && tournament.GoogleMapsURL != "") {
-                    googleMapFramePanel.Visible = true;
-                    GoogleMapIFrame.Src = tournament.GoogleMapsURL;
-				}
+				//if (tournament.GoogleMapsURL != null && tournament.GoogleMapsURL != "")
+    //            {
+    //                googleMapFramePanel.Visible = true;
+    //                GoogleMapIFrame.Src = tournament.GoogleMapsURL;
+				//}
 
 				tournamentContact = iContact.GetTournamentContact(tournament.ID);
-				if (tournamentContact != null) {
+				if (tournamentContact != null)
+                {
 					contactName.Text = tournamentContact.FirstName + " " + tournamentContact.LastName;
-					if (tournamentContact.Email != null && tournamentContact.Email != "") {
+					if (tournamentContact.Email != null && tournamentContact.Email != "")
+                    {
 						contactEmailIcon.Visible = true;
 						contactEmailLink.NavigateUrl = "mailto:" + tournamentContact.Email;
 					}
-					if (tournamentContact.TelephoneNumber != null && tournamentContact.TelephoneNumber != "") {
+					if (tournamentContact.TelephoneNumber != null && tournamentContact.TelephoneNumber != "")
+                    {
 						contactTelephone.Text += "<br>" + tournamentContact.TelephoneNumber + "&nbsp;&nbsp;";
 					}
-					if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+					if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                    {
 						contactEditLink.Text = "[Edit Contact]";
 						contactEditLink.NavigateUrl = "/UI/Planner/ContactForm?version=2&TournamentID="+tournament.ID.ToString()+"&ContactType=2&contact_id="+tournamentContact.ID.ToString();
 					}
 				}
-				else if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+				else if (isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
 					contactEditLink.Text = "[Add Contact]";
 					contactEditLink.NavigateUrl = "/UI/Planner/ContactForm?version=1&TournamentID="+tournament.ID.ToString()+"&ContactType=2";
 				}
 
 				fixtureTurnaround.Text = EnumExtensions.GetIntValue(tournament.FixtureTurnaround).ToString() + " Minutes"; 
-                if (tournament.FixtureHalvesNumber != Tournament.FixtureHalvesNumbers.Undefined) {
-                    fixtureHalvesNumber.Text = "- matches are " + EnumExtensions.GetIntValue(tournament.FixtureHalvesNumber).ToString() + " x " + EnumExtensions.GetIntValue(tournament.FixtureHalvesLength).ToString() + " mins";
+                if (tournament.FixtureStructure != Tournament.FixtureStructures.Undefined)
+                {
+                    FixtureStructure.Text = "- matches are " + EnumExtensions.GetIntValue(tournament.FixtureStructure).ToString() + " x " + EnumExtensions.GetIntValue(tournament.FixtureHalvesLength).ToString() + " mins";
                 }               
 
 				teamSize.Text = EnumExtensions.GetIntValue(tournament.TeamSize).ToString() + " Players";
 				squadSize.Text = EnumExtensions.GetIntValue(tournament.SquadSize).ToString() + " Players";
 
-				if (isDemoTournament || System.Web.HttpContext.Current.User.Identity.IsAuthenticated) {
+				if (isDemoTournament || System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                {
 
 					administratorViewOnlyPanelOne.Visible = true;
                     administratorViewOnlyPanelTwo.Visible = true;
 
 					playingAreaType.Text = tournament.PlayingAreaType.ToString();
-					if (tournament.NoOfPlayingAreas == Tournament.NumberOfPlayingAreas.Undefined) {
+					if (tournament.NoOfPlayingAreas == Tournament.NumberOfPlayingAreas.Undefined)
+                    {
 						noOfPlayingAreas.Text = "";
 					}
-					else {
+					else
+                    {
 						noOfPlayingAreas.Text = EnumExtensions.GetIntValue(tournament.NoOfPlayingAreas).ToString();
 					}
 
-					if (tournament.RotatorDate.HasValue && tournament.RotatorDate != null) {
+					if (tournament.RotatorDate.HasValue && tournament.RotatorDate != null)
+                    {
 						resultsAndTablesDate.Text = tournament.RotatorDate.Value.ToShortDateString();
 					}
-					else {
+					else
+                    {
 						resultsAndTablesDate.Text = "Show All Dates";
 					}
-					if (tournament.RotatorSession != Competition.Sessions.Undefined) {
+					if (tournament.RotatorSession != Competition.Sessions.Undefined)
+                    {
 						resultsAndTablesSession.Text = EnumExtensions.GetStringValue(tournament.RotatorSession);
 					}
-					else {
+					else 
+                    {
 						resultsAndTablesSession.Text = "Show All Sessions";
 					}
 
@@ -157,26 +178,37 @@ namespace GoTournamental.UI.Planner {
 
 				}
 
-				if (tournament.HostClub != null && tournament.HostClub.LogoFile != null && tournament.HostClub.LogoFile != "") {
+                if (tournament.HostClub.LogoFile != "" && tournament.HostClub.LogoFile != null)
+                {
                     clubLogo.ImageUrl = "~/Uploads/Tournament" + tournament.ID.ToString() + "/Logos/" + tournament.HostClub.LogoFile;
-   					uploadClubLogoLink.Text = "[Delete your host club logo]";
-                    if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
-	    			    uploadClubLogoLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete the host club logo?')");
-		    			uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1&Version=2";
-                    }
-				}
-				else if (!isDemoTournament || identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+                }
+                else
+                {
                     clubLogo.ImageUrl = "~/Images/GTLogo.png";
                     clubLogo.Height = 230;
                     clubLogo.Width = 250;
-					uploadClubLogoLink.Text = "[Replace with your host club logo]";
-                    if (!isDemoTournament ) {
+                }
+
+				if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()) && tournament.HostClub != null && tournament.HostClub.LogoFile != null && tournament.HostClub.LogoFile != "")
+                {
+                    if (tournament.HostClub.LogoFile != "" && tournament.HostClub.LogoFile != null)
+                    {
+   					    uploadClubLogoLink.Text = "[Delete your host club logo]";
+                        if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                        {
+	    			        uploadClubLogoLink.Attributes.Add("onclick","javascript:return confirm('Are you sure you want to delete the host club logo?')");
+		    			    uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1&Version=2";
+                        }
+                    }
+                    else {
+					    uploadClubLogoLink.Text = "[Replace with your host club logo]";
     					uploadClubLogoLink.NavigateUrl = "~/UI/IO/FileUploadForm.aspx?TournamentID="+tournament.ID.ToString()+"&UploadType=1";
                     }
 				}
 
 				//advert728By90.graphicFileStyle = Advert.GraphicFileStyles.Advert728By90;
-				//if (tournament.ID != null) {
+				//if (tournament.ID != null)
+                //{
 				//	advert728By90.tournamentID = tournament.ID;
 				//}
 			
@@ -184,7 +216,8 @@ namespace GoTournamental.UI.Planner {
 
         }
 
-        protected void AssignUIControls() {
+        protected void AssignUIControls()
+        {
 			tournamentTitle = (Label)TournamentViewPanel.FindControl("TournamentTitle");
             linkToTournamentEdit = (HyperLink)TournamentViewPanel.FindControl("LinkToTournamentEdit");
 			tournamentType = (Label)TournamentViewPanel.FindControl("TournamentType");
@@ -202,7 +235,7 @@ namespace GoTournamental.UI.Planner {
             playingAreaType = (Label)TournamentViewPanel.FindControl("PlayingAreaType");
             noOfPlayingAreas = (Label)TournamentViewPanel.FindControl("NoOfPlayingAreas");
 			fixtureTurnaround = (Label)TournamentViewPanel.FindControl("FixtureTurnaround");
-            fixtureHalvesNumber = (Label)TournamentViewPanel.FindControl("FixtureHalvesNumber");
+            fixtureStructure = (Label)TournamentViewPanel.FindControl("FixtureStructure");
             fixtureHalvesLength = (Label)TournamentViewPanel.FindControl("FixtureHalvesLength");
 			teamSize = (Label)TournamentViewPanel.FindControl("TeamSize");
 			squadSize = (Label)TournamentViewPanel.FindControl("SquadSize");
@@ -219,10 +252,13 @@ namespace GoTournamental.UI.Planner {
 			//advert728By90 = (AdvertPanel)TournamentViewPanel.FindControl("advert728By90");
         }
  
-        protected void AssignRequestsToVariables() {
-            if (Request.QueryString.Get("TournamentID") != null) {
+        protected void AssignRequestsToVariables()
+        {
+            if (Request.QueryString.Get("TournamentID") != null) 
+            {
 	            tournament = iTournament.SQLSelect<Tournament, int>(Int32.Parse(Request.QueryString.Get("TournamentID")));
-                if (tournament.ID == 1) {
+                if (tournament.ID == 1)
+                {
                     isDemoTournament = true;
                 }
             }

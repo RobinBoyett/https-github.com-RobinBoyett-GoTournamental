@@ -1,35 +1,43 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace GoTournamental.API.Interface {
+namespace GoTournamental.API.Interface 
+{
 
 	#region SQL Methods
-	public interface ISQLInsertable {   
+	public interface ISQLInsertable 
+    {   
 		void SQLInsert<T>(T objectToInsert);
 	}
-    public interface ISQLInsertableReturningID {
+    public interface ISQLInsertableReturningID 
+    {
         int SQLInsertAndReturnID<T>(T objectToInsert);
     }
-	public interface ISQLInsertableOrUpdateable {   
+	public interface ISQLInsertableOrUpdateable 
+    {   
 		void SQLInsertOrUpdate<T>(T objectToInsertOrUpdate);
 	}	    
-    public interface ISQLSelectable {   
+    public interface ISQLSelectable 
+    {   
 		T SQLSelect<T, U>(U objectID);
 	}		
-	public interface ISQLAllSelectable {   
+	public interface ISQLAllSelectable
+    {   
 		List<T> SQLSelectAll<T>();
 	}	
-	public interface ISQLUpdateable {   
+	public interface ISQLUpdateable 
+    {   
 		void SQLUpdate<T>(T objectToUpdate);
 	}	
-	public interface ISQLDeletable {   
+	public interface ISQLDeletable 
+    {   
 		void SQLDelete<T>(T objectToDelete);
 	}
-	public interface ISQLDeleteCascadable {
+	public interface ISQLDeleteCascadable
+    {
         void SQLDeleteWithCascade<T>(T objectToDelete);
 	}
-	public interface ISQLExistsQueryable {   
+	public interface ISQLExistsQueryable
+    {   
 		bool SQLExists<T, U>(U objectID);
 	}	
 	#endregion

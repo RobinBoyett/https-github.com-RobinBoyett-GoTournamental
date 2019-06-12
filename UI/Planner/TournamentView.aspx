@@ -90,7 +90,7 @@
                                 </td>
                                 <td>
                                     <asp:Label ID="FixtureTurnaround" runat="server" />
-                                    <asp:Label ID="FixtureHalvesNumber" runat="server" />
+                                    <asp:Label ID="FixtureStructure" runat="server" />
                                     <asp:Label ID="FixtureHalvesLength" runat="server" />
                                 </td>
                             </tr>

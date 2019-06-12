@@ -11,7 +11,7 @@ GO
 CREATE TABLE [Administration].[TermsSignatories] (
     [ID]             INT           IDENTITY (1, 1) NOT NULL,
     [UserID]		 NVARCHAR (128) NOT NULL,
-    [UserName]       NVARCHAR (256) NOT NULL
+    [UserName]       NVARCHAR (256) NULL
     CONSTRAINT [PK_TermsSignatories] PRIMARY KEY ([ID])
 );
 

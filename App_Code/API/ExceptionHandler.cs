@@ -2,18 +2,20 @@
 using System.Linq;
 using System.Collections.Generic;
 using GoTournamental.API.Interface;
-using GoTournamental.API.Utilities;
 using GoTournamental.ORM.Utilities;
 
-namespace GoTournamental.API.Utilities {
+namespace GoTournamental.API.Utilities 
+{
 
-    public class ExceptionHandler : IExceptionHandler {
+    public class ExceptionHandler : IExceptionHandler
+    {
 
         #region Constructor
         public ExceptionHandler() { }
         public ExceptionHandler(
             int id, string userID, string userIPAddress, DateTime loggedDate, string referringURL, string requestedURL, string typeName, string message, string stackTrace
-        ) {
+        ) 
+        {
             this.ID = id;
             this.UserID = userID;
             this.UserIPAddress = userIPAddress;
@@ -39,29 +41,36 @@ namespace GoTournamental.API.Utilities {
         #endregion
 
         #region Methods
-        public void SQLInsert<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<ExceptionHandler, T>(input)) {
+        public void SQLInsert<T>(T input)
+        {
+            if (ObjectExtensions.ObjectTypesMatch<ExceptionHandler, T>(input)) 
+            {
                 ExceptionHandlerDbContext context = new ExceptionHandlerDbContext();
                 context.ExceptionHandlers.Add((ExceptionHandler)(object)input);
                 context.SaveChanges();
             }
         }
-        public T SQLSelect<T, U>(U id) {
+        public T SQLSelect<T, U>(U id)
+        {
             ExceptionHandlerDbContext context = new ExceptionHandlerDbContext();
             ExceptionHandler selected = context.ExceptionHandlers.Where(i => i.ID == (int)(object)id).SingleOrDefault();
             return (T)(object)selected;
         }
-        public List<T> SQLSelectAll<T>() {
+        public List<T> SQLSelectAll<T>() 
+        {
             ExceptionHandlerDbContext context = new ExceptionHandlerDbContext();
             List<ExceptionHandler> exceptions = context.ExceptionHandlers.ToList();
             List<T> selectedTList = new List<T>();
-            foreach (ExceptionHandler ex in exceptions) {
+            foreach (ExceptionHandler ex in exceptions) 
+            {
                 selectedTList.Add((T)((object)ex));
             }
             return selectedTList;
         }
-        public void SQLDelete<T>(T input) {
-            if (ObjectExtensions.ObjectTypesMatch<ExceptionHandler, T>(input)) {
+        public void SQLDelete<T>(T input) 
+        {
+            if (ObjectExtensions.ObjectTypesMatch<ExceptionHandler, T>(input)) 
+            {
                 ExceptionHandlerDbContext context = new ExceptionHandlerDbContext();
                 ExceptionHandler itemToDelete = (ExceptionHandler)(object)input;
                 ExceptionHandler selected = context.ExceptionHandlers.Single(i => i.ID == itemToDelete.ID);
@@ -71,14 +80,23 @@ namespace GoTournamental.API.Utilities {
         }
         
 
-        public string HandleApplicationError(ExceptionHandler errorToHandle) {
-            string redirectAddress = "";
-            switch (errorToHandle.TypeName) {                                                        
+        public string HandleApplicationError(ExceptionHandler errorToHandle) 
+        {
+            string redirectAddress = "~/default.aspx";
+            switch (errorToHandle.TypeName) 
+            { 
+                case "System.Exception":
+                    //if (errorToHandle.Message == "Unauthorised access to tournament admin page") {
+
+                    //}
+                    break;
                 case "System.Web.HttpException":
-                    if (errorToHandle.RequestedURL.Contains("This is an invalid script resource request")) {
+                    if (errorToHandle.RequestedURL.Contains("This is an invalid script resource request")) 
+                    {
                         // This is probably a search engine robot - ignore it
                     }
-                    else if (errorToHandle.RequestedURL.Contains("This file") && errorToHandle.RequestedURL.Contains("does not exist")) {
+                    else if (errorToHandle.RequestedURL.Contains("This file") && errorToHandle.RequestedURL.Contains("does not exist"))
+                    {
                         this.SQLInsert<ExceptionHandler>(errorToHandle);   // broken link error - save it
                     }
                     break;
@@ -92,7 +110,8 @@ namespace GoTournamental.API.Utilities {
         #endregion
 
     }
-    public interface IExceptionHandler : ISQLInsertable, ISQLSelectable, ISQLAllSelectable, ISQLDeletable {
+    public interface IExceptionHandler : ISQLInsertable, ISQLSelectable, ISQLAllSelectable, ISQLDeletable 
+    {
         int ID { get; }
         string UserID { get; }
         string UserIPAddress { get; }

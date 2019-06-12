@@ -9,9 +9,11 @@ using GoTournamental.API.Utilities;
 using GoTournamental.BLL.Organiser;
 using GoTournamental.BLL.Planner;
 
-namespace GoTournamental.UI.Organiser {
+namespace GoTournamental.UI.Organiser 
+{
 
-    public partial class CompetitionsList : Page {
+    public partial class CompetitionsList : Page
+    {
 
         #region Declare domain objects
  		GoTournamentalIdentityHelper identityHelper = new GoTournamentalIdentityHelper();
@@ -24,13 +26,13 @@ namespace GoTournamental.UI.Organiser {
 		List<GoTournamental.BLL.Organiser.Contact> contacts = new List<GoTournamental.BLL.Organiser.Contact>();
 		GoTournamental.BLL.Organiser.IContact iContact = new GoTournamental.BLL.Organiser.Contact();
 		#endregion
-
 		#region Declare page controls
 		Label competitionsListTitle = new Label();
 		HyperLink linkToCompetitionsAdd = new HyperLink();
         #endregion
 
-        protected void Page_Load(object sender, EventArgs e) {
+        protected void Page_Load(object sender, EventArgs e) 
+        {
 
 			AssignControlsAll();
 
@@ -40,13 +42,19 @@ namespace GoTournamental.UI.Organiser {
 				competitions = iCompetition.SQLSelectForTournament(tournament.ID, false);
 				clubs = iClub.SQLSelectClubsForTournament(tournament.ID);
 				contacts = iContact.SQLSelectForTournament(tournament.ID);
+                if (tournament.ID > 1 && !identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+                {
+                    throw new Exception("Unauthorised access to tournament admin page.");
+                }
             }
 
 
-			if (competitions.Count < Enum.GetNames(typeof(Competition.AgeBands)).Length) {
+			if (competitions.Count < Enum.GetNames(typeof(Competition.AgeBands)).Length) 
+            {
 				linkToCompetitionsAdd.NavigateUrl = "~/UI/Competitions/CompetitionsForm.aspx?TournamentID="+tournament.ID.ToString();
 			}
-			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString())) {
+			if (identityHelper.ClaimExistsForUser(HttpContext.Current.User.Identity.GetUserId(), "TournamentID", tournament.ID.ToString()))
+            {
 				linkToCompetitionsAdd.Visible = true;
 			}
 
@@ -55,22 +63,26 @@ namespace GoTournamental.UI.Organiser {
 
         }
 
-		protected void AssignControlsAll() {
+		protected void AssignControlsAll()
+        {
 			competitionsListTitle = (Label)CompetitionsListPanel.FindControl("CompetitionsListTitle");
 			linkToCompetitionsAdd = (HyperLink)CompetitionsListPanel.FindControl("LinkToCompetitionsAdd");
         }
 
-        protected void CompetitionsListGridView_RowDataBound(Object sender, GridViewRowEventArgs e) {
-            if (e.Row.RowType == DataControlRowType.DataRow) {
+        protected void CompetitionsListGridView_RowDataBound(Object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
                 Competition competition = (Competition)e.Row.DataItem;
                 HyperLink competitionLink = (HyperLink)e.Row.FindControl("CompetitionViewLink");
                 competitionLink.Text = EnumExtensions.GetStringValue(competition.AgeBand);
                 competitionLink.NavigateUrl = "~/UI/Competitions/CompetitionView?TournamentID="+tournament.ID.ToString()+"&competition_id=" + competition.ID.ToString();
-				if (competition.StartTime != null && competition.CountFixturesForCompetition() > 0) {
+				if (competition.StartTime != null && competition.CountFixturesForCompetition() > 0) 
+                {
 					e.Row.Cells[1].Text = competition.StartTime.Value.ToString("ddd d MMM,") + "&nbsp;&nbsp;&nbsp;" + competition.StartTime.Value.ToShortTimeString() + " - " ;
 				}
-				
-				if (competition.StartTime != null) {
+				if (competition.StartTime != null)
+                {
 	                e.Row.Cells[1].Text = competition.StartTime.Value.ToString("ddd d MMM,") + "&nbsp;&nbsp;&nbsp;" + competition.StartTime.Value.ToShortTimeString();
 				}
 
